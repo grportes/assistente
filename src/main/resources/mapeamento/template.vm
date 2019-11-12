@@ -11,16 +11,18 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 /**
- * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
+ * Classe mapeamento ref. a tabela [ $modelo.getBanco().$modelo.getOwner().$modelo.getTabela() ]
  *
  * @autor: $nomeAutor
  */
 @Entity
-@Table( name = "$modelo.getNomeTabela()" )
-public class $modelo.getNomeEntidade() extends Model {
+@Table( name = "$modelo.getTabela()" )
+public class $modelo.getEntidade() extends Model {
 
-    #foreach( $variavel in $modelo.getVariaveis() )
-    private $variavel.getTipo() $variavel.getNome();
+    #foreach( $campo in $modelo.getCampos() )
+    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", nullable = $campo.isColNull() )
+    private $campo.getTipoJava() $campo.getColunaJava();
+
     #end
 
     #set( $texto = "CONSTRUCTOR" )
@@ -28,8 +30,8 @@ public class $modelo.getNomeEntidade() extends Model {
 
     #set( $texto = "GETTERS && SETTERS" )
     #comentario( )
-    #foreach( $variavel in $modelo.getVariaveis() )
-    #macroGetterSetters( $variavel.getTipo() $variavel.getNome() )
+    #foreach( $campo in $modelo.getCampos() )
+    #macroGetterSetters( $campo.getTipoJava() $campo.getColunaJava() )
     #end
 
     #set( $texto = "METODOS TRANSIENTES" )
@@ -44,8 +46,8 @@ public class $modelo.getNomeEntidade() extends Model {
     public boolean equals( final Object obj ) {
 
         if (this == obj) return true;
-        if (!( obj instanceof $modelo.getNomeEntidade() )) return false;
-        return Objects.equals( getId(), (($modelo.getNomeEntidade()) obj).getId() );
+        if (!( obj instanceof $modelo.getEntidade() )) return false;
+        return Objects.equals( getId(), (($modelo.getEntidade()) obj).getId() );
     }
 
     @Override
@@ -83,8 +85,3 @@ public class $modelo.getNomeEntidade() extends Model {
     }
 
 #end
-
-
-
-
-

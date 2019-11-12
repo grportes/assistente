@@ -1,36 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="508.0" prefWidth="696.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.assistente.controllers.AssistenteController">
+<VBox prefHeight="558.0" prefWidth="772.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.assistente.controllers.AssistenteController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="Ações">
           <items>
-            <MenuItem fx:id="mnMapeamento" mnemonicParsing="false" onAction="#onActionMnMapeamento" text="Mapeamento" />
-            <MenuItem mnemonicParsing="false" text="Constante" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Dto" />
-            <MenuItem mnemonicParsing="false" text="Dto/Query" />
+            <MenuItem mnemonicParsing="false" text="Sobre" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Sair" />
           </items>
         </Menu>
       </menus>
     </MenuBar>
-      <TabPane prefHeight="393.0" prefWidth="696.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="485.0" prefWidth="772.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Mapeamento">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="292.0" prefWidth="696.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="292.0" prefWidth="696.0">
+                     <children>
+                        <ComboBox fx:id="cbxMapeamentoBanco" layoutX="14.0" layoutY="29.0" prefHeight="26.0" prefWidth="188.0" />
+                        <TextField fx:id="txtMapeamentoOwner" layoutX="209.0" layoutY="29.0" prefHeight="26.0" prefWidth="144.0" text="dbo" />
+                        <TextField fx:id="txfMapeamentoNomeTabela" layoutX="359.0" layoutY="29.0" prefHeight="26.0" prefWidth="230.0" />
+                        <Label layoutX="14.0" layoutY="13.0" text="Banco:" />
+                        <Label layoutX="209.0" layoutY="13.0" text="Owner:" />
+                        <Label layoutX="362.0" layoutY="13.0" text="Tabela:" />
+                        <Button layoutX="598.0" layoutY="29.0" mnemonicParsing="false" onAction="#onActionMapeamentoBtnLerTabela" prefHeight="26.0" prefWidth="61.0" text="Ler..." />
+                        <TableView fx:id="tblMapeamento" layoutX="14.0" layoutY="68.0" prefHeight="333.0" prefWidth="726.0">
+                          <columns>
+                            <TableColumn fx:id="tcMapeamentoDB" prefWidth="155.0" text="Coluna DB" />
+                            <TableColumn fx:id="tcMapeamentoJava" maxWidth="197.0" prefWidth="141.0" text="Coluna Java" />
+                              <TableColumn fx:id="tcMapeamentoTipoDB" minWidth="0.0" prefWidth="131.0" text="Tipo DB" />
+                              <TableColumn fx:id="tcMapeamentoTipoJava" prefWidth="123.0" text="Tipo Java" />
+                              <TableColumn fx:id="tcMapeamentoConverter" prefWidth="85.0" text="Converter" />
+                              <TableColumn fx:id="tcMapeamentoColNull" prefWidth="75.0" text="NULL" />
+                          </columns>
+                        </TableView>
+                        <Button layoutX="676.0" layoutY="29.0" mnemonicParsing="false" onAction="#onActionMapeamentoBtnLimpar" text="Limpar" />
+                        <Button fx:id="btnMapeamento" disable="true" layoutX="14.0" layoutY="412.0" mnemonicParsing="false" onAction="#onActionBtnMapeamento" text="Gerar Mapeamento" />
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab text="Constante">
