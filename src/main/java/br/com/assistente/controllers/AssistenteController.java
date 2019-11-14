@@ -1,7 +1,7 @@
 package br.com.assistente.controllers;
 
-import br.com.assistente.models.mapeamento.Modelo;
-import br.com.assistente.models.mapeamento.ModeloCampo;
+import br.com.assistente.models.domains.mapeamento.Modelo;
+import br.com.assistente.models.domains.mapeamento.ModeloCampo;
 import br.com.assistente.services.MapeamentoService;
 import io.vavr.control.Try;
 import javafx.collections.ObservableList;
@@ -11,9 +11,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
+import java.util.List;
 
+import static br.com.assistente.controllers.AssistenteConfigController.openViewConfiguracoes;
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.collections.FXCollections.observableList;
@@ -22,6 +25,8 @@ public class AssistenteController {
 
     // Services:
     private final MapeamentoService mapeamentoService = new MapeamentoService();
+
+    @FXML private VBox vboxContainer;
 
     // Mapeamento:
     @FXML private ComboBox<String> cbxMapeamentoBanco;
@@ -35,17 +40,20 @@ public class AssistenteController {
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoColNull;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoConverter;
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
-
-
     @FXML private Button btnMapeamento;
 
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // EVENTOS.
+    // EVENTOS
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void onActionConfiguracoes() {
+
+        openViewConfiguracoes( vboxContainer.getScene().getWindow() );
+    }
 
     @FXML
     public void initialize() {
@@ -84,7 +92,7 @@ public class AssistenteController {
     public void onActionMapeamentoBtnLerTabela() {
 
 
-        var possivelModelo = Try.of(() -> mapeamentoService.extrair(
+        Try<List<ModeloCampo>> possivelModelo = Try.of(() -> mapeamentoService.extrair(
             cbxMapeamentoBanco.getValue(),
             txtMapeamentoOwner.getText(),
             txfMapeamentoNomeTabela.getText()
@@ -94,7 +102,6 @@ public class AssistenteController {
             observableModelo.clear();
             observableModelo.addAll(possivelModelo.get());
             desabilitarAcoesMapeamento(true);
-
         } else {
             msgAviso( possivelModelo.getCause().getMessage() );
         }
@@ -109,7 +116,7 @@ public class AssistenteController {
 
     public void onActionBtnMapeamento() {
 
-        var modelo = new Modelo.Builder()
+        Modelo modelo = new Modelo.Builder()
             .comBanco(cbxMapeamentoBanco.getValue())
             .comOwner(txtMapeamentoOwner.getText())
             .comTabela(txfMapeamentoNomeTabela.getText())

@@ -1,4 +1,4 @@
-package br.com.assistente.models.mapeamento;
+package br.com.assistente.models.domains.mapeamento;
 
 import org.apache.commons.lang3.StringUtils;
 

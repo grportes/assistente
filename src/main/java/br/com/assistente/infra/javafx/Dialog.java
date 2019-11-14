@@ -1,19 +1,34 @@
 package br.com.assistente.infra.javafx;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-
-import java.util.Optional;
 
 public final class Dialog {
 
-    public static void msgAviso( final String mensagem ) {
+    private static void msg(
+        final String mensagem,
+        final Alert.AlertType alertType
+    ) {
 
-        final Alert alert = new Alert(Alert.AlertType.WARNING);
+        final Alert alert = new Alert(alertType);
         alert.setTitle("Assistente");
         alert.setHeaderText("Atenção");
         alert.setContentText( mensagem );
         alert.showAndWait();
+    }
+
+    public static void msgInfo( final String mensagem ) {
+
+        msg( mensagem, Alert.AlertType.INFORMATION );
+    }
+
+    public static void msgAviso( final String mensagem ) {
+
+        msg( mensagem, Alert.AlertType.WARNING );
+    }
+
+    public static void msgErro( final String mensagem ) {
+
+        msg( mensagem, Alert.AlertType.ERROR );
     }
 
 

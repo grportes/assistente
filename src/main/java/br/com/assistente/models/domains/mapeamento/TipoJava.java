@@ -1,4 +1,4 @@
-package br.com.assistente.models.mapeamento;
+package br.com.assistente.models.domains.mapeamento;
 
 public enum TipoJava {
 

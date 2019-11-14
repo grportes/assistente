@@ -1,8 +1,10 @@
 package br.com.assistente.services;
 
 import br.com.assistente.infra.exceptions.BusinessException;
-import br.com.assistente.models.mapeamento.Modelo;
-import br.com.assistente.models.mapeamento.ModeloCampo;
+import br.com.assistente.models.domains.admin.ConfiguracaoDefault;
+import br.com.assistente.models.domains.mapeamento.Modelo;
+import br.com.assistente.models.domains.mapeamento.ModeloCampo;
+import br.com.assistente.models.repository.admin.ConfiguracaoDefaultRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -61,7 +63,7 @@ public class MapeamentoService {
         final Template template = engine.getTemplate("/mapeamento/template.vm");
 
         VelocityContext context = new VelocityContext();
-        context.put("nomeAutor", "Não informado");
+        context.put("nomeAutor", ConfiguracaoDefaultRepository.find().map(ConfiguracaoDefault::getAutor).orElse("?") );
         context.put("modelo", modelo);
         context.put("StringUtils", StringUtils.class);
 
