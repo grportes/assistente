@@ -1,17 +1,15 @@
 package br.com.assistente.models.repository.admin;
 
-import br.com.assistente.infra.exceptions.BusinessException;
 import br.com.assistente.infra.exceptions.PersistenceException;
 import br.com.assistente.models.domains.admin.ConfiguracaoDefault;
 
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.Optional;
 
 import static br.com.assistente.infra.util.UtilArquivo.buscarLocalApp;
 import static br.com.assistente.infra.util.UtilArquivo.excluir;
-import static br.com.assistente.infra.util.UtilArquivo.gravarBinario;
-import static br.com.assistente.infra.util.UtilArquivo.lerArquivoBinario;
+import static br.com.assistente.infra.util.UtilArquivo.gravar;
+import static br.com.assistente.infra.util.UtilArquivo.lerArquivo;
 import static java.lang.String.format;
 import static java.nio.file.Files.notExists;
 import static java.util.Optional.ofNullable;
@@ -27,7 +25,7 @@ public class ConfiguracaoDefaultRepository {
 
         configuracaoDefault = null;
 
-        lerArquivoBinario( arquivoDat )
+        lerArquivo( arquivoDat )
             .flatMap( ConfiguracaoDefault.Parse::convObj )
             .ifPresent( conf -> configuracaoDefault = conf );
 
@@ -41,8 +39,7 @@ public class ConfiguracaoDefaultRepository {
         if ( ! excluir( arquivoDat ) )
             throw new PersistenceException( format( "Falhou exclusão do arquivo %s", arquivoDat ) );
 
-        if ( ! gravarBinario( arquivoDat , ConfiguracaoDefault.Parse.convString(novaConfiguracao) ) )
-            throw new PersistenceException( format( "Falhou escrita do arquivo %s", arquivoDat ) );
+        gravar( arquivoDat, ConfiguracaoDefault.Parse.convString(novaConfiguracao) );
 
         configuracaoDefault = novaConfiguracao;
     }

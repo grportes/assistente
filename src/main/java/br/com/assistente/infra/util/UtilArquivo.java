@@ -3,6 +3,7 @@ package br.com.assistente.infra.util;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,7 +29,7 @@ public final class UtilArquivo {
         return currentRelativePath.toAbsolutePath();
     }
 
-    public static boolean gravarBinario(
+    public static void gravar(
         final Path arquivo,
         final String dados
     ) {
@@ -36,20 +37,19 @@ public final class UtilArquivo {
         try {
             byte[] bytes = dados.getBytes( UTF_8 );
             Files.write( arquivo, bytes );
-            return true;
-        } catch (IOException e) {
-            return false;
+        } catch ( final IOException e ) {
+            throw new UncheckedIOException( e );
         }
     }
 
-    public static Optional<String> lerArquivoBinario( final Path arquivo ) {
+    public static Optional<String> lerArquivo( final Path arquivo ) {
 
         try {
             byte[] bytes = Files.readAllBytes(arquivo);
             String dados = toEncodedString( bytes, UTF_8 );
             return StringUtils.isBlank( dados ) ? empty() : Optional.of( dados );
-        } catch (IOException e) {
-            return empty();
+        } catch ( final IOException e ) {
+            throw new UncheckedIOException( e );
         }
     }
 
