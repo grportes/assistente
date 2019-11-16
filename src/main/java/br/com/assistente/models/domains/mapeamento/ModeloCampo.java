@@ -10,24 +10,36 @@ import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public class ModeloCampo {
 
+    private BooleanProperty pk;
     private StringProperty colunaDB;
     private StringProperty colunaJava;
     private StringProperty tipoDB;
     private StringProperty tipoJava;
     private BooleanProperty colNull;
-    private StringProperty converter;
+    private BooleanProperty converter;
 
     public ModeloCampo() {
     }
 
     private ModeloCampo( final Builder builder ) {
 
+        this.pk = new SimpleBooleanProperty(builder.pk);
         this.colunaDB = new SimpleStringProperty(builder.colunaDB);
         this.colunaJava = new SimpleStringProperty(builder.colunaJava);
         this.tipoDB = new SimpleStringProperty(builder.tipoDB);
         this.tipoJava = new SimpleStringProperty(builder.tipoJava);
         this.colNull = new SimpleBooleanProperty(builder.colNull);
-        this.converter = new SimpleStringProperty(builder.converter);
+        this.converter = new SimpleBooleanProperty(builder.converter);
+    }
+
+    public boolean isPk() {
+
+        return pk.get();
+    }
+
+    public BooleanProperty pkProperty() {
+
+        return pk;
     }
 
     public String getColunaDB() {
@@ -80,33 +92,41 @@ public class ModeloCampo {
         return colNull;
     }
 
-    public String getConverter() {
+    public boolean isConverter() {
 
         return converter.get();
     }
 
-    public StringProperty converterProperty() {
+    public BooleanProperty converterProperty() {
 
         return converter;
     }
 
     public static class Builder {
 
+        private boolean pk;
         private String colunaDB;
         private String colunaJava;
         private String tipoDB;
         private String tipoJava;
         private boolean colNull;
-        private String converter;
+        private boolean converter;
 
         public Builder() {
 
+            this.pk = false;
             this.colunaDB = null;
             this.colunaJava = null;
             this.tipoDB = null;
             this.tipoJava = null;
             this.colNull = false;
-            this.converter = null;
+            this.converter = false;
+        }
+
+        public Builder comPK( final boolean value ) {
+
+            this.pk = value;
+            return this;
         }
 
         public Builder comColunaDB( final String value ) {
@@ -134,7 +154,7 @@ public class ModeloCampo {
             return this;
         }
 
-        public Builder comConverter( final String value ) {
+        public Builder comConverter( final boolean value ) {
 
             this.converter = value;
             return this;

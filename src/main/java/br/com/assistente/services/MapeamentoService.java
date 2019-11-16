@@ -46,8 +46,8 @@ public class MapeamentoService {
 
         List<ModeloCampo> dados = new ArrayList<>();
 
-        dados.add( new ModeloCampo.Builder().comColunaDB("id").comTipoDB("integer").comTipoJava("Long").comConverter("sim").build() );
-        dados.add( new ModeloCampo.Builder().comColunaDB("razao_social").comTipoDB("integer").comTipoJava("Long").comConverter("sim").build() );
+        dados.add( new ModeloCampo.Builder().comPK(true).comColunaDB("id").comTipoDB("integer").comTipoJava("Long").build() );
+        dados.add( new ModeloCampo.Builder().comPK(false).comColunaDB("razao_social").comTipoDB("integer").comTipoJava("Long").comConverter(true).build() );
 
 
         return dados;
