@@ -63,7 +63,7 @@ public class AssistenteConfigController {
                 .build()
         );
 
-        msgInfo("Configuraçãoes alteradas" );
+        msgInfo("Configurações alteradas" );
     }
 
     @FXML

@@ -1,7 +1,5 @@
 package br.com.assistente.infra.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
@@ -11,9 +9,11 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.exists;
 import static java.nio.file.Files.notExists;
 import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.toEncodedString;
 
 public final class UtilArquivo {
@@ -45,9 +45,13 @@ public final class UtilArquivo {
     public static Optional<String> lerArquivo( final Path arquivo ) {
 
         try {
-            byte[] bytes = Files.readAllBytes(arquivo);
-            String dados = toEncodedString( bytes, UTF_8 );
-            return StringUtils.isBlank( dados ) ? empty() : Optional.of( dados );
+            if ( exists( arquivo ) ) {
+                byte[] bytes = Files.readAllBytes(arquivo);
+                String dados = toEncodedString( bytes, UTF_8 );
+                return isBlank( dados ) ? empty() : Optional.of( dados );
+            } else {
+                return empty();
+            }
         } catch ( final IOException e ) {
             throw new UncheckedIOException( e );
         }
