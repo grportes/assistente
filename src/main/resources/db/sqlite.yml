@@ -1,0 +1,7 @@
+!!br.com.assistente.models.domains.db.SQLiteDB;
+driver: "org.sqlite.JDBC"
+selectTop: "select * from %TABLE% limit 1"
+dataTypes:
+  - { dbType: "INTEGER", javaType: "Long" }
+  - { dbType: "VARCHAR", javaType: "String" }
+bancos: []

@@ -1,6 +1,13 @@
 package br.com.assistente.infra.javafx;
 
 import javafx.scene.control.Alert;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
+
+import java.io.File;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 public final class Dialog {
 
@@ -42,5 +49,15 @@ public final class Dialog {
 ////                Animal currentAnimal = (Animal) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
 ////                data.remove(currentAnimal);
 //    }
+
+    public static Optional<File> selecionarPasta(
+        final String titulo,
+        final Window windowPai
+    ) {
+
+        final DirectoryChooser dirChooser = new DirectoryChooser();
+        dirChooser.setTitle( titulo );
+        return ofNullable( dirChooser.showDialog(windowPai) );
+    }
 
 }

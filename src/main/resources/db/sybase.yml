@@ -1,0 +1,7 @@
+!!br.com.assistente.models.domains.db.SQLiteDB;
+driver: ""
+selectTop: "select top 1 * from %TABLE%"
+dataTypes:
+  - { dbType: "INTEGER", javaType: "Long" }
+  - { dbType: "VARCHAR", javaType: "String" }
+bancos: ['vendas','estoque','admin']

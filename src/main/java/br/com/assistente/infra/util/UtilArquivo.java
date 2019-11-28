@@ -1,20 +1,16 @@
 package br.com.assistente.infra.util;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.Files.exists;
-import static java.nio.file.Files.notExists;
-import static java.util.Objects.isNull;
-import static java.util.Optional.empty;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.toEncodedString;
+import static java.nio.file.Files.deleteIfExists;
+import static java.util.Objects.requireNonNull;
 
 public final class UtilArquivo {
 
@@ -23,7 +19,7 @@ public final class UtilArquivo {
         return UtilArquivo.class.getResource( recurso );
     }
 
-    public static Path buscarLocalApp() {
+    public static Path buscarPastaAplicacao() {
 
         Path currentRelativePath = Paths.get("");
         return currentRelativePath.toAbsolutePath();
@@ -42,30 +38,22 @@ public final class UtilArquivo {
         }
     }
 
-    public static Optional<String> lerArquivo( final Path arquivo ) {
+    public static void gravar(
+        final Path arquivo,
+        final StringWriter dados
+    ) {
 
-        try {
-            if ( exists( arquivo ) ) {
-                byte[] bytes = Files.readAllBytes(arquivo);
-                String dados = toEncodedString( bytes, UTF_8 );
-                return isBlank( dados ) ? empty() : Optional.of( dados );
-            } else {
-                return empty();
-            }
-        } catch ( final IOException e ) {
-            throw new UncheckedIOException( e );
-        }
+        gravar( arquivo, dados.toString() );
     }
 
     public static boolean excluir( final Path path ) {
 
-        if ( isNull(path) || notExists(path) ) return true;
+        requireNonNull( path );
 
         try {
-            Files.delete( path );
-            return true;
-        } catch (IOException e) {
-            return false;
+            return deleteIfExists( path );
+        } catch ( final IOException e ) {
+            throw new UncheckedIOException( e );
         }
     }
 

@@ -2,6 +2,7 @@ package br.com.assistente.controllers;
 
 import br.com.assistente.models.domains.mapeamento.Modelo;
 import br.com.assistente.models.domains.mapeamento.ModeloCampo;
+import br.com.assistente.models.repository.admin.SetupUsuarioRepository;
 import br.com.assistente.services.MapeamentoService;
 import io.vavr.control.Try;
 import javafx.collections.ObservableList;
@@ -38,8 +39,8 @@ public class AssistenteController {
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoTipoDB;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoTipoJava;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoConverter;
-    private ObservableList<ModeloCampo> observableModelo = observableArrayList();
     @FXML private Button btnMapeamento;
+    private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
 
 
@@ -58,6 +59,10 @@ public class AssistenteController {
     public void initialize() {
 
         initializeMapeamento();
+        SetupUsuarioRepository.load();
+//        if ( !SetupUsuarioRepository.isCnxDBInformada() )
+//            openViewConfiguracoes( vboxContainer.getScene().getWindow() );
+
     }
 
     private void initializeMapeamento() {

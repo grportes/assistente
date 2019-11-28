@@ -1,10 +1,10 @@
 package br.com.assistente.services;
 
 import br.com.assistente.infra.exceptions.BusinessException;
-import br.com.assistente.models.domains.admin.ConfiguracaoDefault;
+import br.com.assistente.models.domains.admin.SetupUsuario;
 import br.com.assistente.models.domains.mapeamento.Modelo;
 import br.com.assistente.models.domains.mapeamento.ModeloCampo;
-import br.com.assistente.models.repository.admin.ConfiguracaoDefaultRepository;
+import br.com.assistente.models.repository.admin.SetupUsuarioRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -42,6 +42,48 @@ public class MapeamentoService {
         if ( isBlank(banco) || isBlank(owner) || isBlank(tabela) )
             throw new BusinessException( "É necessário informar banco / owner / tabela" );
 
+//        ConfiguracaoDefaultRepository.find()
+
+
+
+//        ConexaoDB.execQuery( "SELECT * FROM perfis", dados -> {
+//            for (Object dado : dados) {
+//                System.out.println(dado);
+//            }
+//        });
+
+
+//        try {
+//            ConexaoDB.conectar();
+//            MapListHandler beanListHandler = new MapListHandler();
+//            QueryRunner runner = new QueryRunner();
+//
+//            ResultSetHandler<Object[]> handler = new ResultSetHandler<Object[]>() {
+//                public Object[] handle(ResultSet rs) throws SQLException {
+//                    if (!rs.next()) {
+//                        return null;
+//                    }
+//                    ResultSetMetaData meta = rs.getMetaData();
+//                    int cols = meta.getColumnCount();
+//                    Object[] result = new Object[cols];
+//
+//                    for (int i = 0; i < cols; i++) {
+//                        result[i] = rs.getObject(i + 1);
+//                    }
+//                    return result;
+//                }
+//            };
+//
+//            Object[] result  = runner.query(ConexaoDB.getConnection(), "SELECT * FROM perfis", handler );
+//            System.out.print("Result: " + Arrays.toString(result));
+//
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        } finally {
+//            ConexaoDB.desconnectar();
+//        }
+
         final String nomeCompletoTabela = format( "%s.%s.%s", banco, owner, tabela );
 
         List<ModeloCampo> dados = new ArrayList<>();
@@ -62,18 +104,18 @@ public class MapeamentoService {
 
         final Template template = engine.getTemplate("/mapeamento/template.vm");
 
-        VelocityContext context = new VelocityContext();
-        context.put("nomeAutor", ConfiguracaoDefaultRepository.find().map(ConfiguracaoDefault::getAutor).orElse("?") );
-        context.put("modelo", modelo);
-        context.put("StringUtils", StringUtils.class);
-
-        try {
-            final StringWriter writer = new StringWriter();
-            template.merge( context, writer );
-            System.out.println(writer.toString());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        VelocityContext context = new VelocityContext();
+//        context.put("nomeAutor", SetupUsuarioRepository.find().map(SetupUsuario::getAutor).orElse("?") );
+//        context.put("modelo", modelo);
+//        context.put("StringUtils", StringUtils.class);
+//
+//        try {
+//            final StringWriter writer = new StringWriter();
+//            template.merge( context, writer );
+//            System.out.println(writer.toString());
+//            writer.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }
