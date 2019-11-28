@@ -5,6 +5,7 @@ import br.com.assistente.models.domains.commons.constantes.FornecedorDB;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+import static java.lang.String.format;
 import static java.util.Objects.*;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 
@@ -93,6 +94,14 @@ public class SetupCnxBanco {
     public int hashCode() {
 
         return hash(id);
+    }
+
+    @Override
+    public String toString() {
+
+        return nonNull( getPorta() )
+            ? format( "%s - %s:%s", getFornecedorDB(), getUrl(), getPorta() )
+            : format( "%s - %s", getFornecedorDB(), getUrl() );
     }
 
     public static void validarObjeto(final SetupCnxBanco setupCnxBanco ) {

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
@@ -12,7 +13,7 @@ public class SetupUsuario {
 
     private String autor;
     private String localProjeto;
-    private String idCnxAtual;
+    private Integer idCnxAtual;
     private List<SetupCnxBanco> conexoesDisponiveis;
 
     public SetupUsuario() {
@@ -38,12 +39,12 @@ public class SetupUsuario {
         this.localProjeto = localProjeto;
     }
 
-    public String getIdCnxAtual() {
+    public Integer getIdCnxAtual() {
 
         return idCnxAtual;
     }
 
-    public void setIdCnxAtual( final String idCnxAtual ) {
+    public void setIdCnxAtual( final Integer idCnxAtual ) {
 
         this.idCnxAtual = idCnxAtual;
     }
@@ -79,7 +80,7 @@ public class SetupUsuario {
 
         final StringJoiner fields = new StringJoiner(" ");
         if ( isBlank( setupUsuario.getAutor() ) ) fields.add( " autor ");
-        if ( isBlank( setupUsuario.getIdCnxAtual() ) ) fields.add( " conexao ");
+        if ( isNull( setupUsuario.getIdCnxAtual() ) ) fields.add( " conexao ");
         if ( isNoneBlank(fields.toString()) )
             throw new IllegalStateException( "[SetupBanco] Campos obrigatórios: " + fields );
     }

@@ -90,7 +90,7 @@ public class Main extends Application {
         SetupUsuario setupUsuario = new SetupUsuario();
         setupUsuario.setAutor("gportes");
         setupUsuario.setLocalProjeto("\\home\\gportes\\develop\\play\\teste");
-        setupUsuario.setIdCnxAtual("SYBASE|terra.com.br");
+        setupUsuario.setIdCnxAtual(123456);
         SetupUsuarioRepository.save(setupUsuario);
     }
 

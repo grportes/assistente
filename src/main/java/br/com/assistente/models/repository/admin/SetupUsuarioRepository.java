@@ -6,10 +6,7 @@ import br.com.assistente.models.domains.admin.SetupCnxBanco;
 import br.com.assistente.models.domains.admin.SetupUsuario;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static br.com.assistente.infra.util.UtilArquivo.buscarPastaAplicacao;
 import static br.com.assistente.models.domains.admin.SetupCnxBanco.mesmosValores;
@@ -114,4 +111,13 @@ public class SetupUsuarioRepository {
         return find().map( SetupUsuario::getConexoesDisponiveis ).orElse( emptyList() );
     }
 
+    public static Optional<SetupCnxBanco> findByIdCnxBanco(Integer idCnxBancoSelecionada) {
+
+        return find()
+            .map( SetupUsuario::getConexoesDisponiveis )
+            .orElseGet( Collections::emptyList )
+            .stream()
+            .filter( cnx -> Objects.equals( cnx.getId(), idCnxBancoSelecionada ) )
+            .findFirst();
+    }
 }

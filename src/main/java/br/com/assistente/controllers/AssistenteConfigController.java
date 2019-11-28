@@ -17,9 +17,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.Optional;
 
-import static br.com.assistente.infra.javafx.Dialog.msgInfo;
-import static br.com.assistente.infra.javafx.Dialog.selecionarPasta;
+import static br.com.assistente.infra.javafx.Dialog.*;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static br.com.assistente.infra.util.UtilNumber.toInteger;
 import static br.com.assistente.infra.util.UtilString.createString;
@@ -30,11 +30,14 @@ import static javafx.stage.Modality.WINDOW_MODAL;
 
 public class AssistenteConfigController {
 
-    // Definições:
+    // Containers:
     @FXML private Pane pnContainer;
+    @FXML private TabPane tpSetup;
+
+    // Definições:
     @FXML private TextField txfAutor;
     @FXML private TextField txfLocalProjeto;
-    @FXML private ComboBox cbxCnxBanco;
+    @FXML private ComboBox<SetupCnxBanco> cbxCnxBanco;
 
     // Conexao banco:
     @FXML private TextField txfCnxBancoId;
@@ -55,26 +58,15 @@ public class AssistenteConfigController {
     @FXML
     public void initialize() {
 
+
         cbxCnxBancoFornecedor.setItems( observableArrayList( asList(FornecedorDB.values()) ) );
 
-//        SetupUsuarioRepository.find().ifPresent( config -> {
-//            txfAutor.setText( config.getAutor() );
-//            txfLocalProjeto.setText( isNull(config.getLocalProjeto()) ? "" : config.getLocalProjeto() );
-//            cbxCnxBancoFornecedor.setValue( config.getBanco() );
-//            txfCnxBancoUrl.setText( config.getUrlConexaoBanco() );
-//            txfCnxBancoPorta.setText( String.valueOf(config.getPortaConexaoBanco()) );
-//            txfCnxBancoUserName.setText( config.getUserName() );
-//            psCnxBancoSenha.setText( config.getPassword() );
+        SetupUsuarioRepository.find().ifPresent( setupUsuario -> {
+            txfAutor.setText( setupUsuario.getAutor() );
+            txfLocalProjeto.setText( isNull(setupUsuario.getLocalProjeto()) ? "" : setupUsuario.getLocalProjeto() );
+            cbxCnxBanco.setItems( observableArrayList( setupUsuario.getConexoesDisponiveis() ) );
 //            ajustarAcesso();
-//        });
-    }
-
-    private void ajustarAcesso() {
-
-        txfCnxBancoPorta.setDisable( !cbxCnxBancoFornecedor.getValue().isPortaCnx() );
-        btnCnxBancoLocalDB.setDisable( !cbxCnxBancoFornecedor.getValue().isSelecionarBase() );
-        txfCnxBancoUserName.setDisable( !btnCnxBancoLocalDB.isDisable() );
-        psCnxBancoSenha.setDisable( !btnCnxBancoLocalDB.isDisable() );
+        });
     }
 
     @FXML
@@ -84,29 +76,29 @@ public class AssistenteConfigController {
 
         final Control source = (Control) event.getSource();
 
-        final SetupUsuario setupUsuario = getSetupUsuario();
-
         switch ( source.getId() ) {
             case "btnConfirmar":
-            case "btnLocalProjeto":
-                SetupUsuarioRepository.save( setupUsuario );
+                SetupUsuarioRepository.save( getSetupUsuario() );
                 msgInfo("Configurações alteradas" );
                 break;
+            case "btnLocalProjeto":
+                selecionarPasta( "Selecione o local do projeto", pnContainer.getScene().getWindow() )
+                    .map( File::getAbsolutePath )
+                    .ifPresent( file -> txfLocalProjeto.setText( file ) );
+                break;
             case "btnEditarCnxBanco":
+                final Integer idCnxBanco = getIdCnxBancoSelecionada();
+                final Optional<SetupCnxBanco> possivelCnx = SetupUsuarioRepository.findByIdCnxBanco( idCnxBanco );
+                if ( possivelCnx.isPresent() ) {
+                    setSetupCnxBanco( possivelCnx.get() );
+                    tpSetup.getSelectionModel().selectLast();
+                } else {
+                    msgErro( "Falhou edição da conexão! Não localizou dados!!" );
+                }
                 break;
         }
 
     }
-
-    private SetupUsuario getSetupUsuario() {
-
-        final SetupUsuario setupUsuario = new SetupUsuario();
-        setupUsuario.setAutor( txfAutor.getText() );
-        setupUsuario.setLocalProjeto( txfLocalProjeto.getText() );
-//        setupUsuario.setIdCnxAtual( cbxCnxBanco.getValue() );
-        return setupUsuario;
-    }
-
 
     @FXML
     public void onActionCnxBanco( final ActionEvent event ) {
@@ -141,6 +133,29 @@ public class AssistenteConfigController {
         }
     }
 
+    private void ajustarAcesso() {
+
+        txfCnxBancoPorta.setDisable( !cbxCnxBancoFornecedor.getValue().isPortaCnx() );
+        btnCnxBancoLocalDB.setDisable( !cbxCnxBancoFornecedor.getValue().isSelecionarBase() );
+        txfCnxBancoUserName.setDisable( !btnCnxBancoLocalDB.isDisable() );
+        psCnxBancoSenha.setDisable( !btnCnxBancoLocalDB.isDisable() );
+    }
+
+    private SetupUsuario getSetupUsuario() {
+
+        final SetupUsuario setupUsuario = new SetupUsuario();
+        setupUsuario.setAutor( txfAutor.getText() );
+        setupUsuario.setLocalProjeto( txfLocalProjeto.getText() );
+        setupUsuario.setIdCnxAtual( getIdCnxBancoSelecionada() );
+        return setupUsuario;
+    }
+
+    private Integer getIdCnxBancoSelecionada() {
+
+        final SetupCnxBanco cnx = cbxCnxBanco.getValue();
+        return isNull( cnx ) ? null : cnx.getId();
+    }
+
     private SetupCnxBanco getSetupCnxBanco() {
 
         final SetupCnxBanco cnx = new SetupCnxBanco();
@@ -151,6 +166,16 @@ public class AssistenteConfigController {
         cnx.setUserName( txfCnxBancoUserName.getText() );
         cnx.setPassword( psCnxBancoSenha.getText() );
         return cnx;
+    }
+
+    private void setSetupCnxBanco( final SetupCnxBanco setup ) {
+
+        txfCnxBancoId.setText( createString( setup.getId() ) );
+//        cbxCnxBancoFornecedor.setText( setup.getId() );
+        txfCnxBancoUrl.setText( setup.getUrl() );
+        txfCnxBancoPorta.setText( createString( setup.getPorta() ) );
+        txfCnxBancoUserName.setText( setup.getUserName() );
+        psCnxBancoSenha.setText( setup.getPassword() );
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
