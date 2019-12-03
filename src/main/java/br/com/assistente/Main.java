@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 
@@ -21,8 +22,8 @@ public class Main extends Application {
 
         try {
 
-//            Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
-//            Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);
+            Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
+            Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);
 
             // DI - Guice:
 //            Injector injector = Guice.createInjector( new AgenteModule() );
@@ -49,8 +50,11 @@ public class Main extends Application {
 
     private void showErrorDialog(Thread t, Throwable e) {
 
-        Dialog.msgErro( e.getMessage() );
-        Platform.exit();
+        Throwable rootCause = ExceptionUtils.getRootCause(e);
+        String message = rootCause.getMessage();
+
+        Dialog.msgErro( message );
+//        Platform.exit();
     }
 
 
@@ -59,39 +63,49 @@ public class Main extends Application {
         launch( args );
     }
 
-    private static void teste() {
+    public static void main2(String[] args) {
 
-        SetupCnxBanco s1 = new SetupCnxBanco();
-        s1.setFornecedorDB(FornecedorDB.SQLITE);
-        s1.setUrl("\\tmp\\teste.db");
-        SetupUsuarioRepository.save(s1);
+        SetupCnxBanco setupCnxBanco = new SetupCnxBanco();
+        setupCnxBanco.setId( 1148323176 );
+        setupCnxBanco.setFornecedorDB(FornecedorDB.SYBASE);
+        setupCnxBanco.setUrl( "terra.com.br" );
+        setupCnxBanco.setPorta(4100);
+        setupCnxBanco.setUserName("grportes");
+        setupCnxBanco.setPassword("123456789");
 
-        SetupCnxBanco s2 = new SetupCnxBanco();
-        s2.setFornecedorDB(FornecedorDB.SQLITE);
-        s2.setUrl("\\tmp\\outro_teste.db");
-        SetupUsuarioRepository.save(s2);
+        SetupUsuarioRepository.save( setupCnxBanco );
 
-        SetupCnxBanco s3 = new SetupCnxBanco();
-        s3.setFornecedorDB(FornecedorDB.SYBASE);
-        s3.setUrl("terra.com.br");
-        s3.setPorta(9030);
-        s3.setUserName("teste");
-        s3.setPassword("123");
-        SetupUsuarioRepository.save(s3);
-
-        SetupCnxBanco s4 = new SetupCnxBanco();
-        s4.setFornecedorDB(FornecedorDB.SYBASE);
-        s4.setUrl("saturno.com.br");
-        s4.setPorta(9031);
-        s4.setUserName("teste");
-        s4.setPassword("123");
-        SetupUsuarioRepository.save(s4);
-
-        SetupUsuario setupUsuario = new SetupUsuario();
-        setupUsuario.setAutor("gportes");
-        setupUsuario.setLocalProjeto("\\home\\gportes\\develop\\play\\teste");
-        setupUsuario.setIdCnxAtual(123456);
-        SetupUsuarioRepository.save(setupUsuario);
+//        SetupCnxBanco s1 = new SetupCnxBanco();
+//        s1.setFornecedorDB(FornecedorDB.SQLITE);
+//        s1.setUrl("\\tmp\\teste.db");
+//        SetupUsuarioRepository.save(s1);
+//
+//        SetupCnxBanco s2 = new SetupCnxBanco();
+//        s2.setFornecedorDB(FornecedorDB.SQLITE);
+//        s2.setUrl("\\tmp\\outro_teste.db");
+//        SetupUsuarioRepository.save(s2);
+//
+//        SetupCnxBanco s3 = new SetupCnxBanco();
+//        s3.setFornecedorDB(FornecedorDB.SYBASE);
+//        s3.setUrl("terra.com.br");
+//        s3.setPorta(9030);
+//        s3.setUserName("teste");
+//        s3.setPassword("123");
+//        SetupUsuarioRepository.save(s3);
+//
+//        SetupCnxBanco s4 = new SetupCnxBanco();
+//        s4.setFornecedorDB(FornecedorDB.SYBASE);
+//        s4.setUrl("saturno.com.br");
+//        s4.setPorta(9031);
+//        s4.setUserName("teste");
+//        s4.setPassword("123");
+//        SetupUsuarioRepository.save(s4);
+//
+//        SetupUsuario setupUsuario = new SetupUsuario();
+//        setupUsuario.setAutor("gportes");
+//        setupUsuario.setLocalProjeto("\\home\\gportes\\develop\\play\\teste");
+//        setupUsuario.setIdCnxAtual(123456);
+//        SetupUsuarioRepository.save(setupUsuario);
     }
 
 

@@ -8,13 +8,12 @@ import io.vavr.control.Try;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
 import java.util.List;
 
-import static br.com.assistente.controllers.AssistenteConfigController.openViewConfiguracoes;
+import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.collections.FXCollections.observableList;

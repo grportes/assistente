@@ -17,18 +17,22 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 
 import static br.com.assistente.infra.javafx.Dialog.*;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static br.com.assistente.infra.util.UtilNumber.toInteger;
 import static br.com.assistente.infra.util.UtilString.createString;
+import static java.lang.Integer.parseInt;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.stage.Modality.WINDOW_MODAL;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
-public class AssistenteConfigController {
+public class SetupController {
 
     // Containers:
     @FXML private Pane pnContainer;
@@ -58,14 +62,18 @@ public class AssistenteConfigController {
     @FXML
     public void initialize() {
 
-
+        cbxCnxBanco.setItems( observableArrayList( emptyList() ) );
         cbxCnxBancoFornecedor.setItems( observableArrayList( asList(FornecedorDB.values()) ) );
 
         SetupUsuarioRepository.find().ifPresent( setupUsuario -> {
             txfAutor.setText( setupUsuario.getAutor() );
             txfLocalProjeto.setText( isNull(setupUsuario.getLocalProjeto()) ? "" : setupUsuario.getLocalProjeto() );
             cbxCnxBanco.setItems( observableArrayList( setupUsuario.getConexoesDisponiveis() ) );
-//            ajustarAcesso();
+            cbxCnxBanco.getItems()
+                .stream()
+                .filter( s -> Objects.equals(s.getId(), setupUsuario.getIdCnxAtual()) )
+                .findFirst()
+                .ifPresent( cbxCnxBanco::setValue );
         });
     }
 
@@ -90,7 +98,7 @@ public class AssistenteConfigController {
                 final Integer idCnxBanco = getIdCnxBancoSelecionada();
                 final Optional<SetupCnxBanco> possivelCnx = SetupUsuarioRepository.findByIdCnxBanco( idCnxBanco );
                 if ( possivelCnx.isPresent() ) {
-                    setSetupCnxBanco( possivelCnx.get() );
+                    objToView( possivelCnx.get() );
                     tpSetup.getSelectionModel().selectLast();
                 } else {
                     msgErro( "Falhou edição da conexão! Não localizou dados!!" );
@@ -111,19 +119,25 @@ public class AssistenteConfigController {
             case "cbxCnxBancoFornecedor":
                 ajustarAcesso();
             case "btnCnxBancoNew":
-                txfCnxBancoId.setText("");
-                txfCnxBancoUrl.setText("");
-                txfCnxBancoPorta.setText("");
-                txfCnxBancoUserName.setText("");
-                psCnxBancoSenha.setText("");
+                reset();
                 break;
             case "btnCnxBancoSave":
-                SetupCnxBanco cnx = getSetupCnxBanco();
-                SetupUsuarioRepository.save(cnx);
-                txfCnxBancoId.setText( createString(cnx.getId()) );
+                final SetupCnxBanco setupCnxBancoSave = getSetupCnxBanco();
+                int idCnxBancoSave = SetupUsuarioRepository.save( setupCnxBancoSave );
+                txfCnxBancoId.setText( createString(idCnxBancoSave) );
+                int index = cbxCnxBanco.getItems().lastIndexOf( setupCnxBancoSave );
+                if ( index == -1 )
+                    cbxCnxBanco.getItems().add( setupCnxBancoSave );
+                else
+                    cbxCnxBanco.getItems().set( index, setupCnxBancoSave );
+                msgInfo( "Conexão salva" );
                 break;
             case "btnCnxBancoDelete":
-                System.out.println("vamos excluir ");
+                if ( isBlank(txfCnxBancoId.getText()) ) return;
+                final int idCnxBancoDelete = parseInt( txfCnxBancoId.getText() );
+                cbxCnxBanco.getItems().removeIf( s -> Objects.equals( s.getId(), idCnxBancoDelete ) );
+                SetupUsuarioRepository.deleteCnxById( idCnxBancoDelete );
+                reset();
                 break;
             case "btnCnxBancoLocalDB":
                 selecionarPasta( "Selecione a base de dados SQLIte", pnContainer.getScene().getWindow() )
@@ -132,6 +146,8 @@ public class AssistenteConfigController {
                 break;
         }
     }
+
+
 
     private void ajustarAcesso() {
 
@@ -168,14 +184,23 @@ public class AssistenteConfigController {
         return cnx;
     }
 
-    private void setSetupCnxBanco( final SetupCnxBanco setup ) {
+    private void objToView( final SetupCnxBanco setup ) {
 
-        txfCnxBancoId.setText( createString( setup.getId() ) );
-//        cbxCnxBancoFornecedor.setText( setup.getId() );
+        cbxCnxBancoFornecedor.getSelectionModel().select( setup.getFornecedorDB() );
         txfCnxBancoUrl.setText( setup.getUrl() );
         txfCnxBancoPorta.setText( createString( setup.getPorta() ) );
         txfCnxBancoUserName.setText( setup.getUserName() );
         psCnxBancoSenha.setText( setup.getPassword() );
+        txfCnxBancoId.setText( createString( setup.getId() ) );
+    }
+
+    private void reset() {
+
+        txfCnxBancoId.setText("");
+        txfCnxBancoUrl.setText("");
+        txfCnxBancoPorta.setText("");
+        txfCnxBancoUserName.setText("");
+        psCnxBancoSenha.setText("");
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +212,7 @@ public class AssistenteConfigController {
     public static void openViewConfiguracoes( final Window windowPai ) {
 
         try {
-            final URL resource = getResource( "/fxml/AssistenteConfigView.fxml");
+            final URL resource = getResource("/fxml/SetupView.fxml");
 
             final Stage stage = new Stage();
             stage.setScene( new Scene(FXMLLoader.load(resource)) );

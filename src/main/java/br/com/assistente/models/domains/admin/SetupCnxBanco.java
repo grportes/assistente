@@ -81,6 +81,14 @@ public class SetupCnxBanco {
         this.password = password;
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // EQUALS & HASCODE.
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     @Override
     public boolean equals(Object o) {
 
@@ -103,6 +111,14 @@ public class SetupCnxBanco {
             ? format( "%s - %s:%s", getFornecedorDB(), getUrl(), getPorta() )
             : format( "%s - %s", getFornecedorDB(), getUrl() );
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // METODOS AUXILIARES.
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     public static void validarObjeto(final SetupCnxBanco setupCnxBanco ) {
 
@@ -134,10 +150,10 @@ public class SetupCnxBanco {
 
         return nonNull( setupCnxBancoA )
             && nonNull( setupCnxBancoB )
+            && Objects.equals( setupCnxBancoA.getUrl(), setupCnxBancoB.getUrl() )
             && Objects.equals( setupCnxBancoA.getPorta(), setupCnxBancoB.getPorta() )
             && Objects.equals( setupCnxBancoA.getUserName(), setupCnxBancoB.getUserName() )
             && Objects.equals( setupCnxBancoA.getPassword(), setupCnxBancoB.getPassword() );
-
     }
 
 }
