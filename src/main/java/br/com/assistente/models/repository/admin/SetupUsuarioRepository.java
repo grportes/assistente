@@ -4,10 +4,12 @@ import br.com.assistente.infra.exceptions.PersistenceException;
 import br.com.assistente.infra.util.UtilYaml;
 import br.com.assistente.models.domains.admin.SetupCnxBanco;
 import br.com.assistente.models.domains.admin.SetupUsuario;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static br.com.assistente.infra.util.UtilArquivo.buscarPastaAplicacao;
@@ -17,7 +19,6 @@ import static br.com.assistente.models.domains.admin.SetupUsuario.validarObjeto;
 import static java.nio.file.Files.notExists;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static java.util.Objects.nonNull;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
@@ -86,15 +87,15 @@ public class SetupUsuarioRepository {
         });
     }
 
-    public static int save( final SetupCnxBanco novaCnx ) {
+    public static int save( final SetupCnxBanco cnxBanco ) {
 
-        validarObjeto( novaCnx );
+        validarObjeto( cnxBanco );
 
-        final AtomicInteger idSetupCnx = new AtomicInteger(0);
+        final AtomicInteger idCnxBanco = new AtomicInteger(0);
 
         final Path arquivoYaml = getArquivoYaml();
 
-        final SetupUsuario setup = UtilYaml
+        final SetupUsuario setupUsuario = UtilYaml
             .load( SetupUsuario.class, arquivoYaml )
             .map( setupUsuarioAtual -> {
 
@@ -102,45 +103,46 @@ public class SetupUsuarioRepository {
 
                 if ( isEmpty(cnxs) ) {
                     // Primeira conexão...
-                    idSetupCnx.set( nextInt() );
-                    novaCnx.setId( idSetupCnx.get() );
-                    cache.setConexoesDisponiveis( singletonList(novaCnx) );
+                    idCnxBanco.set( nextInt() );
+                    cnxBanco.setId( idCnxBanco.get() );
+                    setupUsuarioAtual.setConexoesDisponiveis( singletonList(cnxBanco) );
                     return setupUsuarioAtual;
                 }
 
                 // Update...
                 for ( final SetupCnxBanco cnx : cnxs ) {
-                    if ( !Objects.equals( cnx, novaCnx ) ) continue;
-                    idSetupCnx.set( cnx.getId() );
-                    if ( !mesmosValores( cnx, novaCnx ) ) {
-                        cnx.setFornecedorDB( novaCnx.getFornecedorDB() );
-                        cnx.setUrl( novaCnx.getUrl() );
-                        cnx.setPorta( novaCnx.getPorta() );
-                        cnx.setUserName( novaCnx.getUserName() );
-                        cnx.setPassword( novaCnx.getPassword() );
+                    if ( !Objects.equals( cnx, cnxBanco ) ) continue;
+                    idCnxBanco.set( cnx.getId() );
+                    if ( !mesmosValores( cnx, cnxBanco ) ) {
+                        cnx.setDescricao( cnxBanco.getDescricao() );
+                        cnx.setDriverCnx( cnxBanco.getDriverCnx() );
+                        cnx.setUrl( cnxBanco.getUrl() );
+                        cnx.setPorta( cnxBanco.getPorta() );
+                        cnx.setUserName( cnxBanco.getUserName() );
+                        cnx.setPassword( cnxBanco.getPassword() );
                     }
                     return setupUsuarioAtual;
                 }
 
                 //  Nova conexão.
-                idSetupCnx.set( nextInt() );
-                novaCnx.setId( idSetupCnx.get() );
-                cnxs.add( novaCnx );
+                idCnxBanco.set( nextInt() );
+                cnxBanco.setId( idCnxBanco.get() );
+                cnxs.add( cnxBanco );
                 return setupUsuarioAtual;
             })
             .orElseGet(() -> {
-                idSetupCnx.set( nextInt() );
-                novaCnx.setId( idSetupCnx.get() );
+                idCnxBanco.set( nextInt() );
+                cnxBanco.setId( idCnxBanco.get() );
 
-                final SetupUsuario setupUsuario = new SetupUsuario();
-                setupUsuario.setIdCnxAtual( idSetupCnx.get() );
-                setupUsuario.setConexoesDisponiveis( singletonList(novaCnx) );
-                return setupUsuario;
+                final SetupUsuario setupUsuarioNew = new SetupUsuario();
+                setupUsuarioNew.setIdCnxAtual( idCnxBanco.get() );
+                setupUsuarioNew.setConexoesDisponiveis( singletonList(cnxBanco) );
+                return setupUsuarioNew;
             });
 
-        UtilYaml.dump( setup, arquivoYaml );
-        cache = setup;
-        return idSetupCnx.get();
+        UtilYaml.dump( setupUsuario, arquivoYaml );
+        cache = setupUsuario;
+        return idCnxBanco.get();
     }
 
     public static List<SetupCnxBanco> buscarCnxsDisponiveis() {

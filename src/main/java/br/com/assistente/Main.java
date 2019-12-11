@@ -3,8 +3,6 @@ package br.com.assistente;
 import br.com.assistente.config.ConexaoDB;
 import br.com.assistente.infra.javafx.Dialog;
 import br.com.assistente.models.domains.admin.SetupCnxBanco;
-import br.com.assistente.models.domains.admin.SetupUsuario;
-import br.com.assistente.models.domains.commons.constantes.FornecedorDB;
 import br.com.assistente.models.repository.admin.SetupUsuarioRepository;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -67,7 +65,8 @@ public class Main extends Application {
 
         SetupCnxBanco setupCnxBanco = new SetupCnxBanco();
         setupCnxBanco.setId( 1148323176 );
-        setupCnxBanco.setFornecedorDB(FornecedorDB.SYBASE);
+        setupCnxBanco.setDescricao("TESTE 2");
+        setupCnxBanco.setDriverCnx("Sybase");
         setupCnxBanco.setUrl( "terra.com.br" );
         setupCnxBanco.setPorta(4100);
         setupCnxBanco.setUserName("grportes");

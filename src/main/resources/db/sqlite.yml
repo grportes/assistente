@@ -1,5 +1,9 @@
-!!br.com.assistente.models.domains.db.SQLiteDB;
+id: "SQLite"
 driver: "org.sqlite.JDBC"
+url: "jdbc:sqlite:"
+autenticar: false
+exigirPortaCnx: false
+selecionarBaseDados: true
 selectTop: "select * from %TABLE% limit 1"
 dataTypes:
   - { dbType: "INTEGER", javaType: "Long" }

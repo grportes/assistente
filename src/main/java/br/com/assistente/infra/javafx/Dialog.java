@@ -2,6 +2,7 @@ package br.com.assistente.infra.javafx;
 
 import javafx.scene.control.Alert;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
@@ -58,6 +59,16 @@ public final class Dialog {
         final DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle( titulo );
         return ofNullable( dirChooser.showDialog(windowPai) );
+    }
+
+    public static Optional<File> selecionarArquivo(
+        final String titulo,
+        final Window windowPai
+    ) {
+
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle( titulo );
+        return ofNullable( fileChooser.showOpenDialog(windowPai) );
     }
 
 }

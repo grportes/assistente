@@ -1,5 +1,9 @@
-!!br.com.assistente.models.domains.db.SQLiteDB;
+id: "Sybase"
 driver: ""
+url: "jdbc:sqlite:"
+autenticar: true
+exigirPortaCnx: true
+selecionarBaseDados: true
 selectTop: "select top 1 * from %TABLE%"
 dataTypes:
   - { dbType: "INTEGER", javaType: "Long" }

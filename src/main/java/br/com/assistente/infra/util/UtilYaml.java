@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static br.com.assistente.infra.util.UtilArquivo.excluir;
@@ -39,6 +42,22 @@ public final class UtilYaml {
             throw new UncheckedIOException( e );
         }
     }
+
+    public static <T> Optional<T> load(
+        final Class<T> clazz,
+        final URL resource
+    ) {
+
+        requireNonNull(clazz);
+        requireNonNull(resource);
+
+        try {
+            return load( clazz, Paths.get( resource.toURI() ) );
+        } catch ( URISyntaxException e ) {
+            throw new RuntimeException( "Falhou leitura de: " + resource );
+        }
+    }
+
 
     public static void dump(
         final Object data,
