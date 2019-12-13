@@ -1,6 +1,6 @@
 package br.com.assistente.controllers;
 
-import br.com.assistente.config.ConexaoDB;
+import br.com.assistente.infra.db.ConnectionFactory;
 import br.com.assistente.models.domains.admin.SetupCnxBanco;
 import br.com.assistente.models.domains.admin.SetupUsuario;
 import br.com.assistente.models.domains.db.DriverCnx;
@@ -119,6 +119,7 @@ public class SetupController {
         switch ( source.getId() ) {
             case "cbxCnxBancoFornecedor":
                 ajustarAcesso();
+                break;
             case "btnCnxBancoNew":
                 reset();
                 break;
@@ -146,16 +147,20 @@ public class SetupController {
                     .ifPresent( file -> txfCnxBancoUrl.setText( file ) );
                 break;
             case "btnCnxBancoCheck":
-                ConexaoDB.checkCnx( getCnxBanco() );
+                if ( ConnectionFactory.checkCnx( getCnxBanco() ) )
+                    msgInfo( "Conexão OK" );
+                else
+                    msgErro( "Falha de conexão!!" );
         }
     }
 
     private void ajustarAcesso() {
 
-        txfCnxBancoPorta.setDisable( !cbxCnxBancoFornecedor.getValue().getExigirPortaCnx() );
-        btnCnxBancoLocalDB.setDisable( !cbxCnxBancoFornecedor.getValue().getSelecionarBaseDados() );
-        txfCnxBancoUserName.setDisable( !btnCnxBancoLocalDB.isDisable() );
-        psCnxBancoSenha.setDisable( !btnCnxBancoLocalDB.isDisable() );
+        final DriverCnx driverCnx = cbxCnxBancoFornecedor.getValue();
+        txfCnxBancoPorta.setDisable( !driverCnx.isExigePorta() );
+        btnCnxBancoLocalDB.setDisable( !driverCnx.getSelecionarBaseDados() );
+        txfCnxBancoUserName.setDisable( txfCnxBancoPorta.isDisable() );
+        psCnxBancoSenha.setDisable( txfCnxBancoPorta.isDisable() );
     }
 
     private SetupUsuario getSetupUsuario() {
@@ -178,8 +183,8 @@ public class SetupController {
         final SetupCnxBanco cnx = new SetupCnxBanco();
         cnx.setId( toInteger( txfCnxBancoId.getText() ) );
         cnx.setDescricao( txfCnxBancoDescricao.getText() );
-//        cnx.setFornecedorDB( cbxCnxBancoFornecedor.getValue() );
-        cnx.setUrl( txfCnxBancoUrl.getText() );
+        cnx.setDriver( cbxCnxBancoFornecedor.getValue() );
+        cnx.setEndereco( txfCnxBancoUrl.getText() );
         cnx.setPorta( toInteger( txfCnxBancoPorta.getText() ) );
         cnx.setUserName( txfCnxBancoUserName.getText() );
         cnx.setPassword( psCnxBancoSenha.getText() );
@@ -188,8 +193,8 @@ public class SetupController {
 
     private void objToView( final SetupCnxBanco cnx ) {
 
-//        cbxCnxBancoFornecedor.getSelectionModel().select( cnx.getFornecedorDB() );
-        txfCnxBancoUrl.setText( cnx.getUrl() );
+        cbxCnxBancoFornecedor.getSelectionModel().select( cnx.getDriver() );
+        txfCnxBancoUrl.setText( cnx.getEndereco() );
         txfCnxBancoPorta.setText( createString( cnx.getPorta() ) );
         txfCnxBancoUserName.setText( cnx.getUserName() );
         psCnxBancoSenha.setText( cnx.getPassword() );

@@ -115,8 +115,8 @@ public class SetupUsuarioRepository {
                     idCnxBanco.set( cnx.getId() );
                     if ( !mesmosValores( cnx, cnxBanco ) ) {
                         cnx.setDescricao( cnxBanco.getDescricao() );
-                        cnx.setDriverCnx( cnxBanco.getDriverCnx() );
-                        cnx.setUrl( cnxBanco.getUrl() );
+                        cnx.setDriver( cnxBanco.getDriver() );
+                        cnx.setEndereco( cnxBanco.getEndereco() );
                         cnx.setPorta( cnxBanco.getPorta() );
                         cnx.setUserName( cnxBanco.getUserName() );
                         cnx.setPassword( cnxBanco.getPassword() );

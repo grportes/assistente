@@ -1,9 +1,10 @@
 id: "SQLite"
 driver: "org.sqlite.JDBC"
-url: "jdbc:sqlite:"
+protocolo: "jdbc:sqlite:"
 autenticar: false
-exigirPortaCnx: false
+porta: false
 selecionarBaseDados: true
+selectDate: "select current_date"
 selectTop: "select * from %TABLE% limit 1"
 dataTypes:
   - { dbType: "INTEGER", javaType: "Long" }

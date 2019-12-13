@@ -1,11 +1,12 @@
 id: "Sybase"
-driver: ""
-url: "jdbc:sqlite:"
+driver: "net.sourceforge.jtds.jdbc.Driver"
+protocolo: "jdbc:jtds:sqlserver://"
 autenticar: true
-exigirPortaCnx: true
+porta: true
 selecionarBaseDados: true
+selectDate: "select getdate()"
 selectTop: "select top 1 * from %TABLE%"
 dataTypes:
   - { dbType: "INTEGER", javaType: "Long" }
   - { dbType: "VARCHAR", javaType: "String" }
-bancos: ['vendas','estoque','admin']
+bancos: ["vendas","estoque","admin"]

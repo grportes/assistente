@@ -1,5 +1,7 @@
 package br.com.assistente.models.domains.admin;
 
+import br.com.assistente.models.domains.db.DriverCnx;
+
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -12,8 +14,8 @@ public class SetupCnxBanco {
 
     private Integer id;
     private String descricao;
-    private String driverCnx;
-    private String url;
+    private DriverCnx driver;
+    private String endereco;
     private Integer porta;
     private String userName;
     private String password;
@@ -41,24 +43,24 @@ public class SetupCnxBanco {
         this.descricao = descricao;
     }
 
-    public String getDriverCnx() {
+    public DriverCnx getDriver() {
 
-        return driverCnx;
+        return driver;
     }
 
-    public void setDriverCnx( final String driverCnx ) {
+    public void setDriver( final DriverCnx driver ) {
 
-        this.driverCnx = driverCnx;
+        this.driver = driver;
     }
 
-    public String getUrl() {
+    public String getEndereco() {
 
-        return url;
+        return endereco;
     }
 
-    public void setUrl( final String url ) {
+    public void setEndereco(final String endereco) {
 
-        this.url = url;
+        this.endereco = endereco;
     }
 
     public Integer getPorta() {
@@ -117,7 +119,7 @@ public class SetupCnxBanco {
     @Override
     public String toString() {
 
-        return format( "%s - %s", getDriverCnx(), getDescricao() );
+        return format( "%s - %s", getDriver(), getDescricao() );
     }
 
 
@@ -132,16 +134,22 @@ public class SetupCnxBanco {
 
         requireNonNull( setupCnxBanco );
 
-        final StringJoiner fields = new StringJoiner(" ");
+        StringJoiner fields = new StringJoiner(" ");
         if ( isEmpty( setupCnxBanco.getDescricao()) ) fields.add( "descricao" );
-        if ( isNull( setupCnxBanco.getDriverCnx() ) ) fields.add( "fornecedorDB" );
-        if ( isNull( setupCnxBanco.getUrl() ) ) fields.add( "url" );
-        if ( isNull( setupCnxBanco.getPorta() ) ) fields.add( "porta" );
-        if ( isNull( setupCnxBanco.getUserName() ) ) fields.add( "userName" );
-        if ( isNull( setupCnxBanco.getPassword() ) ) fields.add( "password" );
+        if ( isNull( setupCnxBanco.getDriver() ) ) fields.add( "driver" );
+        if ( isNull( setupCnxBanco.getEndereco() ) ) fields.add( "url" );
         if ( isNoneBlank(fields.toString()) )
             throw new IllegalStateException( "[SetupBanco] Campos obrigatórios: " + fields );
 
+        fields = new StringJoiner(" ");
+        final DriverCnx driver = setupCnxBanco.getDriver();
+        if ( driver.isExigePorta() && isNull( setupCnxBanco.getPorta() ) ) fields.add( "porta" );
+        if ( driver.isExigeAutenticacao() ) {
+            if ( isNull( setupCnxBanco.getUserName() ) ) fields.add( "userName" );
+            if ( isNull( setupCnxBanco.getPassword() ) ) fields.add( "password" );
+        }
+        if ( isNoneBlank(fields.toString()) )
+            throw new IllegalStateException( "[SetupBanco] Campos obrigatórios: " + fields );
     }
 
     public static boolean mesmosValores (
@@ -152,7 +160,7 @@ public class SetupCnxBanco {
         return nonNull( setupCnxBancoA )
             && nonNull( setupCnxBancoB )
             && Objects.equals( setupCnxBancoA.getDescricao(), setupCnxBancoB.getDescricao() )
-            && Objects.equals( setupCnxBancoA.getUrl(), setupCnxBancoB.getUrl() )
+            && Objects.equals( setupCnxBancoA.getEndereco(), setupCnxBancoB.getEndereco() )
             && Objects.equals( setupCnxBancoA.getPorta(), setupCnxBancoB.getPorta() )
             && Objects.equals( setupCnxBancoA.getUserName(), setupCnxBancoB.getUserName() )
             && Objects.equals( setupCnxBancoA.getPassword(), setupCnxBancoB.getPassword() );

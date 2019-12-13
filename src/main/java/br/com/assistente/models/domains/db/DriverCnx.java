@@ -21,10 +21,11 @@ public class DriverCnx {
 
     private String id;
     private String driver;
-    private String url;
+    private String protocolo;
     private Boolean autenticar;
-    private Boolean exigirPortaCnx;
+    private Boolean porta;
     private Boolean selecionarBaseDados;
+    private String selectDate;
     private String selectTop;
     private List<DataType> dataTypes;
     private List<String> bancos;
@@ -49,17 +50,17 @@ public class DriverCnx {
         this.driver = driver;
     }
 
-    public String getUrl() {
+    public String getProtocolo() {
 
-        return url;
+        return protocolo;
     }
 
-    public void setUrl( final String url ) {
+    public void setProtocolo(final String protocolo) {
 
-        this.url = url;
+        this.protocolo = protocolo;
     }
 
-    public Boolean getAutenticar() {
+    public Boolean isExigeAutenticacao() {
 
         return autenticar;
     }
@@ -69,14 +70,14 @@ public class DriverCnx {
         this.autenticar = autenticar;
     }
 
-    public Boolean getExigirPortaCnx() {
+    public Boolean isExigePorta() {
 
-        return exigirPortaCnx;
+        return porta;
     }
 
-    public void setExigirPortaCnx( final Boolean exigirPortaCnx ) {
+    public void setPorta(final Boolean porta) {
 
-        this.exigirPortaCnx = exigirPortaCnx;
+        this.porta = porta;
     }
 
     public Boolean getSelecionarBaseDados() {
@@ -87,6 +88,16 @@ public class DriverCnx {
     public void setSelecionarBaseDados( final Boolean selecionarBaseDados ) {
 
         this.selecionarBaseDados = selecionarBaseDados;
+    }
+
+    public String getSelectDate() {
+
+        return selectDate;
+    }
+
+    public void setSelectDate( final String selectDate ) {
+
+        this.selectDate = selectDate;
     }
 
     public String getSelectTop() {
