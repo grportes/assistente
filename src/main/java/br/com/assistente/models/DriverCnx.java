@@ -1,4 +1,4 @@
-package br.com.assistente.models.domains.db;
+package br.com.assistente.models;
 
 import br.com.assistente.config.ConexaoDB;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 import static br.com.assistente.infra.util.UtilYaml.load;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
+import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toList;
 
 public class DriverCnx {
@@ -174,31 +174,32 @@ public class DriverCnx {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static List<DriverCnx> buscarDriversCnx() {
+    public static List<String> buscarIds() {
 
-        if ( nonNull(cache) ) return cache;
+        if ( isNull(cache) ) {
 
-        URL resource = ConexaoDB.class.getResource("/db");
-        Path arquivos = Paths.get(resource.getPath());
+            final URL resource = ConexaoDB.class.getResource("/db");
+            final Path arquivos = Paths.get( resource.getPath() );
 
-        try {
-            cache =  Files.list(arquivos)
-                .map(path -> load(DriverCnx.class, path))
-                .map(Optional::get)
-                .collect(toList());
-        } catch ( IOException e ) {
-            cache = emptyList();
+            try {
+                cache = Files.list( arquivos )
+                    .map( path -> load(DriverCnx.class, path) )
+                    .map( Optional::get )
+                    .collect( toList() );
+            } catch (IOException e) {
+                cache = emptyList();
+            }
         }
 
-        return cache;
+        return cache.stream().map( DriverCnx::getId ).collect( toList() );
     }
+
 
     public static Optional<DriverCnx> findById( final String id ) {
 
         return isNull(cache)
-            ? Optional.empty()
+            ? empty()
             : cache.stream().filter(driver -> Objects.equals( driver.getId(), id ) ).findFirst();
     }
-
 
 }

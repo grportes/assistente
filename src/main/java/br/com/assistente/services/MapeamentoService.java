@@ -1,18 +1,12 @@
 package br.com.assistente.services;
 
 import br.com.assistente.infra.exceptions.BusinessException;
-import br.com.assistente.models.domains.admin.SetupUsuario;
-import br.com.assistente.models.domains.mapeamento.Modelo;
-import br.com.assistente.models.domains.mapeamento.ModeloCampo;
-import br.com.assistente.models.repository.admin.SetupUsuarioRepository;
-import org.apache.commons.lang3.StringUtils;
+import br.com.assistente.models.Modelo;
+import br.com.assistente.models.ModeloCampo;
 import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 

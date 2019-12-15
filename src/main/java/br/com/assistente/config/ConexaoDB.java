@@ -1,7 +1,5 @@
 package br.com.assistente.config;
 
-import br.com.assistente.models.domains.admin.SetupCnxBanco;
-import br.com.assistente.models.domains.db.DriverCnx;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.*;

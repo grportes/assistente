@@ -15,8 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import static br.com.assistente.infra.util.UtilArquivo.excluir;
-import static br.com.assistente.infra.util.UtilArquivo.gravar;
+import static br.com.assistente.infra.util.UtilArquivo.*;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newInputStream;
 import static java.util.Objects.requireNonNull;
@@ -75,4 +74,11 @@ public final class UtilYaml {
         excluir( arquivo );
         gravar( arquivo, writer );
     }
+
+
+    public static Path getArquivoYaml()  {
+
+        return getPathSetup().resolve( "assistente.yml" );
+    }
+
 }

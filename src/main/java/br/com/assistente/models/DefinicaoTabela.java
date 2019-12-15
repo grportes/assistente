@@ -1,4 +1,4 @@
-package br.com.assistente.models.domains.commons;
+package br.com.assistente.models;
 
 public interface DefinicaoTabela {
 

@@ -1,5 +1,7 @@
 package br.com.assistente.infra.util;
 
+import br.com.assistente.infra.exceptions.PersistenceException;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
@@ -11,6 +13,7 @@ import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.deleteIfExists;
+import static java.nio.file.Files.notExists;
 import static java.util.Objects.requireNonNull;
 
 public final class UtilArquivo {
@@ -56,6 +59,15 @@ public final class UtilArquivo {
         } catch ( final IOException e ) {
             throw new UncheckedIOException( e );
         }
+    }
+
+    public static Path getPathSetup()  {
+
+        final Path pasta = buscarPastaAplicacao();
+        if ( notExists(pasta) )
+            throw new RuntimeException( "Não foi possivel localizar pasta do aplicativo" );
+
+        return pasta;
     }
 
 }

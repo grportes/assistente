@@ -1,7 +1,7 @@
 package br.com.assistente.infra.db;
 
-import br.com.assistente.models.domains.admin.SetupCnxBanco;
-import br.com.assistente.models.domains.db.DriverCnx;
+import br.com.assistente.models.SetupCnxBanco;
+import br.com.assistente.models.DriverCnx;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -56,19 +56,20 @@ public final class ConnectionFactory {
 
     public static boolean checkCnx( final SetupCnxBanco cnxBanco ) {
 
-        if ( isNull(cnxBanco) || isNull(cnxBanco.getDriver()) )
+        if ( isNull(cnxBanco) || isNull(cnxBanco.getIdDriver()) )
             return false;
 
+        final DriverCnx driverCnx = DriverCnx.findById(cnxBanco.getIdDriver())
+                .orElseThrow(() -> new RuntimeException("Não localizou driver de conexão"));
 
         Connection connectionTemp = null;
 
         try {
-            final DriverCnx driver = cnxBanco.getDriver();
-            String db = format( "%s%s", driver.getProtocolo(), cnxBanco.getEndereco() );
+            String db = format( "%s%s", driverCnx.getProtocolo(), cnxBanco.getEndereco() );
             connectionTemp = DriverManager.getConnection( db );
             QueryRunner runner = new QueryRunner();
             ScalarHandler<Object> resultSet = new ScalarHandler<>();
-            runner.query(connectionTemp, driver.getSelectDate(), resultSet);
+            runner.query(connectionTemp, driverCnx.getSelectDate(), resultSet);
             return true;
         } catch (  SQLException e ) {
             return false;

@@ -1,8 +1,8 @@
 package br.com.assistente.controllers;
 
-import br.com.assistente.models.domains.mapeamento.Modelo;
-import br.com.assistente.models.domains.mapeamento.ModeloCampo;
-import br.com.assistente.models.repository.admin.SetupUsuarioRepository;
+import br.com.assistente.models.Modelo;
+import br.com.assistente.models.ModeloCampo;
+import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.MapeamentoService;
 import io.vavr.control.Try;
 import javafx.collections.ObservableList;
@@ -58,7 +58,7 @@ public class AssistenteController {
     public void initialize() {
 
         initializeMapeamento();
-        SetupUsuarioRepository.load();
+        SetupUsuario.load();
 //        if ( !SetupUsuarioRepository.isCnxDBInformada() )
 //            openViewConfiguracoes( vboxContainer.getScene().getWindow() );
 

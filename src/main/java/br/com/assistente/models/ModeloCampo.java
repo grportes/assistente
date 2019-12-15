@@ -1,4 +1,4 @@
-package br.com.assistente.models.domains.mapeamento;
+package br.com.assistente.models;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

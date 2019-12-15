@@ -2,9 +2,6 @@ package br.com.assistente;
 
 import br.com.assistente.config.ConexaoDB;
 import br.com.assistente.infra.javafx.Dialog;
-import br.com.assistente.infra.db.ConnectionFactory;
-import br.com.assistente.models.domains.admin.SetupCnxBanco;
-import br.com.assistente.models.repository.admin.SetupUsuarioRepository;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

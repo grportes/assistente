@@ -1,10 +1,9 @@
 package br.com.assistente.controllers;
 
 import br.com.assistente.infra.db.ConnectionFactory;
-import br.com.assistente.models.domains.admin.SetupCnxBanco;
-import br.com.assistente.models.domains.admin.SetupUsuario;
-import br.com.assistente.models.domains.db.DriverCnx;
-import br.com.assistente.models.repository.admin.SetupUsuarioRepository;
+import br.com.assistente.models.SetupCnxBanco;
+import br.com.assistente.models.SetupUsuario;
+import br.com.assistente.models.DriverCnx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +45,7 @@ public class SetupController {
     // Conexao banco:
     @FXML private TextField txfCnxBancoId;
     @FXML private TextField txfCnxBancoDescricao;
-    @FXML private ComboBox<DriverCnx> cbxCnxBancoFornecedor;
+    @FXML private ComboBox<String> cbxCnxBancoFornecedor;
     @FXML private TextField txfCnxBancoUrl;
     @FXML private TextField txfCnxBancoPorta;
     @FXML private TextField txfCnxBancoUserName;
@@ -64,9 +63,9 @@ public class SetupController {
     public void initialize() {
 
         cbxCnxBanco.setItems( observableArrayList( emptyList() ) );
-        cbxCnxBancoFornecedor.setItems( observableArrayList( DriverCnx.buscarDriversCnx() ) );
+        cbxCnxBancoFornecedor.setItems( observableArrayList( DriverCnx.buscarIds() ) );
 
-        SetupUsuarioRepository.find().ifPresent( setupUsuario -> {
+        SetupUsuario.find().ifPresent( setupUsuario -> {
             txfAutor.setText( setupUsuario.getAutor() );
             txfLocalProjeto.setText( isNull(setupUsuario.getLocalProjeto()) ? "" : setupUsuario.getLocalProjeto() );
             cbxCnxBanco.setItems( observableArrayList( setupUsuario.getConexoesDisponiveis() ) );
@@ -87,7 +86,7 @@ public class SetupController {
 
         switch ( source.getId() ) {
             case "btnConfirmar":
-                SetupUsuarioRepository.save( getSetupUsuario() );
+                SetupUsuario.save( getSetupUsuario() );
                 msgInfo("Configurações alteradas" );
                 break;
             case "btnLocalProjeto":
@@ -97,7 +96,7 @@ public class SetupController {
                 break;
             case "btnEditarCnxBanco":
                 final Integer idCnxBanco = getIdCnxBancoSelecionada();
-                final Optional<SetupCnxBanco> possivelCnx = SetupUsuarioRepository.findByIdCnxBanco( idCnxBanco );
+                final Optional<SetupCnxBanco> possivelCnx = SetupUsuario.findByIdCnxBanco( idCnxBanco );
                 if ( possivelCnx.isPresent() ) {
                     objToView( possivelCnx.get() );
                     tpSetup.getSelectionModel().selectLast();
@@ -125,7 +124,7 @@ public class SetupController {
                 break;
             case "btnCnxBancoSave":
                 final SetupCnxBanco setupCnxBancoSave = getCnxBanco();
-                int idCnxBancoSave = SetupUsuarioRepository.save( setupCnxBancoSave );
+                int idCnxBancoSave = SetupCnxBanco.save( setupCnxBancoSave );
                 txfCnxBancoId.setText( createString(idCnxBancoSave) );
                 int index = cbxCnxBanco.getItems().lastIndexOf( setupCnxBancoSave );
                 if ( index == -1 )
@@ -138,7 +137,7 @@ public class SetupController {
                 if ( isBlank(txfCnxBancoId.getText()) ) return;
                 final int idCnxBancoDelete = parseInt( txfCnxBancoId.getText() );
                 cbxCnxBanco.getItems().removeIf( s -> Objects.equals( s.getId(), idCnxBancoDelete ) );
-                SetupUsuarioRepository.deleteCnxById( idCnxBancoDelete );
+                SetupUsuario.deleteCnxById( idCnxBancoDelete );
                 reset();
                 break;
             case "btnCnxBancoLocalDB":
@@ -156,7 +155,8 @@ public class SetupController {
 
     private void ajustarAcesso() {
 
-        final DriverCnx driverCnx = cbxCnxBancoFornecedor.getValue();
+        final DriverCnx driverCnx = DriverCnx.findById(cbxCnxBancoFornecedor.getValue())
+                .orElseThrow(() -> new RuntimeException("Não localizou driver"));
         txfCnxBancoPorta.setDisable( !driverCnx.isExigePorta() );
         btnCnxBancoLocalDB.setDisable( !driverCnx.getSelecionarBaseDados() );
         txfCnxBancoUserName.setDisable( txfCnxBancoPorta.isDisable() );
@@ -183,7 +183,7 @@ public class SetupController {
         final SetupCnxBanco cnx = new SetupCnxBanco();
         cnx.setId( toInteger( txfCnxBancoId.getText() ) );
         cnx.setDescricao( txfCnxBancoDescricao.getText() );
-        cnx.setDriver( cbxCnxBancoFornecedor.getValue() );
+        cnx.setIdDriver( cbxCnxBancoFornecedor.getValue() );
         cnx.setEndereco( txfCnxBancoUrl.getText() );
         cnx.setPorta( toInteger( txfCnxBancoPorta.getText() ) );
         cnx.setUserName( txfCnxBancoUserName.getText() );
@@ -193,7 +193,7 @@ public class SetupController {
 
     private void objToView( final SetupCnxBanco cnx ) {
 
-        cbxCnxBancoFornecedor.getSelectionModel().select( cnx.getDriver() );
+        cbxCnxBancoFornecedor.getSelectionModel().select( cnx.getIdDriver() );
         txfCnxBancoUrl.setText( cnx.getEndereco() );
         txfCnxBancoPorta.setText( createString( cnx.getPorta() ) );
         txfCnxBancoUserName.setText( cnx.getUserName() );

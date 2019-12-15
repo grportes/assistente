@@ -1,4 +1,4 @@
-package br.com.assistente.models.domains.db;
+package br.com.assistente.models;
 
 import java.util.Objects;
 
