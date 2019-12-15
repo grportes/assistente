@@ -178,7 +178,7 @@ public class DriverCnx {
 
         if ( isNull(cache) ) {
 
-            final URL resource = ConexaoDB.class.getResource("/db");
+            final URL resource = ConexaoDB.class.getResource("/drivers");
             final Path arquivos = Paths.get( resource.getPath() );
 
             try {
@@ -194,12 +194,17 @@ public class DriverCnx {
         return cache.stream().map( DriverCnx::getId ).collect( toList() );
     }
 
-
     public static Optional<DriverCnx> findById( final String id ) {
 
         return isNull(cache)
             ? empty()
             : cache.stream().filter(driver -> Objects.equals( driver.getId(), id ) ).findFirst();
+    }
+
+
+    public static List<String> getBancos( final String id ) {
+
+        return findById( id ).map( DriverCnx::getBancos ).orElse( emptyList() );
     }
 
 }

@@ -51,7 +51,16 @@ public class AssistenteController {
 
     public void onActionConfiguracoes() {
 
-        openViewConfiguracoes( vboxContainer.getScene().getWindow() );
+        openViewConfiguracoes(
+            vboxContainer.getScene().getWindow(),
+            recarregarAplicacao -> {
+
+                if ( recarregarAplicacao ) {
+
+                }
+
+                System.out.println( recarregarAplicacao );
+            });
     }
 
     @FXML

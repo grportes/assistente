@@ -10,7 +10,6 @@ import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
-import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 
@@ -124,12 +123,7 @@ public class SetupUsuario {
         find().ifPresent(s -> cache = s);
     }
 
-    public static List<SetupCnxBanco> buscarCnxsDisponiveis() {
-
-        return find().map( SetupUsuario::getConexoesDisponiveis ).orElse( emptyList() );
-    }
-
-    public static Optional<SetupCnxBanco> findByIdCnxBanco(Integer idCnxBancoSelecionada) {
+    public static Optional<SetupCnxBanco> findByIdCnxBanco( Integer idCnxBancoSelecionada ) {
 
         return find()
                 .map( SetupUsuario::getConexoesDisponiveis )

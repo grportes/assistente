@@ -1,9 +1,9 @@
 package br.com.assistente.controllers;
 
 import br.com.assistente.infra.db.ConnectionFactory;
+import br.com.assistente.models.DriverCnx;
 import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.SetupUsuario;
-import br.com.assistente.models.DriverCnx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +19,7 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static br.com.assistente.infra.javafx.Dialog.*;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
@@ -32,6 +33,8 @@ import static javafx.stage.Modality.WINDOW_MODAL;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class SetupController {
+
+    private static Boolean recarregarAplicacao = false;
 
     // Containers:
     @FXML private Pane pnContainer;
@@ -88,6 +91,7 @@ public class SetupController {
             case "btnConfirmar":
                 SetupUsuario.save( getSetupUsuario() );
                 msgInfo("Configurações alteradas" );
+                recarregarAplicacao = true;
                 break;
             case "btnLocalProjeto":
                 selecionarPasta( "Selecione o local do projeto", pnContainer.getScene().getWindow() )
@@ -218,7 +222,10 @@ public class SetupController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void openViewConfiguracoes( final Window windowPai ) {
+    public static void openViewConfiguracoes(
+        final Window windowPai,
+        final Consumer<Boolean> actionExit
+    ) {
 
         try {
             final URL resource = getResource("/fxml/SetupView.fxml");
@@ -230,6 +237,7 @@ public class SetupController {
             stage.initModality( WINDOW_MODAL );
             stage.setResizable( false );
             stage.setMaximized( false );
+            stage.setOnCloseRequest( ev -> actionExit.accept(recarregarAplicacao) );
             stage.show();
         } catch ( final IOException e ) {
             throw new UncheckedIOException(e);

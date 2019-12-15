@@ -14,32 +14,26 @@ import static br.com.assistente.infra.util.UtilArquivo.getResource;
 public class Main extends Application {
 
     @Override
-    public void start( final Stage stage ) throws Exception {
+    public void start( final Stage stage ) {
 
         try {
 
             Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
             Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);
 
-            // DI - Guice:
-//            Injector injector = Guice.createInjector( new AgenteModule() );
-
             final FXMLLoader loader = new FXMLLoader();
-//            loader.setControllerFactory(injector::getInstance);
             stage.setTitle( "Assistente" );
             loader.setLocation( getResource("/fxml/AssistenteView.fxml") );
             stage.setScene( new Scene(loader.load()) );
             stage.show();
 
-
-
-        } catch (Throwable e) {
+        } catch ( Throwable e ) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
 
         ConexaoDB.desconnectar();
     }
@@ -50,16 +44,12 @@ public class Main extends Application {
         String message = rootCause.getMessage();
 
         Dialog.msgErro( message );
-//        Platform.exit();
     }
 
 
     public static void main(String[] args) {
 
-//        System.out.println( ConnectionFactory.checkCnx() );
-
         launch( args );
     }
-
 
 }
