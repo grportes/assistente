@@ -13,17 +13,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static br.com.assistente.infra.util.UtilYaml.getArquivoYaml;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
-import static java.util.Objects.*;
+import static java.util.Objects.hash;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public class SetupCnxBanco {
 
     private Integer id;
     private String descricao;
     private String idDriver;
-    private String endereco;
+    private String host;
     private Integer porta;
     private String userName;
     private String password;
@@ -62,14 +66,14 @@ public class SetupCnxBanco {
         this.idDriver = idDriver;
     }
 
-    public String getEndereco() {
+    public String getHost() {
 
-        return endereco;
+        return host;
     }
 
-    public void setEndereco(final String endereco) {
+    public void setHost( final String host ) {
 
-        this.endereco = endereco;
+        this.host = host;
     }
 
     public Integer getPorta() {
@@ -164,7 +168,7 @@ public class SetupCnxBanco {
         StringJoiner fields = new StringJoiner(" ");
         if ( isEmpty( setupCnxBanco.getDescricao()) ) fields.add( "descricao" );
         if ( isNull( setupCnxBanco.getIdDriver() ) ) fields.add( "driver" );
-        if ( isNull( setupCnxBanco.getEndereco() ) ) fields.add( "url" );
+        if ( isNull( setupCnxBanco.getHost() ) ) fields.add( "url" );
         if ( isNoneBlank(fields.toString()) )
             throw new IllegalStateException( "[SetupBanco] Campos obrigatórios: " + fields );
     }
@@ -177,7 +181,7 @@ public class SetupCnxBanco {
         return nonNull( setupCnxBancoA )
             && nonNull( setupCnxBancoB )
             && Objects.equals( setupCnxBancoA.getDescricao(), setupCnxBancoB.getDescricao() )
-            && Objects.equals( setupCnxBancoA.getEndereco(), setupCnxBancoB.getEndereco() )
+            && Objects.equals( setupCnxBancoA.getHost(), setupCnxBancoB.getHost() )
             && Objects.equals( setupCnxBancoA.getPorta(), setupCnxBancoB.getPorta() )
             && Objects.equals( setupCnxBancoA.getUserName(), setupCnxBancoB.getUserName() )
             && Objects.equals( setupCnxBancoA.getPassword(), setupCnxBancoB.getPassword() );
@@ -212,7 +216,7 @@ public class SetupCnxBanco {
                     if ( !mesmosValores( cnx, cnxBanco ) ) {
                         cnx.setDescricao( cnxBanco.getDescricao() );
                         cnx.setIdDriver( cnxBanco.getIdDriver() );
-                        cnx.setEndereco( cnxBanco.getEndereco() );
+                        cnx.setHost( lowerCase( cnxBanco.getHost() ) );
                         cnx.setPorta( cnxBanco.getPorta() );
                         cnx.setUserName( cnxBanco.getUserName() );
                         cnx.setPassword( cnxBanco.getPassword() );

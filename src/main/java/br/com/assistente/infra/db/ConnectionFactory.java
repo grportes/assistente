@@ -46,7 +46,7 @@ public final class ConnectionFactory {
         Connection connectionTemp = null;
 
         try {
-            String db = format( "%s%s", driverCnx.getProtocolo(), cnxBanco.getEndereco() );
+            String db = format( "%s%s", driverCnx.getProtocolo(), cnxBanco.getHost() );
             if ( nonNull( cnxBanco.getPorta() ) ) db = format( "%s:%s", db, cnxBanco.getPorta() );
             connectionTemp = isNotBlank( cnxBanco.getUserName() )
                 ? DriverManager.getConnection( db, cnxBanco.getUserName(), cnxBanco.getPassword() )

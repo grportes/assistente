@@ -191,7 +191,7 @@ public class SetupController {
         cnx.setId( toInteger( txfCnxBancoId.getText() ) );
         cnx.setDescricao( txfCnxBancoDescricao.getText() );
         cnx.setIdDriver( cbxCnxBancoFornecedor.getValue() );
-        cnx.setEndereco( txfCnxBancoUrl.getText() );
+        cnx.setHost( txfCnxBancoUrl.getText() );
         cnx.setPorta( toInteger( txfCnxBancoPorta.getText() ) );
         cnx.setUserName( txfCnxBancoUserName.getText() );
         cnx.setPassword( psCnxBancoSenha.getText() );
@@ -202,7 +202,7 @@ public class SetupController {
     private void objToView( final SetupCnxBanco cnx ) {
 
         cbxCnxBancoFornecedor.getSelectionModel().select( cnx.getIdDriver() );
-        txfCnxBancoUrl.setText( cnx.getEndereco() );
+        txfCnxBancoUrl.setText( cnx.getHost() );
         txfCnxBancoPorta.setText( createString( cnx.getPorta() ) );
         txfCnxBancoUserName.setText( cnx.getUserName() );
         psCnxBancoSenha.setText( cnx.getPassword() );
