@@ -1,16 +1,12 @@
 package br.com.assistente.models;
 
-import br.com.assistente.config.ConexaoDB;
-
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static br.com.assistente.infra.util.UtilArquivo.getResourceFolder;
 import static br.com.assistente.infra.util.UtilYaml.load;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
@@ -178,15 +174,12 @@ public class DriverCnx {
 
         if ( isNull(cache) ) {
 
-            final URL resource = ConexaoDB.class.getResource("/drivers");
-            final Path arquivos = Paths.get( resource.getPath() );
-
             try {
-                cache = Files.list( arquivos )
+                cache = Files.list( getResourceFolder( "drivers" ) )
                     .map( path -> load(DriverCnx.class, path) )
                     .map( Optional::get )
                     .collect( toList() );
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 cache = emptyList();
             }
         }
