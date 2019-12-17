@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static br.com.assistente.infra.util.UtilYaml.getArquivoYaml;
+import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
@@ -166,6 +167,20 @@ public class SetupUsuario {
             }
 
         });
+    }
+
+    public static Set<String> getCatalogosCnxSelecionada() {
+
+        if ( isNull( cache ) ) return emptySet();
+
+        final Integer idCnxAtual = cache.getIdCnxAtual();
+        if ( isNull( idCnxAtual ) ) return emptySet();
+
+        return cache.getConexoesDisponiveis()
+            .stream()
+            .filter( cnx -> Objects.equals(cnx.getId(), idCnxAtual) )
+            .map( SetupCnxBanco::getCatalogos )
+            .collect( LinkedHashSet::new, Set::addAll, Set::addAll );
     }
 
 

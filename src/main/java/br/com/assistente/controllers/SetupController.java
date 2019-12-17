@@ -23,8 +23,10 @@ import java.util.function.Consumer;
 
 import static br.com.assistente.infra.javafx.Dialog.*;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
+import static br.com.assistente.infra.util.UtilCollections.createSet;
 import static br.com.assistente.infra.util.UtilNumber.toInteger;
 import static br.com.assistente.infra.util.UtilString.createString;
+import static br.com.assistente.infra.util.UtilString.removerEspacosEntre;
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
@@ -193,7 +195,7 @@ public class SetupController {
         cnx.setPorta( toInteger( txfCnxBancoPorta.getText() ) );
         cnx.setUserName( txfCnxBancoUserName.getText() );
         cnx.setPassword( psCnxBancoSenha.getText() );
-        cnx.setCatalogos( txaCnxBancoCatalogos.getText() );
+        cnx.setCatalogos( createSet( removerEspacosEntre( txaCnxBancoCatalogos.getText() ), ',' ) );
         return cnx;
     }
 
@@ -206,7 +208,7 @@ public class SetupController {
         psCnxBancoSenha.setText( cnx.getPassword() );
         txfCnxBancoDescricao.setText( cnx.getDescricao() );
         txfCnxBancoId.setText( createString( cnx.getId() ) );
-        txaCnxBancoCatalogos.setText( cnx.getCatalogos() );
+        txaCnxBancoCatalogos.setText( createString( cnx.getCatalogos(), ',' ) );
     }
 
     private void reset() {

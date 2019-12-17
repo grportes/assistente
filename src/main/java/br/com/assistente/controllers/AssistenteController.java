@@ -1,6 +1,5 @@
 package br.com.assistente.controllers;
 
-import br.com.assistente.models.DriverCnx;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.SetupUsuario;
@@ -16,6 +15,7 @@ import java.util.List;
 
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
+import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
@@ -54,9 +54,9 @@ public class AssistenteController {
 
         openViewConfiguracoes(
             vboxContainer.getScene().getWindow(),
-            recarregarAplicacao -> {
-                if ( recarregarAplicacao ) {
-
+            reload -> {
+                if ( reload ) {
+                    cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
                 }
             });
     }
@@ -66,6 +66,7 @@ public class AssistenteController {
 
         initializeMapeamento();
         SetupUsuario.load();
+        cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
 //        if ( !SetupUsuarioRepository.isCnxDBInformada() )
 //            openViewConfiguracoes( vboxContainer.getScene().getWindow() );
 

@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,7 +27,7 @@ public class SetupCnxBanco {
     private Integer porta;
     private String userName;
     private String password;
-    private String catalogos;
+    private Set<String> catalogos;
 
     public SetupCnxBanco() {
     }
@@ -101,12 +102,12 @@ public class SetupCnxBanco {
         this.password = password;
     }
 
-    public String getCatalogos() {
+    public Set<String> getCatalogos() {
 
         return catalogos;
     }
 
-    public void setCatalogos( final String catalogos ) {
+    public void setCatalogos( final Set<String> catalogos ) {
 
         this.catalogos = catalogos;
     }
@@ -215,6 +216,7 @@ public class SetupCnxBanco {
                         cnx.setPorta( cnxBanco.getPorta() );
                         cnx.setUserName( cnxBanco.getUserName() );
                         cnx.setPassword( cnxBanco.getPassword() );
+                        cnx.setCatalogos( cnxBanco.getCatalogos() );
                     }
                     return setupUsuarioAtual;
                 }
