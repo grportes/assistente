@@ -1,7 +1,7 @@
 package br.com.assistente.infra.db;
 
-import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.DriverCnx;
+import br.com.assistente.models.SetupCnxBanco;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class ConnectionFactory {
 
@@ -35,29 +36,9 @@ public final class ConnectionFactory {
         if ( nonNull(connection) ) DbUtils.closeQuietly(connection);
     }
 
-    public static boolean checkCnx() {
-
-        Connection connectionTemp = null;
-
-        try {
-            String db = "jdbc:sqlite:/tmp/play/exemplo.db";
-            connectionTemp = DriverManager.getConnection( db );
-            QueryRunner runner = new QueryRunner();
-
-            ScalarHandler<Object> resultSet = new ScalarHandler<>();
-            runner.query(connectionTemp, "select current_date", resultSet);
-            return true;
-        } catch (  SQLException e ) {
-            return false;
-        } finally {
-            DbUtils.closeQuietly(connectionTemp);
-        }
-    }
-
     public static boolean checkCnx( final SetupCnxBanco cnxBanco ) {
 
-        if ( isNull(cnxBanco) || isNull(cnxBanco.getIdDriver()) )
-            return false;
+        if ( isNull(cnxBanco) || isNull(cnxBanco.getIdDriver()) ) return false;
 
         final DriverCnx driverCnx = DriverCnx.findById(cnxBanco.getIdDriver())
                 .orElseThrow(() -> new RuntimeException("Não localizou driver de conexão"));
@@ -66,15 +47,18 @@ public final class ConnectionFactory {
 
         try {
             String db = format( "%s%s", driverCnx.getProtocolo(), cnxBanco.getEndereco() );
-            connectionTemp = DriverManager.getConnection( db );
+            if ( nonNull( cnxBanco.getPorta() ) ) db = format( "%s:%s", db, cnxBanco.getPorta() );
+            connectionTemp = isNotBlank( cnxBanco.getUserName() )
+                ? DriverManager.getConnection( db, cnxBanco.getUserName(), cnxBanco.getPassword() )
+                : DriverManager.getConnection( db );
             QueryRunner runner = new QueryRunner();
             ScalarHandler<Object> resultSet = new ScalarHandler<>();
             runner.query(connectionTemp, driverCnx.getSelectDate(), resultSet);
             return true;
-        } catch (  SQLException e ) {
+        } catch ( SQLException e ) {
             return false;
         } finally {
-            DbUtils.closeQuietly(connectionTemp);
+            if ( nonNull(connectionTemp) ) DbUtils.closeQuietly( connectionTemp );
         }
     }
 }

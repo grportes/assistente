@@ -1,6 +1,6 @@
 id: "Sybase"
 driver: "net.sourceforge.jtds.jdbc.Driver"
-protocolo: "jdbc:jtds:sqlserver://"
+protocolo: "jdbc:jtds:sybase://"
 autenticar: true
 porta: true
 selecionarBaseDados: true
