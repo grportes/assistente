@@ -26,6 +26,7 @@ public class SetupCnxBanco {
     private Integer porta;
     private String userName;
     private String password;
+    private String catalogos;
 
     public SetupCnxBanco() {
     }
@@ -100,6 +101,16 @@ public class SetupCnxBanco {
         this.password = password;
     }
 
+    public String getCatalogos() {
+
+        return catalogos;
+    }
+
+    public void setCatalogos( final String catalogos ) {
+
+        this.catalogos = catalogos;
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -153,7 +164,6 @@ public class SetupCnxBanco {
         if ( isEmpty( setupCnxBanco.getDescricao()) ) fields.add( "descricao" );
         if ( isNull( setupCnxBanco.getIdDriver() ) ) fields.add( "driver" );
         if ( isNull( setupCnxBanco.getEndereco() ) ) fields.add( "url" );
-        if ( isNull( setupCnxBanco.getIdDriver() ) ) fields.add( "driver" );
         if ( isNoneBlank(fields.toString()) )
             throw new IllegalStateException( "[SetupBanco] Campos obrigatórios: " + fields );
     }

@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static br.com.assistente.infra.util.UtilYaml.getArquivoYaml;
-import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
@@ -126,11 +125,11 @@ public class SetupUsuario {
     public static Optional<SetupCnxBanco> findByIdCnxBanco( Integer idCnxBancoSelecionada ) {
 
         return find()
-                .map( SetupUsuario::getConexoesDisponiveis )
-                .orElseGet( Collections::emptyList )
-                .stream()
-                .filter( cnx -> Objects.equals( cnx.getId(), idCnxBancoSelecionada ) )
-                .findFirst();
+            .map( SetupUsuario::getConexoesDisponiveis )
+            .orElseGet( Collections::emptyList )
+            .stream()
+            .filter( cnx -> Objects.equals( cnx.getId(), idCnxBancoSelecionada ) )
+            .findFirst();
     }
 
     public static void save( final SetupUsuario novoSetup ) {

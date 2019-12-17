@@ -53,6 +53,7 @@ public class SetupController {
     @FXML private TextField txfCnxBancoPorta;
     @FXML private TextField txfCnxBancoUserName;
     @FXML private PasswordField psCnxBancoSenha;
+    @FXML private TextArea txaCnxBancoCatalogos;
     @FXML private Button btnCnxBancoLocalDB;
 
 
@@ -192,6 +193,7 @@ public class SetupController {
         cnx.setPorta( toInteger( txfCnxBancoPorta.getText() ) );
         cnx.setUserName( txfCnxBancoUserName.getText() );
         cnx.setPassword( psCnxBancoSenha.getText() );
+        cnx.setCatalogos( txaCnxBancoCatalogos.getText() );
         return cnx;
     }
 
@@ -204,6 +206,7 @@ public class SetupController {
         psCnxBancoSenha.setText( cnx.getPassword() );
         txfCnxBancoDescricao.setText( cnx.getDescricao() );
         txfCnxBancoId.setText( createString( cnx.getId() ) );
+        txaCnxBancoCatalogos.setText( cnx.getCatalogos() );
     }
 
     private void reset() {
@@ -214,7 +217,9 @@ public class SetupController {
         txfCnxBancoPorta.setText("");
         txfCnxBancoUserName.setText("");
         psCnxBancoSenha.setText("");
+        txaCnxBancoCatalogos.setText("");
     }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //

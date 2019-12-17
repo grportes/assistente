@@ -9,4 +9,3 @@ selectTop: "select * from %TABLE% limit 1"
 dataTypes:
   - { dbType: "INTEGER", javaType: "Long" }
   - { dbType: "VARCHAR", javaType: "String" }
-bancos: []

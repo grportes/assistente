@@ -6,19 +6,20 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane fx:id="pnContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="292.0" prefWidth="596.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.assistente.controllers.SetupController">
+<Pane fx:id="pnContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="372.0" prefWidth="596.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.assistente.controllers.SetupController">
    <children>
-      <TabPane fx:id="tpSetup" layoutX="15.0" layoutY="14.0" prefHeight="267.0" prefWidth="565.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tpSetup" layoutX="15.0" layoutY="14.0" prefHeight="343.0" prefWidth="565.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
             <Tab text="Definições">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="328.0" prefWidth="576.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="565.0">
                      <children>
                         <Label layoutX="20.0" layoutY="61.0" text="AUTOR:" />
                         <TextField fx:id="txfAutor" layoutX="20.0" layoutY="77.0" prefHeight="26.0" prefWidth="266.0" />
@@ -56,7 +57,7 @@
             </Tab>
             <Tab text="Conexões (Banco)">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="323.0" prefWidth="576.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="343.0" prefWidth="565.0">
                      <children>
                         <TextField fx:id="txfCnxBancoId" layoutX="235.0" layoutY="18.0" prefHeight="26.0" prefWidth="81.0" visible="false" />
                         <Label layoutX="22.0" layoutY="62.0" text="DESCRIÇAO:" />
@@ -79,6 +80,8 @@
                         <TextField fx:id="txfCnxBancoUserName" layoutX="22.0" layoutY="182.0" prefHeight="26.0" prefWidth="213.0" />
                         <Label layoutX="336.0" layoutY="166.0" text="PASSWORD:" />
                         <PasswordField fx:id="psCnxBancoSenha" layoutX="335.0" layoutY="182.0" prefHeight="26.0" prefWidth="213.0" />
+                        <Label layoutX="22.0" layoutY="218.0" text="CATALÁGOS DISPONÍVEIS:" />
+                        <TextArea fx:id="txaCnxBancoCatalogos" layoutX="22.0" layoutY="235.0" prefHeight="62.0" prefWidth="526.0" promptText="Informe os nomes separados por vírgula. p.exemplo: vendas, estoque" wrapText="true" />
                         <Button fx:id="btnCnxBancoNew" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#onActionCnxBanco" prefHeight="33.0" prefWidth="50.0">
                            <graphic>
                               <ImageView fitHeight="21.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">

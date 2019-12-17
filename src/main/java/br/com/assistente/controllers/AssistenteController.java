@@ -1,5 +1,6 @@
 package br.com.assistente.controllers;
 
+import br.com.assistente.models.DriverCnx;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.SetupUsuario;
@@ -54,12 +55,9 @@ public class AssistenteController {
         openViewConfiguracoes(
             vboxContainer.getScene().getWindow(),
             recarregarAplicacao -> {
-
                 if ( recarregarAplicacao ) {
 
                 }
-
-                System.out.println( recarregarAplicacao );
             });
     }
 
