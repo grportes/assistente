@@ -51,7 +51,7 @@ public class SetupController {
     @FXML private TextField txfCnxBancoId;
     @FXML private TextField txfCnxBancoDescricao;
     @FXML private ComboBox<String> cbxCnxBancoFornecedor;
-    @FXML private TextField txfCnxBancoUrl;
+    @FXML private TextField txfCnxBancoHost;
     @FXML private TextField txfCnxBancoPorta;
     @FXML private TextField txfCnxBancoUserName;
     @FXML private PasswordField psCnxBancoSenha;
@@ -150,7 +150,7 @@ public class SetupController {
             case "btnCnxBancoLocalDB":
                 selecionarArquivo( "Selecione a base de dados SQLIte", pnContainer.getScene().getWindow() )
                     .map( File::getAbsolutePath )
-                    .ifPresent( file -> txfCnxBancoUrl.setText( file ) );
+                    .ifPresent( file -> txfCnxBancoHost.setText( file ) );
                 break;
             case "btnCnxBancoCheck":
                 if ( ConnectionFactory.checkCnx( getCnxBanco() ) )
@@ -191,7 +191,7 @@ public class SetupController {
         cnx.setId( toInteger( txfCnxBancoId.getText() ) );
         cnx.setDescricao( txfCnxBancoDescricao.getText() );
         cnx.setIdDriver( cbxCnxBancoFornecedor.getValue() );
-        cnx.setHost( txfCnxBancoUrl.getText() );
+        cnx.setHost( txfCnxBancoHost.getText() );
         cnx.setPorta( toInteger( txfCnxBancoPorta.getText() ) );
         cnx.setUserName( txfCnxBancoUserName.getText() );
         cnx.setPassword( psCnxBancoSenha.getText() );
@@ -202,7 +202,7 @@ public class SetupController {
     private void objToView( final SetupCnxBanco cnx ) {
 
         cbxCnxBancoFornecedor.getSelectionModel().select( cnx.getIdDriver() );
-        txfCnxBancoUrl.setText( cnx.getHost() );
+        txfCnxBancoHost.setText( cnx.getHost() );
         txfCnxBancoPorta.setText( createString( cnx.getPorta() ) );
         txfCnxBancoUserName.setText( cnx.getUserName() );
         psCnxBancoSenha.setText( cnx.getPassword() );
@@ -215,7 +215,7 @@ public class SetupController {
 
         txfCnxBancoId.setText("");
         txfCnxBancoDescricao.setText("");
-        txfCnxBancoUrl.setText("");
+        txfCnxBancoHost.setText("");
         txfCnxBancoPorta.setText("");
         txfCnxBancoUserName.setText("");
         psCnxBancoSenha.setText("");
