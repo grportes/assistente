@@ -2,6 +2,7 @@ package br.com.assistente.controllers;
 
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
+import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.MapeamentoService;
 import io.vavr.control.Try;

@@ -3,12 +3,15 @@ package br.com.assistente.services;
 import br.com.assistente.infra.exceptions.BusinessException;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
+import br.com.assistente.models.SetupCnxBanco;
+import br.com.assistente.models.SetupUsuario;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -36,7 +39,11 @@ public class MapeamentoService {
         if ( isBlank(banco) || isBlank(owner) || isBlank(tabela) )
             throw new BusinessException( "É necessário informar banco / owner / tabela" );
 
-//        ConfiguracaoDefaultRepository.find()
+        final SetupCnxBanco setupCnxBanco = SetupUsuario.find()
+            .flatMap( su -> SetupCnxBanco.findById(su.getIdCnxAtual()) )
+            .orElseThrow( () -> new BusinessException("Não localizou conexão ativa") );
+
+
 
 
 

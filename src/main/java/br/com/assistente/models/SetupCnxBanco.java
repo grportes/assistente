@@ -5,6 +5,7 @@ import br.com.assistente.infra.util.UtilYaml;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -125,7 +126,6 @@ public class SetupCnxBanco {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
     @Override
     public boolean equals(Object o) {
 
@@ -150,10 +150,11 @@ public class SetupCnxBanco {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // EQUALS & HASCODE.
+    // CONSTANTES
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
+    private static SetupCnxBanco setupCnxBanco = null;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,6 +163,16 @@ public class SetupCnxBanco {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public static Optional<SetupCnxBanco> findById( final Integer idCnxAtual ) {
+        
+        final Path arquivoYaml = getArquivoYaml();
+
+        return UtilYaml
+            .load( SetupUsuario.class, arquivoYaml )
+            .map( SetupUsuario::getConexoesDisponiveis )
+            .map( conexoes -> conexoes.stream().filter(cx -> Objects.equals(cx.getId(), idCnxAtual)).findFirst() )
+            .map( Optional::get );
+    }
 
     public static void validarObjeto( final SetupCnxBanco setupCnxBanco ) {
 

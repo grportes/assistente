@@ -120,6 +120,9 @@ public class SetupUsuario {
 
     public static void load() {
 
+        final Optional<SetupUsuario> possivelSetupUsuario = find();
+
+
         find().ifPresent(s -> cache = s);
     }
 
