@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static br.com.assistente.infra.util.UtilCrypto.descriptografar;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -49,7 +50,7 @@ public final class ConnectionFactory {
             String db = format( "%s%s", driverCnx.getProtocolo(), cnxBanco.getHost() );
             if ( nonNull( cnxBanco.getPorta() ) ) db = format( "%s:%s", db, cnxBanco.getPorta() );
             connectionTemp = isNotBlank( cnxBanco.getUserName() )
-                ? DriverManager.getConnection( db, cnxBanco.getUserName(), cnxBanco.getPassword() )
+                ? DriverManager.getConnection( db, cnxBanco.getUserName(), descriptografar(cnxBanco.getPassword()) )
                 : DriverManager.getConnection( db );
             QueryRunner runner = new QueryRunner();
             ScalarHandler<Object> resultSet = new ScalarHandler<>();

@@ -1,7 +1,6 @@
 package br.com.assistente.models;
 
 import br.com.assistente.infra.util.UtilYaml;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static br.com.assistente.infra.util.UtilCrypto.encriptar;
 import static br.com.assistente.infra.util.UtilYaml.getArquivoYaml;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
@@ -17,9 +17,11 @@ import static java.util.Objects.hash;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public class SetupCnxBanco {
@@ -191,6 +193,9 @@ public class SetupCnxBanco {
 
         validarObjeto( cnxBanco );
 
+        if ( isNotBlank( cnxBanco.getPassword() ) )
+            cnxBanco.setPassword( encriptar( cnxBanco.getPassword() ) );
+
         final AtomicInteger idCnxBanco = new AtomicInteger(0);
 
         final Path arquivoYaml = getArquivoYaml();
@@ -201,7 +206,7 @@ public class SetupCnxBanco {
 
                 final List<SetupCnxBanco> cnxs = setupUsuarioAtual.getConexoesDisponiveis();
 
-                if ( CollectionUtils.isEmpty(cnxs) ) {
+                if ( isEmpty(cnxs) ) {
                     // Primeira conexão...
                     idCnxBanco.set( nextInt() );
                     cnxBanco.setId( idCnxBanco.get() );
