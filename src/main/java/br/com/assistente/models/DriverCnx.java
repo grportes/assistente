@@ -10,6 +10,7 @@ import static br.com.assistente.infra.util.UtilArquivo.getResourceFolder;
 import static br.com.assistente.infra.util.UtilYaml.load;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toList;
 
@@ -24,7 +25,6 @@ public class DriverCnx {
     private String selectDate;
     private String selectTop;
     private List<DataType> dataTypes;
-    private List<String> bancos;
 
     public String getId() {
 
@@ -116,16 +116,6 @@ public class DriverCnx {
         this.dataTypes = dataTypes;
     }
 
-    public List<String> getBancos() {
-
-        return bancos;
-    }
-
-    public void setBancos( final List<String> bancos ) {
-
-        this.bancos = bancos;
-    }
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -170,34 +160,42 @@ public class DriverCnx {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static List<String> buscarIds() {
+    private static void loadCache() {
 
-        if ( isNull(cache) ) {
-
+        if ( isNull(cache) )
             try {
                 cache = Files.list( getResourceFolder( "drivers" ) )
-                    .map( path -> load(DriverCnx.class, path) )
-                    .map( Optional::get )
-                    .collect( toList() );
+                        .map( path -> load(DriverCnx.class, path) )
+                        .map( Optional::get )
+                        .collect( toList() );
             } catch ( IOException e ) {
                 cache = emptyList();
             }
-        }
+    }
 
+    public static List<String> buscarIds() {
+
+        loadCache();
         return cache.stream().map( DriverCnx::getId ).collect( toList() );
     }
 
     public static Optional<DriverCnx> findById( final String id ) {
 
-        return isNull(cache)
+        loadCache();
+        return isNull( cache )
             ? empty()
-            : cache.stream().filter(driver -> Objects.equals( driver.getId(), id ) ).findFirst();
+            : cache.stream().filter( driver -> Objects.equals( driver.getId(), id ) ).findFirst();
     }
 
+    public static String getQuerySelectTop1(
+        final DriverCnx driverCnx,
+        final Modelo modelo
+    ) {
 
-    public static List<String> getBancos( final String id ) {
+        requireNonNull( driverCnx, "DriveCnx - Argumento obritatório: driverCnx" );
+        requireNonNull( modelo, "DriveCnx - Argumento obritatório: modelo" );
 
-        return findById( id ).map( DriverCnx::getBancos ).orElse( emptyList() );
+        return driverCnx.getSelectTop().replaceAll( "%TABLE%", modelo.getNomeCompletoTabela() );
     }
 
 }

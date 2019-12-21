@@ -1,6 +1,5 @@
 package br.com.assistente;
 
-import br.com.assistente.config.ConexaoDB;
 import br.com.assistente.infra.javafx.Dialog;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -9,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import static br.com.assistente.infra.db.ConnectionFactory.closeConnection;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 
 public class Main extends Application {
@@ -35,7 +35,7 @@ public class Main extends Application {
     @Override
     public void stop() {
 
-        ConexaoDB.desconnectar();
+        closeConnection();
     }
 
     private void showErrorDialog(Thread t, Throwable e) {
@@ -51,5 +51,4 @@ public class Main extends Application {
 
         launch( args );
     }
-
 }

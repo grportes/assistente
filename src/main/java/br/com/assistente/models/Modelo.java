@@ -6,12 +6,14 @@ import java.util.Objects;
 import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilString.capitalize;
+import static java.lang.String.format;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class Modelo {
 
-    private String banco;
+    private String catalogo;
     private String owner;
     private String tabela;
     private String entidade;
@@ -19,16 +21,16 @@ public class Modelo {
 
     public Modelo( final Builder builder ) {
 
-        this.banco = builder.banco;
+        this.catalogo = builder.banco;
         this.owner = builder.owner;
         this.tabela = builder.tabela;
         this.entidade = builder.entidade;
         this.campos = builder.campos;
     }
 
-    public String getBanco() {
+    public String getCatalogo() {
 
-        return banco;
+        return catalogo;
     }
 
     public String getOwner() {
@@ -64,6 +66,16 @@ public class Modelo {
     public boolean containsBigDecimal( ) {
 
         return isNotEmpty(campos) && campos.stream().anyMatch(c -> equalsIgnoreCase( c.getTipoJava(), "BigDecimal" ) );
+    }
+
+    public String getNomeCompletoTabela() {
+
+        return format(
+            "%s%s%s",
+            isNotBlank( getCatalogo() ) ? getCatalogo() + "." : "",
+            isNotBlank( getOwner() ) ? getOwner() + "." : "",
+            getTabela()
+        );
     }
 
 

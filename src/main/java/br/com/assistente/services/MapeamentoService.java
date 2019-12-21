@@ -1,99 +1,70 @@
 package br.com.assistente.services;
 
-import br.com.assistente.infra.exceptions.BusinessException;
+import br.com.assistente.models.DriverCnx;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
-import br.com.assistente.models.SetupCnxBanco;
-import br.com.assistente.models.SetupUsuario;
+import io.vavr.Tuple2;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+import static br.com.assistente.infra.db.ConnectionFactory.getConnection;
+import static br.com.assistente.models.DriverCnx.getQuerySelectTop1;
 import static java.lang.String.format;
+import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
 public class MapeamentoService {
 
-    public List<String> buscarBancos() {
+    public List<ModeloCampo> extrair( final Modelo modelo )  {
 
-        List<String> bancos = new ArrayList<>();
-        bancos.add("vendas");
-        bancos.add("move");
-        bancos.add("estoque");
-        bancos.add("admin");
-        bancos.add("seguranca");
-        return bancos;
-    }
+        if ( isNull(modelo) )
+            throw new IllegalArgumentException( "É necessário tabela para mapeamento!" );
 
-    public List<ModeloCampo> extrair(
-        final String banco,
-        final String owner,
-        final String tabela
-    ) throws BusinessException {
+        if ( isBlank(modelo.getTabela()) )
+            throw new IllegalArgumentException( "É necessário tabela para mapeamento!" );
 
-        if ( isBlank(banco) || isBlank(owner) || isBlank(tabela) )
-            throw new BusinessException( "É necessário informar banco / owner / tabela" );
+        final Tuple2<Connection, DriverCnx> tuple = getConnection();
+        final Connection connection = tuple._1();
+        final DriverCnx driverCnx = tuple._2();
+        final String query = getQuerySelectTop1( driverCnx, modelo );
 
-        final SetupCnxBanco setupCnxBanco = SetupUsuario.find()
-            .flatMap( su -> SetupCnxBanco.findById(su.getIdCnxAtual()) )
-            .orElseThrow( () -> new BusinessException("Não localizou conexão ativa") );
+        try {
 
+            QueryRunner runner = new QueryRunner();
 
+            ResultSetHandler<Object[]> handler = rs -> {
 
+                if (!rs.next()) return null;
 
+                ResultSetMetaData meta = rs.getMetaData();
+                int cols = meta.getColumnCount();
+                Object[] result = new Object[cols];
 
-//        ConexaoDB.execQuery( "SELECT * FROM perfis", dados -> {
-//            for (Object dado : dados) {
-//                System.out.println(dado);
-//            }
-//        });
+                for (int i = 0; i < cols; i++) {
+                    result[i] = rs.getObject(i + 1);
+                }
+                return result;
+            };
 
+            Object[] result  = runner.query( connection, query, handler );
+            System.out.print("Result: " + Arrays.toString(result));
 
-//        try {
-//            ConexaoDB.conectar();
-//            MapListHandler beanListHandler = new MapListHandler();
-//            QueryRunner runner = new QueryRunner();
-//
-//            ResultSetHandler<Object[]> handler = new ResultSetHandler<Object[]>() {
-//                public Object[] handle(ResultSet rs) throws SQLException {
-//                    if (!rs.next()) {
-//                        return null;
-//                    }
-//                    ResultSetMetaData meta = rs.getMetaData();
-//                    int cols = meta.getColumnCount();
-//                    Object[] result = new Object[cols];
-//
-//                    for (int i = 0; i < cols; i++) {
-//                        result[i] = rs.getObject(i + 1);
-//                    }
-//                    return result;
-//                }
-//            };
-//
-//            Object[] result  = runner.query(ConexaoDB.getConnection(), "SELECT * FROM perfis", handler );
-//            System.out.print("Result: " + Arrays.toString(result));
-//
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            ConexaoDB.desconnectar();
-//        }
-
-        final String nomeCompletoTabela = format( "%s.%s.%s", banco, owner, tabela );
-
-        List<ModeloCampo> dados = new ArrayList<>();
-
-        dados.add( new ModeloCampo.Builder().comPK(true).comColunaDB("id").comTipoDB("integer").comTipoJava("Long").build() );
-        dados.add( new ModeloCampo.Builder().comPK(false).comColunaDB("razao_social").comTipoDB("integer").comTipoJava("Long").comConverter(true).build() );
+        } catch ( SQLException e ) {
+            throw new RuntimeException( format( "Falhou execução de [%s] \n %s", query, e.getMessage() ) );
+        }
 
 
-        return dados;
+        return null;
     }
 
     public void executar( final Modelo modelo ) {

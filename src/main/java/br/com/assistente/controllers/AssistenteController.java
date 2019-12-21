@@ -2,23 +2,22 @@ package br.com.assistente.controllers;
 
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
-import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.MapeamentoService;
-import io.vavr.control.Try;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
-import java.util.List;
 
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
-import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static javafx.collections.FXCollections.observableArrayList;
-import static javafx.collections.FXCollections.observableList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 
 public class AssistenteController {
@@ -75,8 +74,6 @@ public class AssistenteController {
 
     private void initializeMapeamento() {
 
-        cbxMapeamentoBanco.setItems( observableList(mapeamentoService.buscarBancos()) );
-
         tcMapeamentoColNull.setCellValueFactory( c -> c.getValue().colNullProperty() );
         tcMapeamentoColNull.setCellFactory( forTableColumn(tcMapeamentoColNull) );
         tcMapeamentoID.setCellValueFactory( c -> c.getValue().pkProperty() );
@@ -108,19 +105,22 @@ public class AssistenteController {
 
     public void onActionMapeamentoBtnLerTabela() {
 
-        Try<List<ModeloCampo>> possivelModelo = Try.of(() -> mapeamentoService.extrair(
-            cbxMapeamentoBanco.getValue(),
-            txtMapeamentoOwner.getText(),
-            txfMapeamentoNomeTabela.getText()
-        ));
+        mapeamentoService.extrair( new Modelo
+            .Builder()
+            .comBanco( cbxMapeamentoBanco.getValue() )
+            .comOwner( txtMapeamentoOwner.getText() )
+            .comTabela( txfMapeamentoNomeTabela.getText() )
+            .build()
+        );
 
-        if ( possivelModelo.isSuccess() ) {
-            observableModelo.clear();
-            observableModelo.addAll(possivelModelo.get());
-            desabilitarAcoesMapeamento(true);
-        } else {
-            msgAviso( possivelModelo.getCause().getMessage() );
-        }
+
+//        if ( possivelModelo.isSuccess() ) {
+//            observableModelo.clear();
+//            observableModelo.addAll(possivelModelo.get());
+//            desabilitarAcoesMapeamento(true);
+//        } else {
+//            msgAviso( possivelModelo.getCause().getMessage() );
+//        }
 
     }
 

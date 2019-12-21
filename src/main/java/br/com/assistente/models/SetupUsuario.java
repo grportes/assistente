@@ -106,7 +106,6 @@ public class SetupUsuario {
         cache = value;
     }
 
-
     public static void validarObjeto( final SetupUsuario setupUsuario ) {
 
         requireNonNull( setupUsuario );
@@ -116,6 +115,12 @@ public class SetupUsuario {
         if ( isNull( setupUsuario.getIdCnxAtual() ) ) fields.add( " conexao ");
         if ( isNoneBlank(fields.toString()) )
             throw new IllegalStateException( "[SetupBanco] Campos obrigatórios: " + fields );
+    }
+
+    public static Optional<SetupUsuario> find() {
+
+        final Path arquivoYaml = getArquivoYaml();
+        return UtilYaml.load( SetupUsuario.class, arquivoYaml );
     }
 
     public static void load() {
@@ -136,6 +141,12 @@ public class SetupUsuario {
             .findFirst();
     }
 
+    public static Optional<SetupCnxBanco> buscarCnxAtivaDoUsuario() {
+
+        return SetupUsuario.find()
+                .flatMap( su -> SetupCnxBanco.findById(su.getIdCnxAtual()) );
+    }
+
     public static void save( final SetupUsuario novoSetup ) {
 
         validarObjeto( novoSetup );
@@ -149,12 +160,6 @@ public class SetupUsuario {
 
         UtilYaml.dump( setupUsuario, arquivoYaml );
         cache = setupUsuario;
-    }
-
-    public static Optional<SetupUsuario> find() {
-
-        final Path arquivoYaml = getArquivoYaml();
-        return UtilYaml.load( SetupUsuario.class, arquivoYaml );
     }
 
     public static void deleteCnxById( final Integer id ) {

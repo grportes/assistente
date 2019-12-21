@@ -2,6 +2,8 @@ package br.com.assistente.infra.db;
 
 import br.com.assistente.models.DriverCnx;
 import br.com.assistente.models.SetupCnxBanco;
+import br.com.assistente.models.SetupUsuario;
+import io.vavr.Tuple2;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -19,17 +21,31 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public final class ConnectionFactory {
 
     private static Connection connection;
+    private static DriverCnx driverCnx;
 
-    public static Connection getConnection() {
+    public static Tuple2<Connection, DriverCnx> getConnection() {
 
-        if ( isNull(connection) ) {
+        if ( isNull( connection ) ) {
+
+            final SetupCnxBanco cnxBanco = SetupUsuario.buscarCnxAtivaDoUsuario()
+                    .orElseThrow( () -> new RuntimeException("Não localizou conexão ativa") );
+
+            driverCnx = DriverCnx.findById( cnxBanco.getIdDriver() )
+                    .orElseThrow(() -> new RuntimeException( "Não localizou driver de conexão") );
+
+            final String jdbcUrl = format( "%s%s", driverCnx.getProtocolo(), cnxBanco.getHost() )
+                    .concat( nonNull( cnxBanco.getPorta() ) ? ":" + cnxBanco.getPorta() : ""  );
+
             try {
-                connection = DriverManager.getConnection("");
-            } catch (SQLException e) {
-                e.printStackTrace();
+                connection = isNotBlank( cnxBanco.getUserName() )
+                        ? DriverManager.getConnection( jdbcUrl, cnxBanco.getUserName(), descriptografar(cnxBanco.getPassword()) )
+                        : DriverManager.getConnection( jdbcUrl );
+            } catch ( final SQLException e ) {
+                throw new RuntimeException( format( "Falhou conexão com %s \n%s", cnxBanco.getIdDriver(), e.getMessage() ) );
             }
         }
-        return connection;
+
+        return new Tuple2<>( connection, driverCnx );
     }
 
     public static void closeConnection() {

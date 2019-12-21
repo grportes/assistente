@@ -1,6 +1,10 @@
 package br.com.assistente.infra.util;
 
-import javax.crypto.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -11,12 +15,10 @@ import static javax.crypto.Cipher.ENCRYPT_MODE;
 
 public final class UtilCrypto {
 
-    private static final String CHAVE_SIMETRICA;
     private static final SecretKey SECRET_KEY;
 
     static {
-        CHAVE_SIMETRICA = "l4;WWHw:.}byWlJo<4Ph|1tgs;I2TXe6";
-        SECRET_KEY = new SecretKeySpec( CHAVE_SIMETRICA.getBytes(), "AES" );
+        SECRET_KEY = new SecretKeySpec( "l4;WWHw:.}byWlJo<4Ph|1tgs;I2TXe6".getBytes(), "AES" );
     }
 
     public static String encriptar( final String mensagem ) {
