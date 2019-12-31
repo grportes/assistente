@@ -18,8 +18,8 @@ public final class Dialog {
     ) {
 
         final Alert alert = new Alert(alertType);
-        alert.setTitle("Assistente");
-        alert.setHeaderText("Atenção");
+        alert.setTitle( "Assistente" );
+        alert.setHeaderText( null );
         alert.setContentText( mensagem );
         alert.showAndWait();
     }

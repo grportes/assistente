@@ -14,7 +14,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toList;
 
-public class DriverCnx {
+public final class DriverCnx {
 
     private String id;
     private String driver;
@@ -165,10 +165,10 @@ public class DriverCnx {
         if ( isNull(cache) )
             try {
                 cache = Files.list( getResourceFolder( "drivers" ) )
-                        .map( path -> load(DriverCnx.class, path) )
-                        .map( Optional::get )
-                        .collect( toList() );
-            } catch ( IOException e ) {
+                    .map( path -> load(DriverCnx.class, path) )
+                    .map( Optional::get )
+                    .collect( toList() );
+            } catch ( final IOException e ) {
                 cache = emptyList();
             }
     }

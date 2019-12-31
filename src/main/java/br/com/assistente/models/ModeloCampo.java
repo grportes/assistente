@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import static br.com.assistente.infra.util.UtilString.capitalize;
+import static br.com.assistente.infra.util.UtilString.convPluralToSingular;
+import static org.apache.commons.lang3.StringUtils.isNumeric;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public class ModeloCampo {
@@ -111,6 +113,7 @@ public class ModeloCampo {
         private String tipoJava;
         private boolean colNull;
         private boolean converter;
+        private int tamanho;
 
         public Builder() {
 
@@ -121,6 +124,18 @@ public class ModeloCampo {
             this.tipoJava = null;
             this.colNull = false;
             this.converter = false;
+            this.tamanho = 0;
+        }
+
+        public Builder( final ModeloCampo modeloCampo ) {
+
+            this.pk = modeloCampo.isPk();
+            this.colunaDB = modeloCampo.getColunaDB();
+            this.colunaJava = modeloCampo.getColunaJava();
+            this.tipoDB = modeloCampo.getTipoDB();
+            this.tipoJava = modeloCampo.getTipoJava();
+            this.colNull = modeloCampo.isColNull();
+            this.converter = modeloCampo.isConverter();
         }
 
         public Builder comPK( final boolean value ) {
@@ -131,14 +146,22 @@ public class ModeloCampo {
 
         public Builder comColunaDB( final String value ) {
 
+
             this.colunaDB = lowerCase( value );
-            this.colunaJava = capitalize( this.colunaDB );
+            this.colunaJava = convPluralToSingular( capitalize( this.colunaDB ) );
             return this;
         }
 
         public Builder comTipoDB( final String value ) {
 
             this.tipoDB = value;
+            int inicio = this.tipoDB.lastIndexOf( "(" );
+            if ( inicio > 0 ) {
+                int fim = this.tipoDB.lastIndexOf( ")" );
+                String sTamanho = this.tipoDB.substring( inicio + 1, fim );
+                if ( isNumeric( sTamanho ) ) this.tamanho = Integer.parseInt( sTamanho );
+                this.tipoDB = this.tipoDB.substring( 0, inicio );
+            }
             return this;
         }
 
