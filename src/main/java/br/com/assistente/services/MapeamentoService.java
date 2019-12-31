@@ -12,6 +12,7 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class MapeamentoService {
             }).collect( toSet() );
     }
 
-    public void executar( final Modelo modelo ) {
+    public String executar( final Modelo modelo ) {
 
         final VelocityEngine engine = new VelocityEngine();
         engine.setProperty( RESOURCE_LOADERS, "classpath" );
@@ -60,13 +61,12 @@ public class MapeamentoService {
         context.put("modelo", modelo);
 //        context.put("StringUtils", StringUtils.class);
 
-        try {
-            final StringWriter writer = new StringWriter();
+
+        try ( final StringWriter writer = new StringWriter() ){
             template.merge( context, writer );
-            System.out.println(writer.toString());
-            writer.close();
+            return writer.toString();
         } catch ( IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException( e );
         }
     }
 }

@@ -8,8 +8,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
@@ -48,6 +52,9 @@ public class AssistenteController {
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
 
+    // Result:
+    @FXML private Tab tabResult;
+    @FXML private TextArea txtResult;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -146,7 +153,15 @@ public class AssistenteController {
             .comCampos( new HashSet<>(observableModelo) )
             .build();
 
-        mapeamentoService.executar( modelo );
+        String texto = mapeamentoService.executar( modelo );
+
+        setarTab( tabResult );
+        txtResult.setText( texto );
+    }
+
+    private void setarTab( final Tab tab ) {
+
+        tab.getTabPane().getSelectionModel().select( tab );
     }
 
 }
