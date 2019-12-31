@@ -14,11 +14,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
+import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 public class AssistenteController {
 
@@ -32,6 +35,7 @@ public class AssistenteController {
     @FXML private TextField txtMapeamentoOwner;
     @FXML private TextField txfMapeamentoNomeTabela;
     @FXML private TableView<ModeloCampo> tblMapeamento;
+    @FXML private TableColumn<ModeloCampo, Integer> tcMapeamentoPosicao;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoColNull;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoID;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoDB;
@@ -39,6 +43,7 @@ public class AssistenteController {
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoTipoDB;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoTipoJava;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoConverter;
+    @FXML private TableColumn<ModeloCampo, Integer> tcMapeamentoTamanho;
     @FXML private Button btnMapeamento;
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
@@ -74,6 +79,7 @@ public class AssistenteController {
 
     private void initializeMapeamento() {
 
+        tcMapeamentoPosicao.setCellValueFactory( c -> c.getValue().posicaoProperty().asObject() );
         tcMapeamentoColNull.setCellValueFactory( c -> c.getValue().colNullProperty() );
         tcMapeamentoColNull.setCellFactory( forTableColumn(tcMapeamentoColNull) );
         tcMapeamentoID.setCellValueFactory( c -> c.getValue().pkProperty() );
@@ -82,6 +88,7 @@ public class AssistenteController {
         tcMapeamentoJava.setCellValueFactory( c -> c.getValue().colunaJavaProperty() );
         tcMapeamentoTipoDB.setCellValueFactory( c -> c.getValue().tipoDBProperty() );
         tcMapeamentoTipoJava.setCellValueFactory( c -> c.getValue().tipoJavaProperty() );
+        tcMapeamentoTamanho.setCellValueFactory( c -> c.getValue().tamanhoProperty().asObject() );
         tcMapeamentoConverter.setCellValueFactory( c -> c.getValue().converterProperty() );
         tcMapeamentoConverter.setCellFactory( forTableColumn(tcMapeamentoConverter) );
 
@@ -105,23 +112,23 @@ public class AssistenteController {
 
     public void onActionMapeamentoBtnLerTabela() {
 
-        mapeamentoService.extrair( new Modelo
-            .Builder()
-            .comBanco( cbxMapeamentoBanco.getValue() )
-            .comOwner( txtMapeamentoOwner.getText() )
-            .comTabela( txfMapeamentoNomeTabela.getText() )
-            .build()
+        final Set<ModeloCampo> campos = mapeamentoService.extrair(
+            new Modelo.Builder()
+                .comBanco( cbxMapeamentoBanco.getValue() )
+                .comOwner( txtMapeamentoOwner.getText() )
+                .comTabela( txfMapeamentoNomeTabela.getText() )
+                .build()
         );
 
+        if ( isEmpty( campos ) ) {
+            msgAviso( "Não foi possivel ler dados" );
+            return;
+        }
 
-//        if ( possivelModelo.isSuccess() ) {
-//            observableModelo.clear();
-//            observableModelo.addAll(possivelModelo.get());
-//            desabilitarAcoesMapeamento(true);
-//        } else {
-//            msgAviso( possivelModelo.getCause().getMessage() );
-//        }
-
+        observableModelo.clear();
+        observableModelo.addAll( campos );
+        tblMapeamento.getSortOrder().add( tcMapeamentoPosicao );
+        desabilitarAcoesMapeamento(true);
     }
 
     public void onActionMapeamentoBtnLimpar() {
@@ -133,10 +140,10 @@ public class AssistenteController {
     public void onActionBtnMapeamento() {
 
         Modelo modelo = new Modelo.Builder()
-            .comBanco(cbxMapeamentoBanco.getValue())
-            .comOwner(txtMapeamentoOwner.getText())
-            .comTabela(txfMapeamentoNomeTabela.getText())
-            .comCampos(new HashSet<>(observableModelo))
+            .comBanco( cbxMapeamentoBanco.getValue() )
+            .comOwner( txtMapeamentoOwner.getText() )
+            .comTabela( txfMapeamentoNomeTabela.getText() )
+            .comCampos( new HashSet<>(observableModelo) )
             .build();
 
         mapeamentoService.executar( modelo );

@@ -1,7 +1,9 @@
 package br.com.assistente.models;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -12,8 +14,10 @@ import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public class ModeloCampo {
 
+    private IntegerProperty posicao;
     private BooleanProperty pk;
     private StringProperty colunaDB;
+    private IntegerProperty tamanho;
     private StringProperty colunaJava;
     private StringProperty tipoDB;
     private StringProperty tipoJava;
@@ -25,13 +29,25 @@ public class ModeloCampo {
 
     private ModeloCampo( final Builder builder ) {
 
-        this.pk = new SimpleBooleanProperty(builder.pk);
-        this.colunaDB = new SimpleStringProperty(builder.colunaDB);
-        this.colunaJava = new SimpleStringProperty(builder.colunaJava);
-        this.tipoDB = new SimpleStringProperty(builder.tipoDB);
-        this.tipoJava = new SimpleStringProperty(builder.tipoJava);
-        this.colNull = new SimpleBooleanProperty(builder.colNull);
-        this.converter = new SimpleBooleanProperty(builder.converter);
+        this.posicao = new SimpleIntegerProperty( builder.posicao );
+        this.pk = new SimpleBooleanProperty( builder.pk );
+        this.colunaDB = new SimpleStringProperty( builder.colunaDB );
+        this.tamanho = new SimpleIntegerProperty( builder.tamanho );
+        this.colunaJava = new SimpleStringProperty( builder.colunaJava );
+        this.tipoDB = new SimpleStringProperty( builder.tipoDB );
+        this.tipoJava = new SimpleStringProperty( builder.tipoJava );
+        this.colNull = new SimpleBooleanProperty( builder.colNull );
+        this.converter = new SimpleBooleanProperty( builder.converter );
+    }
+
+    public IntegerProperty posicaoProperty() {
+
+        return posicao;
+    }
+
+    public int getPosicao() {
+
+        return posicao.get();
     }
 
     public boolean isPk() {
@@ -52,6 +68,16 @@ public class ModeloCampo {
     public StringProperty colunaDBProperty() {
 
         return colunaDB;
+    }
+
+    public int getTamanho() {
+
+        return tamanho.get();
+    }
+
+    public IntegerProperty tamanhoProperty() {
+
+        return tamanho;
     }
 
     public String getColunaJava() {
@@ -106,6 +132,7 @@ public class ModeloCampo {
 
     public static class Builder {
 
+        private int posicao;
         private boolean pk;
         private String colunaDB;
         private String colunaJava;
@@ -117,6 +144,7 @@ public class ModeloCampo {
 
         public Builder() {
 
+            this.posicao = 0;
             this.pk = false;
             this.colunaDB = null;
             this.colunaJava = null;
@@ -129,6 +157,7 @@ public class ModeloCampo {
 
         public Builder( final ModeloCampo modeloCampo ) {
 
+            this.posicao = modeloCampo.getPosicao();
             this.pk = modeloCampo.isPk();
             this.colunaDB = modeloCampo.getColunaDB();
             this.colunaJava = modeloCampo.getColunaJava();
@@ -136,6 +165,13 @@ public class ModeloCampo {
             this.tipoJava = modeloCampo.getTipoJava();
             this.colNull = modeloCampo.isColNull();
             this.converter = modeloCampo.isConverter();
+            this.tamanho = modeloCampo.getTamanho();
+        }
+
+        public Builder comPosicao( final int value ) {
+
+            this.posicao = value;
+            return this;
         }
 
         public Builder comPK( final boolean value ) {
@@ -188,6 +224,5 @@ public class ModeloCampo {
             return new ModeloCampo( this );
         }
     }
-
 
 }

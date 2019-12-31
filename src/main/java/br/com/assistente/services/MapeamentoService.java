@@ -32,7 +32,7 @@ public class MapeamentoService {
             .map( DriverCnx::getDataTypes )
             .orElseThrow( () -> new RuntimeException( "Não foi possivel localizar driver de conexão!!" ) );
 
-        final Set<ModeloCampo> modelos = getMetaData( modelo )
+        return getMetaData( modelo )
             .stream().map( m -> {
                 final String tipoJava = dataTypes
                     .stream()
@@ -44,8 +44,6 @@ public class MapeamentoService {
                     )));
                 return new ModeloCampo.Builder( m ).comTipoJava( tipoJava ).build();
             }).collect( toSet() );
-
-        return modelos;
     }
 
     public void executar( final Modelo modelo ) {

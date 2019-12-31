@@ -110,17 +110,20 @@ public final class ConnectionFactory {
             while ( rs.next() ) pks.add( rs.getString("COLUMN_NAME" ) );
 
             // Colunas:
+            int posicaoLeitura = 0;
             rs = metaData.getColumns(null, null, modelo.getTabela(), null );
             while ( rs.next() ) {
                 final String columnName = rs.getString( "COLUMN_NAME" );
                 campos.add(
                     new ModeloCampo.Builder()
+                        .comPosicao( posicaoLeitura )
                         .comColunaDB( columnName )
                         .comPK( pks.contains( columnName ) )
                         .comColNull( Objects.equals( rs.getString( "NULLABLE" ), "1" ) )
                         .comTipoDB( rs.getString( "TYPE_NAME" ) )
                         .build()
                 );
+                posicaoLeitura ++;
             }
 
             return campos;

@@ -43,10 +43,12 @@
                         <Button layoutX="598.0" layoutY="29.0" mnemonicParsing="false" onAction="#onActionMapeamentoBtnLerTabela" prefHeight="26.0" prefWidth="61.0" text="Ler..." />
                         <TableView fx:id="tblMapeamento" editable="true" layoutX="14.0" layoutY="68.0" prefHeight="333.0" prefWidth="777.0">
                           <columns>
-                              <TableColumn fx:id="tcMapeamentoColNull" prefWidth="48.0" text="NULL" />
-                              <TableColumn fx:id="tcMapeamentoID" prefWidth="49.0" text="PK" />
-                            <TableColumn fx:id="tcMapeamentoDB" prefWidth="147.0" text="Coluna DB" />
-                            <TableColumn fx:id="tcMapeamentoJava" maxWidth="197.0" prefWidth="155.0" text="Coluna Java" />
+                              <TableColumn fx:id="tcMapeamentoPosicao" prefWidth="42.0" text="POS." visible="false" />
+                              <TableColumn fx:id="tcMapeamentoColNull" prefWidth="49.0" sortable="false" text="NULL" />
+                              <TableColumn fx:id="tcMapeamentoID" prefWidth="34.0" sortable="false" text="PK" />
+                            <TableColumn fx:id="tcMapeamentoDB" prefWidth="194.0" text="Coluna DB" />
+                            <TableColumn fx:id="tcMapeamentoJava" maxWidth="197.0" prefWidth="191.0" text="Coluna Java" />
+                              <TableColumn fx:id="tcMapeamentoTamanho" prefWidth="39.0" text="TA." visible="false" />
                               <TableColumn fx:id="tcMapeamentoTipoDB" minWidth="0.0" prefWidth="111.0" text="Tipo DB" />
                               <TableColumn fx:id="tcMapeamentoTipoJava" prefWidth="104.0" text="Tipo Java" />
                               <TableColumn fx:id="tcMapeamentoConverter" prefWidth="85.0" text="Converter" />
