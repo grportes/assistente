@@ -25,6 +25,15 @@ create table usuarios (
 
 create unique index idx_usuario_1 on usuarios ( cpf asc );
 
+create table clientes(
+    empresa integer not null,
+    cliente integer not null,
+    razao_social varchar(250) not null,
+
+    primary key( empresa, cliente )
+);
+
+
 insert into perfis( descricao, version ) values ( "ADMINISTRADOR", 0 );
 insert into perfis( descricao, version ) values ( "ANALISTA", 0 );
 
