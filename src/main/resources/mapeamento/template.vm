@@ -19,7 +19,7 @@ import javax.persistence.Version;
 @Table( name = "$modelo.getTabela()" )
 public class $modelo.getEntidade() extends Model {
 
-    #foreach( $campo in $modelo.getCampos() )
+    #foreach( $campo in $campos )
     @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", nullable = $campo.isColNull() )
     private $campo.getTipoJava() $campo.getColunaJava();
 

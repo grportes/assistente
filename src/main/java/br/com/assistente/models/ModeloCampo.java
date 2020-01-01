@@ -7,12 +7,19 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
+
 import static br.com.assistente.infra.util.UtilString.capitalize;
 import static br.com.assistente.infra.util.UtilString.convPluralToSingular;
+import static java.util.Comparator.comparing;
+import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.toCollection;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
-public class ModeloCampo {
+public final class ModeloCampo {
 
     private IntegerProperty posicao;
     private BooleanProperty pk;
@@ -23,6 +30,13 @@ public class ModeloCampo {
     private StringProperty tipoJava;
     private BooleanProperty colNull;
     private BooleanProperty converter;
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // CONSTRUCTOR
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public ModeloCampo() {
     }
@@ -129,6 +143,51 @@ public class ModeloCampo {
 
         return converter;
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // EQUALS && HASHCODE
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public boolean equals( Object o ) {
+
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
+        ModeloCampo that = (ModeloCampo) o;
+        return Objects.equals( posicao, that.posicao );
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( posicao );
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // METODOS AUXLIARES
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static Set<ModeloCampo> orderByPosicao( final Set<ModeloCampo> lista ) {
+
+        return isNull( lista )
+            ? null
+            : lista.stream()
+                .sorted( comparing( ModeloCampo::getPosicao ) )
+                .collect( toCollection( LinkedHashSet::new ) );
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // BUILDER
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static class Builder {
 

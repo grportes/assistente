@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
+import static br.com.assistente.models.ModeloCampo.orderByPosicao;
 import static br.com.assistente.models.SetupUsuario.buscarCnxAtivaDoUsuario;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
@@ -57,6 +58,7 @@ public class MapeamentoService {
         final VelocityContext context = new VelocityContext();
         context.put( "nomeAutor", SetupUsuario.find().map( SetupUsuario::getAutor ).orElse( "????" ) );
         context.put( "modelo", modelo );
+        context.put( "campos", orderByPosicao( modelo.getCampos() ) );
         context.put( "StringUtils", StringUtils.class );
 
         final VelocityEngine engine = new VelocityEngine();
