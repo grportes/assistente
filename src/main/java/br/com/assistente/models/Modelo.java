@@ -1,11 +1,9 @@
 package br.com.assistente.models;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
 import java.util.Set;
 
-import static br.com.assistente.infra.util.UtilString.capitalize;
+import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.lang.String.format;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
@@ -135,7 +133,7 @@ public final class Modelo {
         public Builder comTabela( final String value ) {
 
             this.tabela = value;
-            this.entidade = StringUtils.capitalize( capitalize( value ) );
+            this.entidade = convCamelCase( value, true );
             return this;
         }
 

@@ -1,37 +1,17 @@
 package br.com.assistente.infra.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 import static java.lang.String.join;
-import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.text.CaseUtils.toCamelCase;
 
 public final class UtilString {
-
-    public static String capitalize( final String str ) {
-
-        if ( isBlank(str) ) return str;
-
-        final StringBuilder b = new StringBuilder(str);
-        int i = 0;
-        do {
-            String tmp = b.substring(i,i + 1);
-            b.replace( i, i + 1, i == 0 ? tmp : tmp.toUpperCase() );
-            i = b.indexOf("_", i) + 1;
-        } while (i > 0 && i < b.length());
-
-        return b.toString().replaceAll("_","");
-    }
 
     public static <T extends Number> String createString( final T value ) {
 
@@ -101,6 +81,19 @@ public final class UtilString {
             return substantivo.substring( 0, tamanho -1 );
 
         return substantivo;
+    }
+
+    public static String convCamelCase(
+        final String str,
+        final boolean capitalizeFirst
+    ) {
+
+        final String newStr = Arrays.stream( str.split( "_" ) )
+            .map( String::toLowerCase )
+            .map( UtilString::convPluralToSingular )
+            .collect( joining( "_" ) );
+
+        return toCamelCase( newStr, capitalizeFirst, '_' );
     }
 
 }

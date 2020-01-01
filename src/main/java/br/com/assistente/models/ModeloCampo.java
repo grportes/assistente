@@ -11,8 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static br.com.assistente.infra.util.UtilString.capitalize;
-import static br.com.assistente.infra.util.UtilString.convPluralToSingular;
+import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toCollection;
@@ -241,9 +240,8 @@ public final class ModeloCampo {
 
         public Builder comColunaDB( final String value ) {
 
-
             this.colunaDB = lowerCase( value );
-            this.colunaJava = convPluralToSingular( capitalize( this.colunaDB ) );
+            this.colunaJava = convCamelCase( value, false );
             return this;
         }
 

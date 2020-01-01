@@ -145,7 +145,7 @@ public class AssistenteController {
 
     public void onActionBtnMapeamento() {
 
-        Modelo modelo = new Modelo.Builder()
+        final Modelo modelo = new Modelo.Builder()
             .comBanco( cbxMapeamentoBanco.getValue() )
             .comOwner( txtMapeamentoOwner.getText() )
             .comTabela( txfMapeamentoNomeTabela.getText() )
