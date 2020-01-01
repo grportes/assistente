@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vboxContainer" prefHeight="558.0" prefWidth="804.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.assistente.controllers.AssistenteController">
+<VBox fx:id="vboxContainer" prefHeight="486.0" prefWidth="804.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.assistente.controllers.AssistenteController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -32,34 +32,65 @@
         </Menu>
       </menus>
     </MenuBar>
-      <TabPane prefHeight="485.0" prefWidth="772.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="485.0" prefWidth="772.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
           <Tab fx:id="tabMapeamento" text="Mapeamento">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="292.0" prefWidth="696.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="564.0" prefWidth="804.0">
                      <children>
-                        <ComboBox fx:id="cbxMapeamentoBanco" layoutX="14.0" layoutY="29.0" prefHeight="26.0" prefWidth="188.0" />
-                        <TextField fx:id="txtMapeamentoOwner" layoutX="209.0" layoutY="29.0" prefHeight="26.0" prefWidth="144.0" text="dbo" />
-                        <TextField fx:id="txfMapeamentoNomeTabela" layoutX="359.0" layoutY="29.0" prefHeight="26.0" prefWidth="230.0" />
-                        <Label layoutX="14.0" layoutY="13.0" text="Banco:" />
-                        <Label layoutX="209.0" layoutY="13.0" text="Owner:" />
-                        <Label layoutX="362.0" layoutY="13.0" text="Tabela:" />
-                        <Button layoutX="598.0" layoutY="29.0" mnemonicParsing="false" onAction="#onActionMapeamentoBtnLerTabela" prefHeight="26.0" prefWidth="61.0" text="Ler..." />
-                        <TableView fx:id="tblMapeamento" editable="true" layoutX="14.0" layoutY="68.0" prefHeight="333.0" prefWidth="777.0">
-                          <columns>
-                              <TableColumn fx:id="tcMapeamentoPosicao" prefWidth="42.0" text="POS." visible="false" />
-                              <TableColumn fx:id="tcMapeamentoColNull" prefWidth="49.0" sortable="false" text="NULL" />
-                              <TableColumn fx:id="tcMapeamentoID" prefWidth="34.0" sortable="false" text="PK" />
-                            <TableColumn fx:id="tcMapeamentoDB" prefWidth="194.0" text="Coluna DB" />
-                            <TableColumn fx:id="tcMapeamentoJava" maxWidth="197.0" prefWidth="191.0" text="Coluna Java" />
-                              <TableColumn fx:id="tcMapeamentoTamanho" prefWidth="39.0" text="TA." visible="false" />
-                              <TableColumn fx:id="tcMapeamentoTipoDB" minWidth="0.0" prefWidth="111.0" text="Tipo DB" />
-                              <TableColumn fx:id="tcMapeamentoTipoJava" prefWidth="104.0" text="Tipo Java" />
-                              <TableColumn fx:id="tcMapeamentoConverter" prefWidth="85.0" text="Converter" />
-                          </columns>
-                        </TableView>
-                        <Button layoutX="676.0" layoutY="29.0" mnemonicParsing="false" onAction="#onActionMapeamentoBtnLimpar" text="Limpar" />
-                        <Button fx:id="btnMapeamento" disable="true" layoutX="14.0" layoutY="412.0" mnemonicParsing="false" onAction="#onActionBtnMapeamento" text="Gerar Mapeamento" />
+                        <HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="14.0" prefHeight="47.0" prefWidth="794.0" spacing="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <VBox prefHeight="47.0" prefWidth="153.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Catalogo:" />
+                                    <ComboBox fx:id="cbxMapeamentoBanco" prefHeight="26.0" prefWidth="254.0" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="47.0" prefWidth="27.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Owner:" />
+                                    <TextField fx:id="txtMapeamentoOwner" prefHeight="26.0" prefWidth="144.0" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="218.0" prefWidth="211.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Tabela:" />
+                                    <TextField fx:id="txfMapeamentoNomeTabela" prefHeight="26.0" prefWidth="230.0" />
+                                 </children>
+                              </VBox>
+                              <HBox alignment="CENTER" prefHeight="47.0" prefWidth="184.0" spacing="5.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#onActionMapeamentoBtnLerTabela" prefHeight="26.0" prefWidth="88.0" text="Ler..." />
+                                    <Button mnemonicParsing="false" onAction="#onActionMapeamentoBtnLimpar" prefHeight="26.0" prefWidth="83.0" text="Limpar" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="8.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="14.0" layoutY="61.0" prefHeight="313.0" prefWidth="789.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="61.0">
+                           <children>
+                              <TableView fx:id="tblMapeamento" editable="true" prefHeight="108.0" prefWidth="777.0" HBox.hgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="tcMapeamentoPosicao" prefWidth="42.0" text="POS." visible="false" />
+                                    <TableColumn fx:id="tcMapeamentoColNull" prefWidth="49.0" sortable="false" text="NULL" />
+                                    <TableColumn fx:id="tcMapeamentoID" prefWidth="34.0" sortable="false" text="PK" />
+                                  <TableColumn fx:id="tcMapeamentoDB" prefWidth="194.0" text="Coluna DB" />
+                                  <TableColumn fx:id="tcMapeamentoJava" maxWidth="197.0" prefWidth="191.0" text="Coluna Java" />
+                                    <TableColumn fx:id="tcMapeamentoTamanho" prefWidth="39.0" text="TA." visible="false" />
+                                    <TableColumn fx:id="tcMapeamentoTipoDB" minWidth="0.0" prefWidth="111.0" text="Tipo DB" />
+                                    <TableColumn fx:id="tcMapeamentoTipoJava" prefWidth="104.0" text="Tipo Java" />
+                                    <TableColumn fx:id="tcMapeamentoConverter" prefWidth="85.0" text="Converter" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" layoutX="5.0" layoutY="381.0" prefHeight="29.0" prefWidth="794.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                           <children>
+                              <Button fx:id="btnMapeamento" mnemonicParsing="false" onAction="#onActionBtnMapeamento" text="Gerar Mapeamento" />
+                           </children>
+                        </HBox>
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -74,38 +105,48 @@
               </content>
             </Tab>
             <Tab fx:id="tabResult" text="Result">
-              <content>
+               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <HBox prefHeight="35.0" prefWidth="784.0" AnchorPane.bottomAnchor="407.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                        <AnchorPane minHeight="-Infinity" prefHeight="48.0" prefWidth="794.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                            <children>
-                              <Button fx:id="btnResultCopiar" mnemonicParsing="false" text="Copiar">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="btnResultGravar" mnemonicParsing="false" text="Gravar">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin>
-                              </Button>
+                              <HBox alignment="CENTER_LEFT" prefHeight="36.0" prefWidth="259.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                 <children>
+                                    <Button fx:id="btnResultCopiar" mnemonicParsing="false" text="Copiar">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="btnResultGravar" mnemonicParsing="false" text="Gravar">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="271.0" layoutY="-3.0" prefHeight="37.0" prefWidth="385.0" spacing="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                 <children>
+                                    <ComboBox prefHeight="26.0" prefWidth="265.0" />
+                                    <Button mnemonicParsing="false" text="Atualizar" />
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutY="56.0" prefHeight="254.0" prefWidth="561.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                        </AnchorPane>
+                        <VBox alignment="CENTER" layoutX="14.0" layoutY="59.0" prefHeight="435.0" prefWidth="794.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
                            <children>
-                              <TextArea fx:id="txtResult" prefHeight="244.0" prefWidth="592.0" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </HBox.margin>
+                              <TextArea fx:id="txtResult" prefHeight="311.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                  <font>
-                                    <Font name="Liberation Mono" size="13.0" />
+                                    <Font name="Courier New" size="14.0" />
                                  </font>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </VBox.margin>
                               </TextArea>
                            </children>
-                        </HBox>
+                        </VBox>
                      </children>
                   </AnchorPane>
-              </content>
+               </content>
             </Tab>
         </tabs>
       </TabPane>
