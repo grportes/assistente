@@ -66,7 +66,7 @@ public class MapeamentoService {
         engine.setProperty( "resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
         engine.init();
 
-        final Template template = engine.getTemplate("/mapeamento/template.vm");
+        final Template template = engine.getTemplate("/templates/mapeamento.vm");
 
         try ( final StringWriter writer = new StringWriter() ){
             template.merge( context, writer );
