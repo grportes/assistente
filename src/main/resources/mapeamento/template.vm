@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 /**
- * Classe mapeamento ref. a tabela [ $modelo.getBanco().$modelo.getOwner().$modelo.getTabela() ]
+ * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
  *
  * @autor: $nomeAutor
  */

@@ -3,12 +3,20 @@ package br.com.assistente.models;
 import br.com.assistente.infra.util.UtilYaml;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.StringJoiner;
 
 import static br.com.assistente.infra.util.UtilYaml.getArquivoYaml;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.of;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
@@ -106,6 +114,15 @@ public class SetupUsuario {
         cache = value;
     }
 
+    public static Optional<SetupUsuario> find() {
+
+        if ( nonNull( cache ) ) return of( cache );
+
+        final Path arquivoYaml = getArquivoYaml();
+        return UtilYaml.load( SetupUsuario.class, arquivoYaml );
+    }
+
+
     public static void validarObjeto( final SetupUsuario setupUsuario ) {
 
         requireNonNull( setupUsuario );
@@ -115,20 +132,6 @@ public class SetupUsuario {
         if ( isNull( setupUsuario.getIdCnxAtual() ) ) fields.add( " conexao ");
         if ( isNoneBlank(fields.toString()) )
             throw new IllegalStateException( "[SetupBanco] Campos obrigatórios: " + fields );
-    }
-
-    public static Optional<SetupUsuario> find() {
-
-        final Path arquivoYaml = getArquivoYaml();
-        return UtilYaml.load( SetupUsuario.class, arquivoYaml );
-    }
-
-    public static void load() {
-
-        final Optional<SetupUsuario> possivelSetupUsuario = find();
-
-
-        find().ifPresent(s -> cache = s);
     }
 
     public static Optional<SetupCnxBanco> findByIdCnxBanco( Integer idCnxBancoSelecionada ) {
@@ -173,7 +176,6 @@ public class SetupUsuario {
                 UtilYaml.dump( setupUsuario, arquivoYaml );
                 cache = setupUsuario;
             }
-
         });
     }
 

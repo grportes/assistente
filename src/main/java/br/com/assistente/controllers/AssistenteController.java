@@ -77,7 +77,6 @@ public class AssistenteController {
     public void initialize() {
 
         initializeMapeamento();
-        SetupUsuario.load();
         cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
 //        if ( !SetupUsuarioRepository.isCnxDBInformada() )
 //            openViewConfiguracoes( vboxContainer.getScene().getWindow() );
