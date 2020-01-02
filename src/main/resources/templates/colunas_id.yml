@@ -1,0 +1,39 @@
+Ids:
+  - { coluna: "acerto", atributo: "idAcerto" }
+  - { coluna: "cliente", atributo: "idCliente" }
+  - { coluna: "carga", atributo: "idCarga" }
+  - { coluna: "cidade", atributo: "idCidade" }
+  - { coluna: "convenio", atributo: "idConvenio" }
+  - { coluna: "conta", atributo: "idConta" }
+  - { coluna: "cond_venda",atributo: "idCondVenda" }
+  - { coluna: "debito", atributo: "idDebito" }
+  - { coluna: "destinatario", atributo: "idDestinatario" }
+  - { coluna: "departamento", atributo: "idDepartamento" }
+  - { coluna: "descarga", atributo: "idDescarga" }
+  - { coluna: "distrito", atributo: "idDistrito" }
+  - { coluna: "documento", atributo: "idDocumento" }
+  - { coluna: "empresa", atributo: "idEmpresa" }
+  - { coluna: "empresa_motorista", atributo: "idEmpresaMotorista" }
+  - { coluna: "filial", atributo: "idFilial" }
+  - { coluna: "funcionario", atributo: "idFuncionario" }
+  - { coluna: "fornecedor", atributo: "idFornecedor" }
+  - { coluna: "folha", atributo: "idFolha" }
+  - { coluna: "grupo_cidade", atributo: "idGrupoCidade" }
+  - { coluna: "mercadoria", atributo: "idMercadoria" }
+  - { coluna: "matricula", atributo: "idMatricula" }
+  - { coluna: "motorista", atributo: "idMotorista" }
+  - { coluna: "nf_saida", atributo: "idNfSaida" }
+  - { coluna: "nf_fiscal", atributo: "idNfFiscal" }
+  - { coluna: "nro_nota", atributo: "idNroNota" }
+  - { coluna: "ocorrencia",atributo: "idOcorrencia" }
+  - { coluna: "ocor_cadastro",atributo: "idOcorCadastro" }
+  - { coluna: "pedido", atributo: "idPedido" }
+  - { coluna: "promocao",atributo: "idPromocao" }
+  - { coluna: "ramo_atividade",atributo: "idRamoAtividade" }
+  - { coluna: "representante",atributo: "idRepresentante" }
+  - { coluna: "sessao", atributo: "idSessao" }
+  - { coluna: "setor", atributo: "idSetor" }
+  - { coluna: "transportadora",atributo: "idTransportadora" }
+  - { coluna: "usuario", atributo: "idUsuario" }
+  - { coluna: "veiculo", atributo: "idVeiculo" }
+  - { coluna: "viagem", atributo: "idViagem" }

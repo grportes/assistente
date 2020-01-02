@@ -241,7 +241,7 @@ public final class ModeloCampo {
         public Builder comColunaDB( final String value ) {
 
             this.colunaDB = lowerCase( value );
-            this.colunaJava = convCamelCase( value, false );
+            this.colunaJava = ColunaId.getNomeAtributo( value ).orElse( convCamelCase( value, false ) );
             return this;
         }
 

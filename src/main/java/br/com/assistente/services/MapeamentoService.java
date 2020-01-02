@@ -4,6 +4,7 @@ import br.com.assistente.models.DataType;
 import br.com.assistente.models.DriverCnx;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
+import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.SetupUsuario;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,7 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
@@ -24,6 +26,7 @@ import static br.com.assistente.models.ModeloCampo.orderByPosicao;
 import static br.com.assistente.models.SetupUsuario.buscarCnxAtivaDoUsuario;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
+import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
@@ -51,9 +54,9 @@ public class MapeamentoService {
             }).collect( toSet() );
     }
 
-    public String executar( final Modelo modelo ) {
+    public Optional<ResultMapeamento> executar( final Modelo modelo ) {
 
-        if ( isNull( modelo ) ) return "";
+        if ( isNull( modelo ) ) return empty();
 
         final VelocityContext context = new VelocityContext();
         context.put( "nomeAutor", SetupUsuario.find().map( SetupUsuario::getAutor ).orElse( "????" ) );
@@ -66,7 +69,7 @@ public class MapeamentoService {
         engine.setProperty( "resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
         engine.init();
 
-        final Template template = engine.getTemplate("/templates/mapeamento.vm");
+        final Template template = engine.getTemplate( "/templates/entidade.vm" );
 
         try ( final StringWriter writer = new StringWriter() ){
             template.merge( context, writer );

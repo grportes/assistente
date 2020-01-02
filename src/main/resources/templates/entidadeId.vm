@@ -1,0 +1,83 @@
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Version;
+
+/**
+ * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
+ *
+ * @autor: $nomeAutor
+ */
+@Entity
+@Table( name = "$modelo.getTabela()" )
+public class $modelo.getEntidade() extends Model {
+
+    #foreach( $campo in $campos )
+    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", nullable = $campo.isColNull() )
+    private $campo.getTipoJava() $campo.getColunaJava();
+
+    #end
+
+    #set( $texto = "CONSTRUCTOR" )
+    #comentario( )
+
+    #set( $texto = "GETTERS && SETTERS" )
+    #comentario( )
+    #foreach( $campo in $modelo.getCampos() )
+    #macroGetterSetters( $campo.getTipoJava() $campo.getColunaJava() )
+    #end
+
+    #set( $texto = "METODOS TRANSIENTES" )
+    #comentario( )
+
+    #set( $texto = "CONSTANTES" )
+    #comentario( )
+
+    #set( $texto = "EQUALS && HASHCODE" )
+    #comentario( )
+    @Override
+    public boolean equals( final Object obj ) {
+
+        if (this == obj) return true;
+        if (!( obj instanceof $modelo.getEntidade() )) return false;
+        return Objects.equals( getId(), (($modelo.getEntidade()) obj).getId() );
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( getId() );
+    }
+
+    #set( $texto = "METODOS AUXILIARES" )
+    #comentario( )
+}
+
+#macro( comentario $texto )
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // $texto
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#end
+
+#macro( macroGetterSetters $tipo $nomeCampo )
+    public $tipo get$StringUtils.capitalize($nomeCampo)() {
+
+        return this.$nomeCampo;
+    }
+
+    public void set$StringUtils.capitalize($nomeCampo)( final $tipo $nomeCampo ) {
+
+        this.$nomeCampo = $nomeCampo;
+    }
+
+#end

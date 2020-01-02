@@ -38,11 +38,13 @@ public class Main extends Application {
         closeConnection();
     }
 
-    private void showErrorDialog(Thread t, Throwable e) {
+    private void showErrorDialog(
+        final Thread t,
+        final Throwable e
+    ) {
 
         Throwable rootCause = ExceptionUtils.getRootCause(e);
         String message = rootCause.getMessage();
-
         Dialog.msgErro( message );
     }
 
