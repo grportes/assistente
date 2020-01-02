@@ -106,12 +106,12 @@ public final class ConnectionFactory {
             final Set<ModeloCampo> campos = new LinkedHashSet<>();
 
             // Pks;
-            ResultSet rs = metaData.getPrimaryKeys( null, null, modelo.getTabela() );
+            ResultSet rs = metaData.getPrimaryKeys( modelo.getCatalogo(), modelo.getOwner(), modelo.getTabela() );
             while ( rs.next() ) pks.add( rs.getString("COLUMN_NAME" ) );
 
             // Colunas:
             int posicaoLeitura = 0;
-            rs = metaData.getColumns(null, null, modelo.getTabela(), null );
+            rs = metaData.getColumns(modelo.getCatalogo(), modelo.getOwner(), modelo.getTabela(), null );
             while ( rs.next() ) {
                 final String columnName = rs.getString( "COLUMN_NAME" );
                 campos.add(

@@ -2,6 +2,7 @@ package br.com.assistente.controllers;
 
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
+import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.MapeamentoService;
 import javafx.collections.ObservableList;
@@ -18,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
@@ -152,10 +154,12 @@ public class AssistenteController {
             .comCampos( new HashSet<>(observableModelo) )
             .build();
 
-        String texto = mapeamentoService.executar( modelo );
-
-        setarTab( tabResult );
-        txtResult.setText( texto );
+        mapeamentoService
+            .executar( modelo )
+            .ifPresent( resultMapeamento -> {
+                setarTab( tabResult );
+                txtResult.setText( resultMapeamento.getConteudoEntidade() );
+            });
     }
 
     private void setarTab( final Tab tab ) {

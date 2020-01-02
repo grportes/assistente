@@ -10,11 +10,13 @@ import javafx.beans.property.StringProperty;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
@@ -179,6 +181,11 @@ public final class ModeloCampo {
             : lista.stream()
                 .sorted( comparing( ModeloCampo::getPosicao ) )
                 .collect( toCollection( LinkedHashSet::new ) );
+    }
+
+    public static Set<ModeloCampo> buscarPks( final Set<ModeloCampo> lista ) {
+
+        return isNull( lista ) ? null : lista.stream().filter( ModeloCampo::isPk ).collect( toSet() );
     }
 
 

@@ -15,6 +15,26 @@ public final class ResultMapeamento {
         this.conteudoEntidadeId = builder.conteudoEntidadeId;
     }
 
+    public String getNomeEntidade() {
+
+        return nomeEntidade;
+    }
+
+    public String getConteudoEntidade() {
+
+        return conteudoEntidade;
+    }
+
+    public String getNomeEntidadeId() {
+
+        return nomeEntidadeId;
+    }
+
+    public String getConteudoEntidadeId() {
+
+        return conteudoEntidadeId;
+    }
+
     public static class Builder {
 
         private String nomeEntidade;

@@ -11,13 +11,16 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 /**
- * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
+ * Classe mapeamento ref. a tabela [ $nomeCompletoTabela ]
  *
- * @autor: $nomeAutor
+ * <p>Autor: $nomeAutor</p>
  */
 @Entity
-@Table( name = "$modelo.getTabela()" )
-public class $modelo.getEntidade() extends Model {
+@Table( name = "$nomeTabela" )
+public class $nomeEntidade extends Model {
+
+    #set( $texto = "COLUNAS MAPEADAS" )
+    #comentario( )
 
     #foreach( $campo in $campos )
     @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", nullable = $campo.isColNull() )

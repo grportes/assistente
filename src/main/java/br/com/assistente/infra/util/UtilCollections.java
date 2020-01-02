@@ -1,6 +1,7 @@
 package br.com.assistente.infra.util;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Set;
 
 import static java.util.Collections.emptySet;
@@ -18,6 +19,11 @@ public final class UtilCollections {
         return isNotBlank( str ) && nonNull(separador)
             ? Arrays.stream( str.split( separador.toString() ) ).collect( toSet() )
             : emptySet();
+    }
+
+    public static int getTamanho( final Collection collections ) {
+
+        return nonNull( collections ) ? collections.size() : 0;
     }
 
 }

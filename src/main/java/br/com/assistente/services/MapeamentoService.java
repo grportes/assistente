@@ -7,6 +7,7 @@ import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.SetupUsuario;
+import io.vavr.Tuple2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -22,11 +23,15 @@ import java.util.Optional;
 import java.util.Set;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
+import static br.com.assistente.infra.util.UtilCollections.getTamanho;
+import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
 import static br.com.assistente.models.SetupUsuario.buscarCnxAtivaDoUsuario;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
@@ -58,10 +63,70 @@ public class MapeamentoService {
 
         if ( isNull( modelo ) ) return empty();
 
+        final String nomeTabela = modelo.getTabela();
+        final String nomeCompletoTabela = modelo.getNomeCompletoTabela();
+        final String nomeEntidade = requireNonNull(modelo.getEntidade(), "Nome da entidade esta vazio!" );
+        final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
+
+        final Set<ModeloCampo> camposPk = buscarPks( modelo.getCampos() );
+        Set<ModeloCampo> campos = modelo.getCampos();
+
+        if ( getTamanho( camposPk ) > 1 ) {
+            campos.removeAll( camposPk );
+            return of(
+                new ResultMapeamento.Builder()
+                    .comConteudoEntidade( nomeEntidade )
+                    .comConteudoEntidade( gerarMapeamento(
+                        nomeTabela,
+                        nomeCompletoTabela,
+                        nomeEntidade,
+                        nomeAutor,
+                        campos,
+                        "/templates/entidade.vm"
+                    ))
+                    .comNomeEntidadeId( nomeEntidade + "Id" )
+                    .comConteudoEntidadeId( gerarMapeamento(
+                        nomeTabela,
+                        nomeCompletoTabela,
+                        nomeEntidade,
+                        nomeAutor,
+                        orderByPosicao( camposPk ),
+                        "/templates/entidadeId.vm"
+                    ))
+                    .build()
+            );
+        }
+
+        return of(
+            new ResultMapeamento.Builder()
+                .comConteudoEntidade( nomeEntidade )
+                .comConteudoEntidade( gerarMapeamento(
+                    nomeTabela,
+                    nomeCompletoTabela,
+                    nomeEntidade,
+                    nomeAutor,
+                    campos,
+                    "/templates/entidade.vm"
+                ))
+                .build()
+        );
+    }
+
+    private String gerarMapeamento(
+        final String nomeTabela,
+        final String nomeCompletoTabela,
+        final String nomeEntidade,
+        final String nomeAutor,
+        final Set<ModeloCampo> campos,
+        final String arquivoTemplate
+    ) {
+
         final VelocityContext context = new VelocityContext();
-        context.put( "nomeAutor", SetupUsuario.find().map( SetupUsuario::getAutor ).orElse( "????" ) );
-        context.put( "modelo", modelo );
-        context.put( "campos", orderByPosicao( modelo.getCampos() ) );
+        context.put( "nomeTabela", nomeTabela );
+        context.put( "nomeCompletoTabela", nomeCompletoTabela );
+        context.put( "nomeEntidade", nomeEntidade );
+        context.put( "nomeAutor", nomeAutor );
+        context.put( "campos", orderByPosicao( campos ) );
         context.put( "StringUtils", StringUtils.class );
 
         final VelocityEngine engine = new VelocityEngine();
@@ -69,7 +134,7 @@ public class MapeamentoService {
         engine.setProperty( "resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
         engine.init();
 
-        final Template template = engine.getTemplate( "/templates/entidade.vm" );
+        final Template template = engine.getTemplate( arquivoTemplate );
 
         try ( final StringWriter writer = new StringWriter() ){
             template.merge( context, writer );
@@ -78,4 +143,6 @@ public class MapeamentoService {
             throw new UncheckedIOException( e );
         }
     }
+
+
 }

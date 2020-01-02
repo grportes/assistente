@@ -7,5 +7,20 @@ selecionarBaseDados: true
 selectDate: "select getdate()"
 selectTop: "select top 1 * from %TABLE%"
 dataTypes:
-  - { dbType: "INTEGER", javaType: "Long" }
-  - { dbType: "VARCHAR", javaType: "String" }
+  - { dbType: "varchar", javaType: "java.lang.String" }
+  - { dbType: "char", javaType: "java.lang.String" }
+  - { dbType: "text", javaType: "java.lang.String" }
+  - { dbType: "int", javaType: "java.lang.Long" }
+  - { dbType: "int identity", javaType: "java.lang.Long" }
+  - { dbType: "numeric identity", javaType: "java.lang.Long" }
+  - { dbType: "tinyint", javaType: "java.lang.Short" }
+  - { dbType: "smallint", javaType: "java.lang.Short" }
+  - { dbType: "numeric", javaType: "java.math.BigDecimal" }
+  - { dbType: "decimal", javaType: "java.math.BigDecimal" }
+  - { dbType: "money", javaType: "java.math.BigDecimal" }
+  - { dbType: "image", javaType: "java.lang.Blob" }
+  - { dbType: "varbinary", javaType: "java.sql.Blob" }
+  - { dbType: "date", javaType: "java.time.LocalDate" }
+  - { dbType: "time", javaType: "java.time.LocalTime" }
+  - { dbType: "smalldatetime", javaType: "java.time.LocalDateTime" }
+  - { dbType: "datetime", javaType: "java.time.LocalDateTime" }

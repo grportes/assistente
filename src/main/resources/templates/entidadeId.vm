@@ -1,23 +1,18 @@
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Version;
-
 /**
- * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
+ * Classe que representa o Id da entidade {@link $nomeEntidade}
  *
- * @autor: $nomeAutor
+ * <p>Autor: $nomeAutor</p>
  */
-@Entity
-@Table( name = "$modelo.getTabela()" )
-public class $modelo.getEntidade() extends Model {
+@Embeddable
+public class $nomeEntidadeId extends Model {
+
+    #set( $texto = "COLUNAS MAPEADAS" )
+    #comentario( )
 
     #foreach( $campo in $campos )
     @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", nullable = $campo.isColNull() )
@@ -33,12 +28,6 @@ public class $modelo.getEntidade() extends Model {
     #foreach( $campo in $modelo.getCampos() )
     #macroGetterSetters( $campo.getTipoJava() $campo.getColunaJava() )
     #end
-
-    #set( $texto = "METODOS TRANSIENTES" )
-    #comentario( )
-
-    #set( $texto = "CONSTANTES" )
-    #comentario( )
 
     #set( $texto = "EQUALS && HASHCODE" )
     #comentario( )
@@ -56,8 +45,6 @@ public class $modelo.getEntidade() extends Model {
         return Objects.hash( getId() );
     }
 
-    #set( $texto = "METODOS AUXILIARES" )
-    #comentario( )
 }
 
 #macro( comentario $texto )
