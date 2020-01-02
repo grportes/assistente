@@ -23,7 +23,7 @@ public class $nomeEntidade extends Model {
     #comentario( )
 
     #foreach( $campo in $campos )
-    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", nullable = $campo.isColNull() )
+    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", length = 250, nullable = $campo.isColNull() )
     private $campo.getTipoJava() $campo.getColunaJava();
 
     #end
