@@ -17,6 +17,7 @@ import javax.persistence.Version;
  */
 @Entity
 @Table( name = "$nomeTabela" )
+@Table( name = "midia_clientes", schema = "dbo", catalog = "vendas" )
 public class $nomeEntidade extends Model {
 
     #set( $texto = "COLUNAS MAPEADAS" )
@@ -24,7 +25,7 @@ public class $nomeEntidade extends Model {
 
     #foreach( $campo in $campos )
     @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", length = 250, nullable = $campo.isColNull() )
-    private $campo.getTipoJava() $campo.getColunaJava();
+    private $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava();
 
     #end
 
@@ -34,7 +35,7 @@ public class $nomeEntidade extends Model {
     #set( $texto = "GETTERS && SETTERS" )
     #comentario( )
     #foreach( $campo in $modelo.getCampos() )
-    #macroGetterSetters( $campo.getTipoJava() $campo.getColunaJava() )
+    #macroGetterSetters( $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava() )
     #end
 
     #set( $texto = "METODOS TRANSIENTES" )
