@@ -6,9 +6,11 @@ import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.MapeamentoService;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -25,6 +27,7 @@ import java.util.Set;
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
+import static java.util.Objects.isNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
@@ -53,10 +56,10 @@ public class AssistenteController {
     @FXML private Button btnMapeamento;
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
-
     // Result:
     @FXML private Tab tabResult;
     @FXML private TextArea txtResult;
+    @FXML private ComboBox<String> cbxResultArquivos;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -158,6 +161,8 @@ public class AssistenteController {
             .executar( modelo )
             .ifPresent( resultMapeamento -> {
                 setarTab( tabResult );
+                cbxResultArquivos.setValue( "" );
+                cbxResultArquivos.setItems( observableArrayList( resultMapeamento.getArquivos() ) );
                 txtResult.setText( resultMapeamento.getConteudoEntidade() );
             });
     }
@@ -165,6 +170,23 @@ public class AssistenteController {
     private void setarTab( final Tab tab ) {
 
         tab.getTabPane().getSelectionModel().select( tab );
+    }
+
+    @FXML
+    public void onActionResult( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnResultCopiar":
+                break;
+            case "btnResultGravar":
+                break;
+            case "btnResultAtualizar":
+                break;
+        }
     }
 
 }

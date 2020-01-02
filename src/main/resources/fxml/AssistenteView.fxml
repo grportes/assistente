@@ -112,12 +112,12 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="36.0" prefWidth="259.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <children>
-                                    <Button fx:id="btnResultCopiar" mnemonicParsing="false" text="Copiar">
+                                    <Button fx:id="btnResultCopiar" mnemonicParsing="false" onAction="#onActionResult" text="Copiar">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="btnResultGravar" mnemonicParsing="false" text="Gravar">
+                                    <Button fx:id="btnResultGravar" mnemonicParsing="false" onAction="#onActionResult" text="Gravar">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -126,8 +126,8 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" layoutX="271.0" layoutY="-3.0" prefHeight="37.0" prefWidth="385.0" spacing="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <children>
-                                    <ComboBox prefHeight="26.0" prefWidth="265.0" />
-                                    <Button mnemonicParsing="false" text="Atualizar" />
+                                    <ComboBox fx:id="cbxResultArquivos" prefHeight="26.0" prefWidth="265.0" />
+                                    <Button fx:id="btnResultAtualizar" mnemonicParsing="false" onAction="#onActionResult" text="Atualizar" />
                                  </children>
                               </HBox>
                            </children>
