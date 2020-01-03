@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Classe que representa o Id da entidade {@link $nomeEntidade}
+ * Classe que representa o Id da entidade {@link $modelo.getEntidade()}
  *
  * <p>Autor: $nomeAutor</p>
  */
 @Embeddable
-public class $nomeEntidadeId extends Model {
+public class $StringUtils.join($modelo.getEntidade(),"Id") extends Model {
 
     #set( $texto = "COLUNAS MAPEADAS" )
     #comentario( )

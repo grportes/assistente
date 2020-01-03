@@ -10,13 +10,13 @@ import javafx.beans.property.StringProperty;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static java.util.Collections.emptySet;
 import static java.util.Comparator.comparing;
-import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
@@ -38,9 +38,6 @@ public final class ModeloCampo {
     // CONSTRUCTOR
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public ModeloCampo() {
-    }
 
     private ModeloCampo( final Builder builder ) {
 
@@ -176,8 +173,8 @@ public final class ModeloCampo {
 
     public static Set<ModeloCampo> orderByPosicao( final Set<ModeloCampo> lista ) {
 
-        return isNull( lista )
-            ? null
+        return isEmpty( lista )
+            ? emptySet()
             : lista.stream()
                 .sorted( comparing( ModeloCampo::getPosicao ) )
                 .collect( toCollection( LinkedHashSet::new ) );
@@ -185,7 +182,14 @@ public final class ModeloCampo {
 
     public static Set<ModeloCampo> buscarPks( final Set<ModeloCampo> lista ) {
 
-        return isNull( lista ) ? null : lista.stream().filter( ModeloCampo::isPk ).collect( toSet() );
+        return isEmpty( lista ) ? emptySet() : lista.stream().filter( ModeloCampo::isPk ).collect( toSet() );
+    }
+
+    public static Set<String> buscarTiposDeDados( final Set<ModeloCampo> lista ) {
+
+        return isEmpty( lista )
+            ? emptySet()
+            : lista.stream().map( ModeloCampo::getTipoJava ).collect(toSet());
     }
 
 

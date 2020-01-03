@@ -2,13 +2,10 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Version;
+
+#foreach( $tipoJava in $modelo.getTiposDeDados() )
+import $tipoJava;
+#end
 
 /**
  * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
@@ -25,6 +22,13 @@ public class $modelo.getEntidade() extends Model {
 
     #set( $texto = "COLUNAS MAPEADAS" )
     #comentario( )
+
+    #if( $modelo.isChaveComposta() )
+    @EmbeddedId
+    private $StringUtils.join($modelo.getEntidade(),"Id") $StringUtils.join($modelo.getEntidade(),"Id");
+    #else
+    private
+    #end
 
     #foreach( $campo in $campos )
     @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", length = 250, nullable = $campo.isColNull() )

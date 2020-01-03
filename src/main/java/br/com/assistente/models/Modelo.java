@@ -3,19 +3,21 @@ package br.com.assistente.models;
 import java.util.Objects;
 import java.util.Set;
 
+import static br.com.assistente.infra.util.UtilCollections.getTamanho;
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.models.ModeloCampo.buscarTiposDeDados;
 import static java.lang.String.format;
-import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class Modelo {
 
-    private String catalogo;
-    private String owner;
-    private String tabela;
-    private String entidade;
-    private Set<ModeloCampo> campos;
+    private final String catalogo;
+    private final String owner;
+    private final String tabela;
+    private final String entidade;
+    private final Set<ModeloCampo> campos;
+    private final boolean chaveComposta;
+    private final Set<String> tiposDeDados;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +33,8 @@ public final class Modelo {
         this.tabela = builder.tabela;
         this.entidade = builder.entidade;
         this.campos = builder.campos;
+        this.chaveComposta = getTamanho( builder.campos ) > 1;
+        this.tiposDeDados = buscarTiposDeDados( builder.campos );
     }
 
     public String getCatalogo() {
@@ -58,19 +62,14 @@ public final class Modelo {
         return campos;
     }
 
-    public boolean containsLocalDate( ) {
+    public Set<String> getTiposDeDados() {
 
-        return isNotEmpty(campos) && campos.stream().anyMatch(c -> equalsIgnoreCase( c.getTipoJava(), "LocalDate" ) );
+        return tiposDeDados;
     }
 
-    public boolean containsLocalDateTime( ) {
+    public boolean isChaveComposta() {
 
-        return isNotEmpty(campos) && campos.stream().anyMatch(c -> equalsIgnoreCase( c.getTipoJava(), "LocalDateTime" ) );
-    }
-
-    public boolean containsBigDecimal( ) {
-
-        return isNotEmpty(campos) && campos.stream().anyMatch(c -> equalsIgnoreCase( c.getTipoJava(), "BigDecimal" ) );
+        return chaveComposta;
     }
 
     public String getNomeCompletoTabela() {
