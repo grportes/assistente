@@ -7,20 +7,20 @@ selecionarBaseDados: true
 selectDate: "select getdate()"
 selectTop: "select top 1 * from %TABLE%"
 dataTypes:
-  - { dbType: "varchar", javaType: "java.lang.String" }
-  - { dbType: "char", javaType: "java.lang.String" }
-  - { dbType: "text", javaType: "java.lang.String" }
-  - { dbType: "int", javaType: "java.lang.Long" }
-  - { dbType: "int identity", javaType: "java.lang.Long" }
-  - { dbType: "numeric identity", javaType: "java.lang.Long" }
-  - { dbType: "tinyint", javaType: "java.lang.Short" }
-  - { dbType: "smallint", javaType: "java.lang.Short" }
-  - { dbType: "numeric", javaType: "java.math.BigDecimal" }
-  - { dbType: "decimal", javaType: "java.math.BigDecimal" }
-  - { dbType: "money", javaType: "java.math.BigDecimal" }
-  - { dbType: "image", javaType: "java.lang.Blob" }
-  - { dbType: "varbinary", javaType: "java.sql.Blob" }
-  - { dbType: "date", javaType: "java.time.LocalDate" }
-  - { dbType: "time", javaType: "java.time.LocalTime" }
-  - { dbType: "smalldatetime", javaType: "java.time.LocalDateTime" }
-  - { dbType: "datetime", javaType: "java.time.LocalDateTime" }
+  - { dbType: "varchar", dbLength: true, javaType: "java.lang.String" }
+  - { dbType: "char", dbLength: true, javaType: "java.lang.String" }
+  - { dbType: "text", dbLength: false, javaType: "java.lang.String" }
+  - { dbType: "int", dbLength: false, javaType: "java.lang.Long" }
+  - { dbType: "int identity", dbLength: false, javaType: "java.lang.Long" }
+  - { dbType: "numeric identity", dbLength: false, javaType: "java.lang.Long" }
+  - { dbType: "tinyint", dbLength: false, javaType: "java.lang.Short" }
+  - { dbType: "smallint", dbLength: false, javaType: "java.lang.Short" }
+  - { dbType: "numeric", dbLength: false, javaType: "java.math.BigDecimal" }
+  - { dbType: "decimal", dbLength: false, javaType: "java.math.BigDecimal" }
+  - { dbType: "money", dbLength: false, javaType: "java.math.BigDecimal" }
+  - { dbType: "image", dbLength: false, javaType: "java.lang.Blob" }
+  - { dbType: "varbinary", dbLength: false, javaType: "java.sql.Blob" }
+  - { dbType: "date", dbLength: false, javaType: "java.time.LocalDate" }
+  - { dbType: "time", dbLength: false, javaType: "java.time.LocalTime" }
+  - { dbType: "smalldatetime", dbLength: false, javaType: "java.time.LocalDateTime" }
+  - { dbType: "datetime", dbLength: false, javaType: "java.time.LocalDateTime" }

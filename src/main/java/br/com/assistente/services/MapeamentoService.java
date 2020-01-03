@@ -45,7 +45,8 @@ public class MapeamentoService {
             .orElseThrow( () -> new RuntimeException( "Não foi possivel localizar driver de conexão!!" ) );
 
         return getMetaData( modelo )
-            .stream().map( m -> {
+            .stream()
+            .map( m -> {
                 final String tipoJava = dataTypes
                     .stream()
                     .filter( type -> Objects.equals( m.getTipoDB(), type.getDbType() ) )

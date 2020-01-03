@@ -7,6 +7,6 @@ selecionarBaseDados: true
 selectDate: "select current_date"
 selectTop: "select * from %TABLE% limit 1"
 dataTypes:
-  - { dbType: "INTEGER", javaType: "java.lang.Long" }
-  - { dbType: "VARCHAR", javaType: "java.lang.String" }
-  - { dbType: "CHAR", javaType: "java.lang.String" }
+  - { dbType: "INTEGER", dbLength: false, javaType: "java.lang.Long" }
+  - { dbType: "VARCHAR", dbLength: true, javaType: "java.lang.String" }
+  - { dbType: "CHAR", dbLength: true, javaType: "java.lang.String" }
