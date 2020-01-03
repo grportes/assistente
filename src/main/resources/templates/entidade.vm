@@ -31,7 +31,7 @@ public class $modelo.getEntidade() extends Model {
     #end
 
     #foreach( $campo in $campos )
-    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", length = 250, nullable = $campo.isColNull() )
+    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", #if($campo.isAtributoLength())length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
     private $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava();
 
     #end

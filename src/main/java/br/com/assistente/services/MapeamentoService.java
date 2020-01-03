@@ -47,15 +47,14 @@ public class MapeamentoService {
         return getMetaData( modelo )
             .stream()
             .map( m -> {
-                final String tipoJava = dataTypes
+                final DataType dataType = dataTypes
                     .stream()
                     .filter( type -> Objects.equals( m.getTipoDB(), type.getDbType() ) )
                     .findFirst()
-                    .map( DataType::getJavaType )
                     .orElseThrow( () -> new RuntimeException( format(
                         "%s - %s: não localizou tipo Java correspondente", m.getColunaDB(), m.getTipoDB()
                     )));
-                return new ModeloCampo.Builder( m ).comTipoJava( tipoJava ).build();
+                return new ModeloCampo.Builder( m ).comDataType( dataType ).build();
             }).collect( toSet() );
     }
 

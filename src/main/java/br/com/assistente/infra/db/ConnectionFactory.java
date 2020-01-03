@@ -119,6 +119,7 @@ public final class ConnectionFactory {
                         .comPosicao( posicaoLeitura )
                         .comColunaDB( columnName )
                         .comPK( pks.contains( columnName ) )
+                        .comTamanho( rs.getInt( "COLUMN_SIZE") )
                         .comColNull( Objects.equals( rs.getString( "NULLABLE" ), "1" ) )
                         .comTipoDB( rs.getString( "TYPE_NAME" ) )
                         .build()

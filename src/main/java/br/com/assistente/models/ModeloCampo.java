@@ -22,15 +22,16 @@ import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public final class ModeloCampo {
 
-    private IntegerProperty posicao;
-    private BooleanProperty pk;
-    private StringProperty colunaDB;
-    private IntegerProperty tamanho;
-    private StringProperty colunaJava;
-    private StringProperty tipoDB;
-    private StringProperty tipoJava;
-    private BooleanProperty colNull;
-    private BooleanProperty converter;
+    private final IntegerProperty posicao;
+    private final BooleanProperty pk;
+    private final StringProperty colunaDB;
+    private final StringProperty tipoDB;
+    private final BooleanProperty colNull;
+    private final IntegerProperty tamanho;
+    private final StringProperty colunaJava;
+    private final Boolean atributoLength;
+    private final StringProperty tipoJava;
+    private final BooleanProperty converter;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,6 +51,7 @@ public final class ModeloCampo {
         this.tipoJava = new SimpleStringProperty( builder.tipoJava );
         this.colNull = new SimpleBooleanProperty( builder.colNull );
         this.converter = new SimpleBooleanProperty( builder.converter );
+        this.atributoLength = builder.atributoLength;
     }
 
     public IntegerProperty posicaoProperty() {
@@ -142,6 +144,10 @@ public final class ModeloCampo {
         return converter;
     }
 
+    public Boolean isAtributoLength() {
+
+        return atributoLength;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -209,6 +215,7 @@ public final class ModeloCampo {
         private String tipoJava;
         private boolean colNull;
         private boolean converter;
+        private boolean atributoLength;
         private int tamanho;
 
         public Builder() {
@@ -221,6 +228,7 @@ public final class ModeloCampo {
             this.tipoJava = null;
             this.colNull = false;
             this.converter = false;
+            this.atributoLength = false;
             this.tamanho = 0;
         }
 
@@ -249,10 +257,18 @@ public final class ModeloCampo {
             return this;
         }
 
+
+
         public Builder comColunaDB( final String value ) {
 
             this.colunaDB = lowerCase( value );
             this.colunaJava = ColunaId.getNomeAtributo( value ).orElse( convCamelCase( value, false ) );
+            return this;
+        }
+
+        public Builder comTamanho( final Integer value ) {
+
+            this.tamanho = value;
             return this;
         }
 
@@ -269,12 +285,6 @@ public final class ModeloCampo {
             return this;
         }
 
-        public Builder comTipoJava( final String value ) {
-
-            this.tipoJava = value;
-            return this;
-        }
-
         public Builder comColNull( final boolean value ) {
 
             this.colNull = value;
@@ -287,10 +297,18 @@ public final class ModeloCampo {
             return this;
         }
 
+        public Builder comDataType( final DataType dataType ) {
+
+            this.tipoJava = dataType.getJavaType();
+            this.atributoLength = dataType.getDbLength();
+            return this;
+        }
+
         public ModeloCampo build() {
 
             return new ModeloCampo( this );
         }
+
     }
 
 }
