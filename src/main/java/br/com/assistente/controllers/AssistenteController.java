@@ -3,7 +3,6 @@ package br.com.assistente.controllers;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
-import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.MapeamentoService;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,9 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -21,7 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
@@ -59,7 +55,7 @@ public class AssistenteController {
     // Result:
     @FXML private Tab tabResult;
     @FXML private TextArea txtResult;
-    @FXML private ComboBox<String> cbxResultArquivos;
+    @FXML private ComboBox<ResultMapeamento> cbxResultArquivos;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -157,14 +153,16 @@ public class AssistenteController {
             .comCampos( new HashSet<>(observableModelo) )
             .build();
 
-        mapeamentoService
-            .executar( modelo )
-            .ifPresent( resultMapeamento -> {
-                setarTab( tabResult );
-                cbxResultArquivos.setValue( "" );
-                cbxResultArquivos.setItems( observableArrayList( resultMapeamento.getArquivos() ) );
-                txtResult.setText( resultMapeamento.getConteudoEntidade() );
-            });
+        final Set<ResultMapeamento> results = mapeamentoService.executar( modelo );
+        if ( isEmpty( results ) ) return;
+
+        cbxResultArquivos.setItems( observableArrayList( results ) );
+        setarTab( tabResult );
+
+        results.stream().findFirst().ifPresent( rm -> {
+            cbxResultArquivos.setValue( rm );
+            txtResult.setText( rm.getConteudoEntidade() );
+        });
     }
 
     private void setarTab( final Tab tab ) {

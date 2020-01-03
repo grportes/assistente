@@ -16,6 +16,8 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +29,7 @@ import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
 import static br.com.assistente.models.SetupUsuario.buscarCnxAtivaDoUsuario;
 import static java.lang.String.format;
+import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -58,32 +61,39 @@ public class MapeamentoService {
             }).collect( toSet() );
     }
 
-    public Optional<ResultMapeamento> executar( final Modelo modelo ) {
+    public Set<ResultMapeamento> executar( final Modelo modelo ) {
 
-        if ( isNull( modelo ) || isEmpty( modelo.getCampos() ) ) return empty();
+        if ( isNull( modelo ) || isEmpty( modelo.getCampos() ) ) return emptySet();
 
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
 
         final Set<ModeloCampo> camposPk = buscarPks( modelo.getCampos() );
         Set<ModeloCampo> campos = modelo.getCampos();
+        final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
 
         if ( getTamanho( camposPk ) > 1 ) {
             campos.removeAll( camposPk );
-            return of(
+            results.add(
                 new ResultMapeamento.Builder()
-                .comNomeEntidade( modelo.getEntidade() )
-                .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
-                .comConteudoEntidadeId( gerarMapeamento( nomeAutor, modelo, camposPk,"/templates/entidadeId.vm"))
-                .build()
+                    .comNomeEntidade( modelo.getEntidade() )
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
+                    .build()
             );
-        }
+            results.add(
+                new ResultMapeamento.Builder()
+                    .comNomeEntidade( modelo.getEntidade() + "Id" )
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidadeId.vm"))
+                    .build()
+            );
+        } else
+            results.add(
+                new ResultMapeamento.Builder()
+                    .comNomeEntidade( modelo.getEntidade() )
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
+                    .build()
+            );
 
-        return of(
-            new ResultMapeamento.Builder()
-            .comNomeEntidade( modelo.getEntidade() )
-            .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
-            .build()
-        );
+        return results;
     }
 
     private String gerarMapeamento(
