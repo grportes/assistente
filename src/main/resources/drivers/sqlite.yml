@@ -10,3 +10,4 @@ dataTypes:
   - { dbType: "INTEGER", dbLength: false, javaType: "java.lang.Long" }
   - { dbType: "VARCHAR", dbLength: true, javaType: "java.lang.String" }
   - { dbType: "CHAR", dbLength: true, javaType: "java.lang.String" }
+  - { dbType: "TEXT", dbLength: true, javaType: "java.lang.String" }
