@@ -11,14 +11,17 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 /**
- * Classe mapeamento ref. a tabela [ $nomeCompletoTabela ]
+ * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
  *
  * <p>Autor: $nomeAutor</p>
  */
 @Entity
-@Table( name = "$nomeTabela" )
-@Table( name = "midia_clientes", schema = "dbo", catalog = "vendas" )
-public class $nomeEntidade extends Model {
+#if( $StringUtils.isNotBlank($modelo.getCatalogo()) )
+@Table( name = "$modelo.getTabela()", schema = "$modelo.getOwner()", catalog = "$modelo.getCatalogo()" )
+#else
+@Table( name = "$modelo.getTabela()" )
+#end
+public class $modelo.getEntidade() extends Model {
 
     #set( $texto = "COLUNAS MAPEADAS" )
     #comentario( )

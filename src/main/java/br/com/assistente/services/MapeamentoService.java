@@ -7,7 +7,6 @@ import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.SetupUsuario;
-import io.vavr.Tuple2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -29,10 +28,10 @@ import static br.com.assistente.models.ModeloCampo.orderByPosicao;
 import static br.com.assistente.models.SetupUsuario.buscarCnxAtivaDoUsuario;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
 public class MapeamentoService {
@@ -61,11 +60,8 @@ public class MapeamentoService {
 
     public Optional<ResultMapeamento> executar( final Modelo modelo ) {
 
-        if ( isNull( modelo ) ) return empty();
+        if ( isNull( modelo ) || isEmpty( modelo.getCampos() ) ) return empty();
 
-        final String nomeTabela = modelo.getTabela();
-        final String nomeCompletoTabela = modelo.getNomeCompletoTabela();
-        final String nomeEntidade = requireNonNull(modelo.getEntidade(), "Nome da entidade esta vazio!" );
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
 
         final Set<ModeloCampo> camposPk = buscarPks( modelo.getCampos() );
@@ -75,57 +71,31 @@ public class MapeamentoService {
             campos.removeAll( camposPk );
             return of(
                 new ResultMapeamento.Builder()
-                    .comConteudoEntidade( nomeEntidade )
-                    .comConteudoEntidade( gerarMapeamento(
-                        nomeTabela,
-                        nomeCompletoTabela,
-                        nomeEntidade,
-                        nomeAutor,
-                        campos,
-                        "/templates/entidade.vm"
-                    ))
-                    .comNomeEntidadeId( nomeEntidade + "Id" )
-                    .comConteudoEntidadeId( gerarMapeamento(
-                        nomeTabela,
-                        nomeCompletoTabela,
-                        nomeEntidade,
-                        nomeAutor,
-                        orderByPosicao( camposPk ),
-                        "/templates/entidadeId.vm"
-                    ))
-                    .build()
+                .comNomeEntidade( modelo.getEntidade() )
+                .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
+                .comConteudoEntidadeId( gerarMapeamento( nomeAutor, modelo, camposPk,"/templates/entidadeId.vm"))
+                .build()
             );
         }
 
         return of(
             new ResultMapeamento.Builder()
-                .comConteudoEntidade( nomeEntidade )
-                .comConteudoEntidade( gerarMapeamento(
-                    nomeTabela,
-                    nomeCompletoTabela,
-                    nomeEntidade,
-                    nomeAutor,
-                    campos,
-                    "/templates/entidade.vm"
-                ))
-                .build()
+            .comNomeEntidade( modelo.getEntidade() )
+            .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
+            .build()
         );
     }
 
     private String gerarMapeamento(
-        final String nomeTabela,
-        final String nomeCompletoTabela,
-        final String nomeEntidade,
         final String nomeAutor,
+        final Modelo modelo,
         final Set<ModeloCampo> campos,
         final String arquivoTemplate
     ) {
 
         final VelocityContext context = new VelocityContext();
-        context.put( "nomeTabela", nomeTabela );
-        context.put( "nomeCompletoTabela", nomeCompletoTabela );
-        context.put( "nomeEntidade", nomeEntidade );
         context.put( "nomeAutor", nomeAutor );
+        context.put( "modelo", modelo );
         context.put( "campos", orderByPosicao( campos ) );
         context.put( "StringUtils", StringUtils.class );
 
