@@ -5,7 +5,6 @@ import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilCollections.getTamanho;
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
-import static br.com.assistente.models.ModeloCampo.buscarTiposDeDados;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -17,7 +16,6 @@ public final class Modelo {
     private final String entidade;
     private final Set<ModeloCampo> campos;
     private final boolean chaveComposta;
-    private final Set<String> tiposDeDados;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +32,6 @@ public final class Modelo {
         this.entidade = builder.entidade;
         this.campos = builder.campos;
         this.chaveComposta = getTamanho( builder.campos ) > 1;
-        this.tiposDeDados = buscarTiposDeDados( builder.campos );
     }
 
     public String getCatalogo() {
@@ -60,11 +57,6 @@ public final class Modelo {
     public Set<ModeloCampo> getCampos() {
 
         return campos;
-    }
-
-    public Set<String> getTiposDeDados() {
-
-        return tiposDeDados;
     }
 
     public boolean isChaveComposta() {

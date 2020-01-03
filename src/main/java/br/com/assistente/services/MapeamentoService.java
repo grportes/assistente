@@ -16,23 +16,20 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
 import static br.com.assistente.infra.util.UtilCollections.getTamanho;
+import static br.com.assistente.models.ModeloCampo.buscarImports;
 import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
 import static br.com.assistente.models.SetupUsuario.buscarCnxAtivaDoUsuario;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
@@ -107,6 +104,7 @@ public class MapeamentoService {
         context.put( "nomeAutor", nomeAutor );
         context.put( "modelo", modelo );
         context.put( "campos", orderByPosicao( campos ) );
+        context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "StringUtils", StringUtils.class );
 
         final VelocityEngine engine = new VelocityEngine();

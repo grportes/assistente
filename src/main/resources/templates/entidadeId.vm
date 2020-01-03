@@ -3,6 +3,10 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+#foreach( $importNecessario in $importsNecessarios )
+import $importNecessario;
+#end
+
 /**
  * Classe que representa o Id da entidade {@link $modelo.getEntidade()}
  *

@@ -185,7 +185,7 @@ public final class ModeloCampo {
         return isEmpty( lista ) ? emptySet() : lista.stream().filter( ModeloCampo::isPk ).collect( toSet() );
     }
 
-    public static Set<String> buscarTiposDeDados( final Set<ModeloCampo> lista ) {
+    public static Set<String> buscarImports( final Set<ModeloCampo> lista ) {
 
         return isEmpty( lista )
             ? emptySet()
