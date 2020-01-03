@@ -126,7 +126,7 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" layoutX="271.0" layoutY="-3.0" prefHeight="37.0" prefWidth="385.0" spacing="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                  <children>
-                                    <ComboBox fx:id="cbxResultArquivos" prefHeight="26.0" prefWidth="265.0" />
+                                    <ComboBox fx:id="cbxResultArquivos" onAction="#onActionResult" prefHeight="26.0" prefWidth="265.0" />
                                     <Button fx:id="btnResultAtualizar" mnemonicParsing="false" onAction="#onActionResult" text="Atualizar" />
                                  </children>
                               </HBox>
