@@ -17,6 +17,7 @@ import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptySet;
 import static java.util.Comparator.comparing;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
@@ -179,6 +180,7 @@ public final class ModeloCampo {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Extrair numero de p.ex: varchar(100)
     private static final Pattern REGEX = Pattern.compile( "(.*)\\((\\d+)\\)" );
 
 
@@ -277,7 +279,7 @@ public final class ModeloCampo {
 
         public Builder comTamanho( final Integer value ) {
 
-            this.tamanho = value;
+            if ( isNull( this.tamanho ) ) this.tamanho = value;
             return this;
         }
 
