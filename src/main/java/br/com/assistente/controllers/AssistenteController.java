@@ -18,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
@@ -25,6 +27,7 @@ import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
@@ -184,11 +187,21 @@ public class AssistenteController {
             case "btnResultGravar":
                 break;
             case "cbxResultArquivos":
-                if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) ) {
+                if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) )
                     txtResult.setText( cbxResultArquivos.getValue().getConteudoEntidade() );
-                }
                 break;
             case "btnResultAtualizar":
+                if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) ) {
+                    final String nomeEntidade = cbxResultArquivos.getValue().getNomeEntidade();
+                    final List<ResultMapeamento> novaLista = cbxResultArquivos
+                        .getItems()
+                        .stream()
+                        .map( rs -> Objects.equals( rs.getNomeEntidade(), nomeEntidade )
+                            ? new ResultMapeamento.Builder().comNomeEntidade( nomeEntidade ).comConteudoEntidade( txtResult.getText() ).build()
+                            : rs
+                        ).collect( toList() );
+                    cbxResultArquivos.setItems( observableArrayList( novaLista ) );
+                }
                 break;
         }
     }
