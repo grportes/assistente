@@ -26,7 +26,9 @@ import java.util.Objects;
 
     #foreach ( $import in $importsNecessarios )
 import $import;
+
     #end
+import static java.util.Objects.isNull;
 #end
 
 #macro( macroDeclaracaoAtributos )
@@ -99,14 +101,31 @@ import $import;
     public boolean equals( final Object obj ) {
 
         if ( this == obj ) return true;
-        if ( !( obj instanceof $nomeEntidade ) ) return false;
+        if ( isNull( obj ) || getClass() != o.getClass() ) return false;
         final $nomeEntidade $variavel = ($nomeEntidade) obj;
-
+        return #macroCondicional( $variavel )
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash( getId() );
+        return Objects.hash(
+            #foreach ( $campo in $campos )
+                #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.getColunaJava() ) ,"()" ) )
+            $metodo#if( $foreach.hasNext ),#{else};#end
+            #end
+        );
     }
 #end
+
+#macro( macroCondicional $obj )
+    #foreach ( $campo in $campos )
+        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.getColunaJava() ) ,"()" ) )
+        Objects.equals( $metodo, $obj.$metodo )#if( $foreach.hasNext ) &&#{else};#end
+    #end
+#end
+
+
+
+
+
