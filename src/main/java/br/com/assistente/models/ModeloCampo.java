@@ -24,6 +24,7 @@ import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public final class ModeloCampo {
@@ -224,6 +225,12 @@ public final class ModeloCampo {
     public static boolean chaveComposta( final Set<ModeloCampo> lista ) {
 
         return isNotEmpty( lista ) && lista.stream().filter( ModeloCampo::isPk ).count() > 1;
+    }
+
+    public static boolean atributoVersion( final Set<ModeloCampo> lista ) {
+
+        return isNotEmpty( lista )
+                && lista.stream().anyMatch( m -> equalsIgnoreCase( m.getColunaDB(), "version" ) );
     }
 
     public static Set<String> buscarImports( final Set<ModeloCampo> lista ) {

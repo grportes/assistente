@@ -31,9 +31,11 @@ import infra.models.Model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Version;
     #if ( $modelo.isChaveComposta() )
 import javax.persistence.EmbeddedId;
+    #end
+    #if ( $modelo.isAtributoVersion() )
+import javax.persistence.Version;
     #end
 import java.util.Objects;
 
@@ -74,6 +76,9 @@ import $import;
     @Id #if ( $campo.isAutoIncremento() )@GeneratedValue( strategy = GenerationType.IDENTITY ) #end
             #macroDefinicaoColumn( $campo )
         #else
+            #if ( $StringUtils.equalsIgnoreCase( $campo.getColunaDB(), "version" ) )
+    @Version
+            #end
             #macroDefinicaoColumn( $campo )
         #end
     private $tipo #if ($campo.isPk())id;#{else}$campo.getColunaJava();#end

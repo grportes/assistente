@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.models.ModeloCampo.atributoVersion;
 import static br.com.assistente.models.ModeloCampo.chaveComposta;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -16,6 +17,7 @@ public final class Modelo {
     private final String entidade;
     private final Set<ModeloCampo> campos;
     private final boolean chaveComposta;
+    private final boolean atributoVersion;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +34,7 @@ public final class Modelo {
         this.entidade = builder.entidade;
         this.campos = builder.campos;
         this.chaveComposta = chaveComposta( this.campos );
+        this.atributoVersion = atributoVersion( this.campos );
     }
 
     public String getCatalogo() {
@@ -62,6 +65,11 @@ public final class Modelo {
     public boolean isChaveComposta() {
 
         return chaveComposta;
+    }
+
+    public boolean isAtributoVersion() {
+
+        return atributoVersion;
     }
 
     public String getNomeCompletoTabela() {
