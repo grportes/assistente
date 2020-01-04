@@ -3,59 +3,125 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-#foreach( $importNecessario in $importsNecessarios )
-import $importNecessario;
-#end
+#macroImports
 
 /**
  * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
  *
  * <p>Autor: $nomeAutor</p>
  */
-@Entity
-#if( $StringUtils.isNotBlank($modelo.getCatalogo()) )
-@Table( name = "$modelo.getTabela()", schema = "$modelo.getOwner()", catalog = "$modelo.getCatalogo()" )
-#else
-@Table( name = "$modelo.getTabela()" )
-#end
+#macroEntidade
 public class $modelo.getEntidade() extends Model {
 
-    #set( $texto = "COLUNAS MAPEADAS" )
-    #comentario( )
+    #macroComentario( "COLUNAS MAPEADAS" )
 
-    #if( $modelo.isChaveComposta() )
+    #macroDeclaracaoAtributos
+
+    #macroComentario( "CONSTRUCTOR" )
+
+    #macroGetterSetters
+
+    #macroComentario( "METODOS TRANSIENTES" )
+
+    #macroComentario( "CONSTANTES" )
+
+    #macroEqualsHashcode
+
+    #macroComentario( "METODOS AUXILIARES" )
+}
+
+#macro( macroImports )
+    #foreach ( $import in $importsNecessarios )
+import $import;
+    #end
+#end
+
+#macro( macroEntidade )
+@Entity
+    #set ( $nomeCatalogo = $modelo.getCatalogo() )
+    #set ( $nomeTabela = $modelo.getTabela() )
+    #if ( $StringUtils.isNotBlank( $nomeCatalogo ) )
+@Table( name = "$nomeTabela", schema = "$modelo.getOwner()", catalog = "$nomeCatalogo" )
+    #else
+@Table( name = "$nomeTabela" )
+    #end
+#end
+
+#macro( macroComentario $texto )
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // $texto
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#end
+
+#macro( macroDeclaracaoAtributos )
+    #if ( $modelo.isChaveComposta() )
     @EmbeddedId
-    private $StringUtils.join($modelo.getEntidade(),"Id") $StringUtils.join($modelo.getEntidade(),"Id");
+    private $StringUtils.join($modelo.getEntidade(),"Id") id;
     #end
 
     #foreach( $campo in $campos )
-    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", #if($campo.isAtributoLength())length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
-    private $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava();
+        #set ( $isPk = !$modelo.isChaveComposta() && $campo.isPk() )
+        #set ( $tipo = $StringUtils.substringAfterLast( $campo.getTipoJava(), "." ) )
 
+        #if ( $isPk )
+    @Id #if ( $campo.isAutoIncremento() )@GeneratedValue( strategy = GenerationType.IDENTITY ) #end
+            #macroDefinicaoColumn( $campo )
+        #else
+            #macroDefinicaoColumn( $campo )
+        #end
+    private $tipo #if ($campo.isPk())id;#{else}$campo.getColunaJava();#end
     #end
 
-    #set( $texto = "CONSTRUCTOR" )
-    #comentario( )
+#end
 
-    #set( $texto = "GETTERS && SETTERS" )
-    #comentario( )
-    #foreach( $campo in $modelo.getCampos() )
-    #macroGetterSetters( $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava() )
+#macro( macroDefinicaoColumn $campo )
+    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()",#if ($campo.isAtributoLength()) length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
+#end
+
+#macro( macroGetterSetters )
+
+    #macroComentario( "GETTERS && SETTERS" )
+
+    #if ( $modelo.isChaveComposta() )
+        #set ( $tipo = $StringUtils.join($modelo.getEntidade(),"Id") )
+    public $tipo getId() {
+
+        return this.id;
+    }
+
+    public void setId( final $tipo id ) {
+
+        this.id = id;
+    }
     #end
 
-    #set( $texto = "METODOS TRANSIENTES" )
-    #comentario( )
+    #foreach ( $campo in $campos )
+        #set ( $nomeAtributo = $campo.getColunaJava() )
+        #set ( $nomeMetodo = $StringUtils.capitalize( $nomeAtributo ) )
+        #set ( $tipo = $StringUtils.substringAfterLast( $campo.getTipoJava(), "." ) )
+    public $tipo get$nomeMetodo() {
 
-    #set( $texto = "CONSTANTES" )
-    #comentario( )
+        return this.$nomeAtributo;
+    }
 
-    #set( $texto = "EQUALS && HASHCODE" )
-    #comentario( )
+    public void set$nomeMetodo( final $tipo $nomeAtributo ) {
+
+        this.$nomeAtributo = $nomeAtributo;
+    }
+    #end
+#end
+
+#macro( macroEqualsHashcode )
+
+    #macroComentario( "EQUALS && HASHCODE" )
+
     @Override
     public boolean equals( final Object obj ) {
 
-        if (this == obj) return true;
-        if (!( obj instanceof $modelo.getEntidade() )) return false;
+        if ( this == obj ) return true;
+        if ( !( obj instanceof $modelo.getEntidade() ) ) return false;
         return Objects.equals( getId(), (($modelo.getEntidade()) obj).getId() );
     }
 
@@ -64,29 +130,4 @@ public class $modelo.getEntidade() extends Model {
 
         return Objects.hash( getId() );
     }
-
-    #set( $texto = "METODOS AUXILIARES" )
-    #comentario( )
-}
-
-#macro( comentario $texto )
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // $texto
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#end
-
-#macro( macroGetterSetters $tipo $nomeCampo )
-    public $tipo get$StringUtils.capitalize($nomeCampo)() {
-
-        return this.$nomeCampo;
-    }
-
-    public void set$StringUtils.capitalize($nomeCampo)( final $tipo $nomeCampo ) {
-
-        this.$nomeCampo = $nomeCampo;
-    }
-
 #end

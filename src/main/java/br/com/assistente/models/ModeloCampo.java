@@ -36,6 +36,7 @@ public final class ModeloCampo {
     private final Boolean atributoLength;
     private final StringProperty tipoJava;
     private final BooleanProperty converter;
+    private final Boolean autoIncremento;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +57,15 @@ public final class ModeloCampo {
         this.colNull = new SimpleBooleanProperty( builder.colNull );
         this.converter = new SimpleBooleanProperty( builder.converter );
         this.atributoLength = builder.atributoLength;
+        this.autoIncremento = builder.autoIncremento;
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // GETTERS && SETTERS
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public IntegerProperty posicaoProperty() {
 
@@ -153,6 +162,11 @@ public final class ModeloCampo {
         return atributoLength;
     }
 
+    public Boolean isAutoIncremento() {
+
+        return autoIncremento;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // EQUALS && HASHCODE
@@ -236,6 +250,7 @@ public final class ModeloCampo {
         private boolean converter;
         private boolean atributoLength;
         private Integer tamanho;
+        private boolean autoIncremento;
 
         public Builder() {
 
@@ -249,6 +264,7 @@ public final class ModeloCampo {
             this.converter = false;
             this.atributoLength = false;
             this.tamanho = null;
+            this.autoIncremento = false;
         }
 
         public Builder( final ModeloCampo modeloCampo ) {
@@ -262,6 +278,7 @@ public final class ModeloCampo {
             this.colNull = modeloCampo.isColNull();
             this.converter = modeloCampo.isConverter();
             this.tamanho = modeloCampo.getTamanho();
+            this.autoIncremento = modeloCampo.isAutoIncremento();
         }
 
         public Builder comPosicao( final int value ) {
@@ -314,10 +331,16 @@ public final class ModeloCampo {
             return this;
         }
 
-        public Builder comDataType( final DataType dataType ) {
+        public Builder comDataType( final DataType value ) {
 
-            this.tipoJava = dataType.getJavaType();
-            this.atributoLength = dataType.getDbLength();
+            this.tipoJava = value.getJavaType();
+            this.atributoLength = value.getDbLength();
+            return this;
+        }
+
+        public Builder comAutoIncremento( final boolean value ) {
+
+            this.autoIncremento = value;
             return this;
         }
 
