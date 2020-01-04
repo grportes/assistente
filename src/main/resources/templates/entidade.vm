@@ -26,8 +26,6 @@ public class $modelo.getEntidade() extends Model {
     #if( $modelo.isChaveComposta() )
     @EmbeddedId
     private $StringUtils.join($modelo.getEntidade(),"Id") $StringUtils.join($modelo.getEntidade(),"Id");
-    #else
-    private
     #end
 
     #foreach( $campo in $campos )

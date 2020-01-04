@@ -3,8 +3,8 @@ package br.com.assistente.models;
 import java.util.Objects;
 import java.util.Set;
 
-import static br.com.assistente.infra.util.UtilCollections.getTamanho;
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.models.ModeloCampo.chaveComposta;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -31,7 +31,7 @@ public final class Modelo {
         this.tabela = builder.tabela;
         this.entidade = builder.entidade;
         this.campos = builder.campos;
-        this.chaveComposta = getTamanho( builder.campos ) > 1;
+        this.chaveComposta = chaveComposta( this.campos );
     }
 
     public String getCatalogo() {

@@ -68,7 +68,7 @@ public class MapeamentoService {
         Set<ModeloCampo> campos = modelo.getCampos();
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
 
-        if ( getTamanho( camposPk ) > 1 ) {
+        if ( modelo.isChaveComposta() ) {
             campos.removeAll( camposPk );
             results.add(
                 new ResultMapeamento.Builder()

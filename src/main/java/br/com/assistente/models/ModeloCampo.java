@@ -21,6 +21,7 @@ import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public final class ModeloCampo {
@@ -202,6 +203,11 @@ public final class ModeloCampo {
     public static Set<ModeloCampo> buscarPks( final Set<ModeloCampo> lista ) {
 
         return isEmpty( lista ) ? emptySet() : lista.stream().filter( ModeloCampo::isPk ).collect( toSet() );
+    }
+
+    public static boolean chaveComposta( final Set<ModeloCampo> lista ) {
+
+        return isNotEmpty( lista ) && lista.stream().filter( ModeloCampo::isPk ).count() > 1;
     }
 
     public static Set<String> buscarImports( final Set<ModeloCampo> lista ) {
