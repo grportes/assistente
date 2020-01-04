@@ -24,6 +24,7 @@ import static br.com.assistente.controllers.SetupController.openViewConfiguracoe
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
@@ -181,6 +182,11 @@ public class AssistenteController {
             case "btnResultCopiar":
                 break;
             case "btnResultGravar":
+                break;
+            case "cbxResultArquivos":
+                if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) ) {
+                    txtResult.setText( cbxResultArquivos.getValue().getConteudoEntidade() );
+                }
                 break;
             case "btnResultAtualizar":
                 break;
