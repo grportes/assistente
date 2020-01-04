@@ -10,8 +10,10 @@ import javafx.beans.property.StringProperty;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.lang.Integer.parseInt;
@@ -226,9 +228,19 @@ public final class ModeloCampo {
 
     public static Set<String> buscarImports( final Set<ModeloCampo> lista ) {
 
+        final Supplier<Stream<String>> tiposJavaObrigatorios = () -> Stream.of(
+            "java.math.BigDecimal",
+            "java.time.LocalDate",
+            "java.time.LocalTime",
+            "java.time.LocalDateTime"
+        );
+
         return isEmpty( lista )
             ? emptySet()
-            : lista.stream().map( ModeloCampo::getTipoJava ).collect(toSet());
+            : lista.stream()
+                .map( ModeloCampo::getTipoJava )
+                .filter( tipoJava ->  tiposJavaObrigatorios.get().anyMatch( t -> t.equalsIgnoreCase( tipoJava ) )  )
+                .collect( toSet() );
     }
 
 
