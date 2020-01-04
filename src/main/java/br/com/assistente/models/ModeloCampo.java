@@ -10,14 +10,16 @@ import javafx.beans.property.StringProperty;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptySet;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNumeric;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 
 public final class ModeloCampo {
@@ -173,6 +175,15 @@ public final class ModeloCampo {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    // CONSTANTES
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private static final Pattern REGEX = Pattern.compile( "(.*)\\((\\d+)\\)" );
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     // METODOS AUXLIARES
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +227,7 @@ public final class ModeloCampo {
         private boolean colNull;
         private boolean converter;
         private boolean atributoLength;
-        private int tamanho;
+        private Integer tamanho;
 
         public Builder() {
 
@@ -229,7 +240,7 @@ public final class ModeloCampo {
             this.colNull = false;
             this.converter = false;
             this.atributoLength = false;
-            this.tamanho = 0;
+            this.tamanho = null;
         }
 
         public Builder( final ModeloCampo modeloCampo ) {
@@ -257,8 +268,6 @@ public final class ModeloCampo {
             return this;
         }
 
-
-
         public Builder comColunaDB( final String value ) {
 
             this.colunaDB = lowerCase( value );
@@ -274,14 +283,14 @@ public final class ModeloCampo {
 
         public Builder comTipoDB( final String value ) {
 
-            this.tipoDB = value;
-            int inicio = this.tipoDB.lastIndexOf( "(" );
-            if ( inicio > 0 ) {
-                int fim = this.tipoDB.lastIndexOf( ")" );
-                String sTamanho = this.tipoDB.substring( inicio + 1, fim );
-                if ( isNumeric( sTamanho ) ) this.tamanho = Integer.parseInt( sTamanho );
-                this.tipoDB = this.tipoDB.substring( 0, inicio );
+            final Matcher matcher = REGEX.matcher( value );
+            if ( matcher.find() ) {
+                this.tipoDB = matcher.group( 1 );
+                this.tamanho = parseInt( matcher.group( 2 ) );
+            } else {
+                this.tipoDB = value;
             }
+
             return this;
         }
 
