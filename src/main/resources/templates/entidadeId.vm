@@ -1,12 +1,4 @@
-import java.util.Objects;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import java.io.Serializable;
-
-#foreach( $importNecessario in $importsNecessarios )
-import $importNecessario;
-#end
+#macroImports
 
 /**
  * Classe que representa o Id da entidade {@link $modelo.getEntidade()}
@@ -14,45 +6,39 @@ import $importNecessario;
  * <p>Autor: $nomeAutor</p>
  */
 @Embeddable
-public class $StringUtils.join($modelo.getEntidade(),"Id") extends Model {
+#set( $nomeEntidade = $StringUtils.join( $modelo.getEntidade(), "Id" ) )
+public class $nomeEntidade implements Serializable {
 
-    #set( $texto = "COLUNAS MAPEADAS" )
-    #comentario( )
+    #macroDeclaracaoAtributos
 
+    #macroConstructor( $nomeEntidade )
+
+    #macroGetterSetters
+
+    #macroEqualsHashcode( $nomeEntidade )
+}
+
+#macro( macroImports )
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.io.Serializable;
+import java.util.Objects;
+
+    #foreach ( $import in $importsNecessarios )
+import $import;
+    #end
+#end
+
+#macro( macroDeclaracaoAtributos )
+    #macroComentario( "COLUNAS MAPEADAS" )
     #foreach( $campo in $campos )
-    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()", #if($campo.isAtributoLength())length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
+    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()",#if ($campo.isAtributoLength()) length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
     private $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava();
 
     #end
+#end
 
-    #set( $texto = "CONSTRUCTOR" )
-    #comentario( )
-
-    #set( $texto = "GETTERS && SETTERS" )
-    #comentario( )
-    #foreach( $campo in $modelo.getCampos() )
-    #macroGetterSetters( $campo.getTipoJava() $campo.getColunaJava() )
-    #end
-
-    #set( $texto = "EQUALS && HASHCODE" )
-    #comentario( )
-    @Override
-    public boolean equals( final Object obj ) {
-
-        if (this == obj) return true;
-        if (!( obj instanceof $modelo.getEntidade() )) return false;
-        return Objects.equals( getId(), (($modelo.getEntidade()) obj).getId() );
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash( getId() );
-    }
-
-}
-
-#macro( comentario $texto )
+#macro( macroComentario $texto )
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // $texto
@@ -61,15 +47,66 @@ public class $StringUtils.join($modelo.getEntidade(),"Id") extends Model {
 
 #end
 
-#macro( macroGetterSetters $tipo $nomeCampo )
-    public $tipo get$StringUtils.capitalize($nomeCampo)() {
+#macro( macroConstructor $nomeEntidade )
 
-        return this.$nomeCampo;
+    #macroComentario( "CONSTRUCTOR" )
+
+    public $nomeEntidade() {
+
+        super();
     }
 
-    public void set$StringUtils.capitalize($nomeCampo)( final $tipo $nomeCampo ) {
+    public $nomeEntidade(
+        #foreach ( $campo in $campos )
+            #set ( $nomeAtributo = $campo.getColunaJava() )
+            #set ( $tipo = $StringUtils.substringAfterLast( $campo.getTipoJava(), "." ) )
+        final $tipo $nomeAtributo#if( $foreach.hasNext ),#end
+        #end
+    ) {
 
-        this.$nomeCampo = $nomeCampo;
+        #foreach ( $campo in $campos )
+            #set ( $nomeAtributo = $campo.getColunaJava() )
+        this.$nomeAtributo = $nomeAtributo;
+        #end
+    }
+#end
+
+#macro( macroGetterSetters )
+
+    #macroComentario( "GETTERS && SETTERS" )
+
+    #foreach ( $campo in $campos )
+        #set ( $nomeAtributo = $campo.getColunaJava() )
+        #set ( $nomeMetodo = $StringUtils.capitalize( $nomeAtributo ) )
+        #set ( $tipo = $StringUtils.substringAfterLast( $campo.getTipoJava(), "." ) )
+    public $tipo get$nomeMetodo() {
+
+        return this.$nomeAtributo;
     }
 
+    public void set$nomeMetodo( final $tipo $nomeAtributo ) {
+
+        this.$nomeAtributo = $nomeAtributo;
+    }
+    #end
+#end
+
+#macro( macroEqualsHashcode $nomeEntidade )
+    #set( $variavel = $StringUtils.join( $StringUtils.lowerCase($StringUtils.substring($nomeEntidade,0,1) ), $StringUtils.substring($nomeEntidade,1) ) )
+    #macroComentario( "EQUALS && HASHCODE" )
+
+    @Override
+    public boolean equals( final Object obj ) {
+
+        if ( this == obj ) return true;
+        if ( !( obj instanceof $nomeEntidade ) ) return false;
+        final $nomeEntidade $variavel = ($nomeEntidade) obj;
+
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash( getId() );
+    }
 #end

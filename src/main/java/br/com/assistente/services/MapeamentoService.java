@@ -79,7 +79,7 @@ public class MapeamentoService {
             results.add(
                 new ResultMapeamento.Builder()
                     .comNomeEntidade( modelo.getEntidade() + "Id" )
-                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidadeId.vm"))
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, camposPk,"/templates/entidadeId.vm"))
                     .build()
             );
         } else
