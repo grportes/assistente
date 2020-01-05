@@ -13,7 +13,7 @@ public class $modelo.Entidade extends Model {
     #macroGetterSetters
     #macroComentarios
     #macroEqualsHashcode
-
+    #macroToString
     #macroComentario( "METODOS AUXILIARES" )
 }
 
@@ -159,6 +159,18 @@ import $import;
     public int hashCode() {
 
         return Objects.hash( getId() );
+    }
+
+#end
+
+#macro( macroToString )
+
+    #macroComentario( "TO_STRING" )
+
+    @Override
+    public String toString() {
+
+        return String.format( "$modelo.Entidade { id = %s }", this.getId() );
     }
 
 #end
