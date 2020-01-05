@@ -1,12 +1,12 @@
 #macroImports
 
 /**
- * Classe mapeamento ref. a tabela [ $modelo.getNomeCompletoTabela() ]
+ * Classe mapeamento ref. a tabela [ $modelo.NomeCompletoTabela ]
  *
  * <p>Autor: $nomeAutor</p>
  */
 #macroEntidade
-public class $modelo.getEntidade() extends Model {
+public class $modelo.Entidade extends Model {
 
     #macroColunasMapeadas
     #macroConstructor
@@ -23,10 +23,10 @@ import infra.models.Model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-    #if ( $modelo.isChaveComposta() )
+    #if ( $modelo.ChaveComposta )
 import javax.persistence.EmbeddedId;
     #end
-    #if ( $modelo.isAtributoVersion() )
+    #if ( $modelo.AtributoVersion )
 import javax.persistence.Version;
     #end
 import java.util.Objects;
@@ -38,10 +38,10 @@ import $import;
 
 #macro( macroEntidade )
 @Entity
-    #set ( $nomeCatalogo = $modelo.getCatalogo() )
-    #set ( $nomeTabela = $modelo.getTabela() )
+    #set ( $nomeCatalogo = $modelo.Catalogo )
+    #set ( $nomeTabela = $modelo.Tabela )
     #if ( $StringUtils.isNotBlank( $nomeCatalogo ) )
-@Table( name = "$nomeTabela", schema = "$modelo.getOwner()", catalog = "$nomeCatalogo" )
+@Table( name = "$nomeTabela", schema = "$modelo.Owner", catalog = "$nomeCatalogo" )
     #else
 @Table( name = "$nomeTabela" )
     #end
@@ -59,37 +59,37 @@ import $import;
 
     #macroComentario( "COLUNAS MAPEADAS" )
 
-    #if ( $modelo.isChaveComposta() )
+    #if ( $modelo.ChaveComposta )
     @EmbeddedId
-    private $StringUtils.join( $modelo.getEntidade(), "Id" ) id;
+    private $StringUtils.join( $modelo.Entidade, "Id" ) id;
 
     #end
     #foreach( $campo in $campos )
-        #set ( $isPk = !$modelo.isChaveComposta() && $campo.isPk() )
-        #set ( $tipo = $StringUtils.substringAfterLast( $campo.getTipoJava(), "." ) )
+        #set ( $isPk = !$modelo.ChaveComposta && $campo.Pk )
+        #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
         #if ( $isPk )
     @Id #if ( $campo.isAutoIncremento() )@GeneratedValue( strategy = GenerationType.IDENTITY ) #end
             #macroDefinicaoColumn( $campo )
         #else
-            #if ( $StringUtils.equalsIgnoreCase( $campo.getColunaDB(), "version" ) )
+            #if ( $StringUtils.equalsIgnoreCase( $campo.ColunaDB, "version" ) )
     @Version
             #end
             #macroDefinicaoColumn( $campo )
         #end
-    private $tipo #if ($campo.isPk())id;#{else}$campo.getColunaJava();#end
+    private $tipo #if ($campo.Pk)id;#{else}$campo.ColunaJava;#end
 
     #end
 #end
 
 #macro( macroDefinicaoColumn $campo )
-    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()",#if ($campo.isAtributoLength()) length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
+    @Column( name = "$campo.ColunaDB", columnDefinition = "$campo.TipoDB",#if ($campo.isAtributoLength()) length = $campo.Tamanho,#end nullable = $campo.isColNull() )
 #end
 
 #macro( macroConstructor )
 
     #macroComentario( "CONSTRUCTOR" )
 
-    public $modelo.getEntidade() {
+    public $modelo.Entidade {
 
         super();
     }
@@ -100,8 +100,8 @@ import $import;
 
     #macroComentario( "GETTERS && SETTERS" )
 
-    #if ( $modelo.isChaveComposta() )
-        #set ( $tipo = $StringUtils.join($modelo.getEntidade(),"Id") )
+    #if ( $modelo.ChaveComposta )
+        #set ( $tipo = $StringUtils.join($modelo.Entidade,"Id") )
     public $tipo getId() {
 
         return this.id;
@@ -114,9 +114,9 @@ import $import;
 
     #end
     #foreach ( $campo in $campos )
-        #set ( $nomeAtributo = $campo.getColunaJava() )
+        #set ( $nomeAtributo = $campo.ColunaJava )
         #set ( $nomeMetodo = $StringUtils.capitalize( $nomeAtributo ) )
-        #set ( $tipo = $StringUtils.substringAfterLast( $campo.getTipoJava(), "." ) )
+        #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
     public $tipo get$nomeMetodo() {
 
         return this.$nomeAtributo;
@@ -151,8 +151,8 @@ import $import;
     public boolean equals( final Object obj ) {
 
         if ( this == obj ) return true;
-        if ( !( obj instanceof $modelo.getEntidade() ) ) return false;
-        return Objects.equals( getId(), (($modelo.getEntidade()) obj).getId() );
+        if ( !( obj instanceof $modelo.Entidade ) ) return false;
+        return Objects.equals( getId(), (($modelo.Entidade) obj).getId() );
     }
 
     @Override
