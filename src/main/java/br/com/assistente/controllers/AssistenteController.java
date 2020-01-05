@@ -31,6 +31,7 @@ import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 public class AssistenteController {
 
@@ -122,6 +123,9 @@ public class AssistenteController {
     }
 
     public void onActionMapeamentoBtnLerTabela() {
+
+        txtMapeamentoOwner.setText( trim( txtMapeamentoOwner.getText() ) );
+        txfMapeamentoNomeTabela.setText( trim( txfMapeamentoNomeTabela.getText() ) );
 
         final Set<ModeloCampo> campos = mapeamentoService.extrair(
             new Modelo.Builder()

@@ -94,7 +94,7 @@ import static java.util.Objects.isNull;
 #end
 
 #macro( macroEqualsHashcode $nomeEntidade )
-    #set( $variavel = $StringUtils.join( $StringUtils.lowerCase($StringUtils.substring($nomeEntidade,0,1) ), $StringUtils.substring($nomeEntidade,1) ) )
+    #set( $varObj = $StringUtils.join( $StringUtils.lowerCase($StringUtils.substring($nomeEntidade,0,1) ), $StringUtils.substring($nomeEntidade,1) ) )
     #macroComentario( "EQUALS && HASHCODE" )
 
     @Override
@@ -102,8 +102,8 @@ import static java.util.Objects.isNull;
 
         if ( this == obj ) return true;
         if ( isNull( obj ) || getClass() != o.getClass() ) return false;
-        final $nomeEntidade $variavel = ($nomeEntidade) obj;
-        return #macroCondicional( $variavel )
+        final $nomeEntidade $varObj = ($nomeEntidade) obj;
+        #macroExpressoesEquals( $varObj )
     }
 
     @Override
@@ -112,16 +112,23 @@ import static java.util.Objects.isNull;
         return Objects.hash(
             #foreach ( $campo in $campos )
                 #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.getColunaJava() ) ,"()" ) )
-            $metodo#if( $foreach.hasNext ),#{else};#end
+            $metodo#if( $foreach.hasNext ),#end
             #end
         );
     }
 #end
 
-#macro( macroCondicional $obj )
+#macro( macroExpressoesEquals $varObj )
+    #set ( $primeiraLinha = true )
     #foreach ( $campo in $campos )
-        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.getColunaJava() ) ,"()" ) )
-        Objects.equals( $metodo, $obj.$metodo )#if( $foreach.hasNext ) &&#{else};#end
+        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.getColunaJava() ), "()" ) )
+        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.getColunaJava() , " )" ) )
+        #if ( $primeiraLinha  )
+            #set ( $primeiraLinha = false )
+        return $expressao
+        #else
+            && $expressao #if( !$foreach.hasNext );#end
+        #end
     #end
 #end
 
