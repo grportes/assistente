@@ -143,7 +143,11 @@ import static java.util.Objects.isNull;
 
         return new StringJoiner( ", ", $StringUtils.join( $nomeEntidade, ".class.getSimpleName()" ) + "[", "]" )
     #foreach ( $campo in $campos )
+        #if ( $StringUtils.equalsIgnoreCase( "java.lang.String", $campo.TipoJava ) )
+            .add( "$campo.ColunaJava='" + $campo.ColunaJava + "'" )
+        #else
             .add( "$campo.ColunaJava=" + $campo.ColunaJava )
+        #end
     #end
             .toString();
     }
