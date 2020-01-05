@@ -4,6 +4,7 @@ import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.services.MapeamentoService;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,11 +16,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
@@ -51,9 +54,10 @@ public class AssistenteController {
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoDB;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoJava;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoTipoDB;
+    @FXML private TableColumn<ModeloCampo, Integer> tcMapeamentoTamanho;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoTipoJava;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoConverter;
-    @FXML private TableColumn<ModeloCampo, Integer> tcMapeamentoTamanho;
+    @FXML private TableColumn<ModeloCampo, String> tcMapeamentoNomeConverter;
     @FXML private Button btnMapeamento;
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
@@ -102,7 +106,27 @@ public class AssistenteController {
         tcMapeamentoTipoJava.setCellValueFactory( c -> c.getValue().tipoJavaProperty() );
         tcMapeamentoTamanho.setCellValueFactory( c -> c.getValue().tamanhoProperty().asObject() );
         tcMapeamentoConverter.setCellValueFactory( c -> c.getValue().converterProperty() );
-        tcMapeamentoConverter.setCellFactory( forTableColumn(tcMapeamentoConverter) );
+        tcMapeamentoConverter.setCellFactory( forTableColumn( index -> {
+            final ModeloCampo modeloCampo = observableModelo.get( index );
+            if ( modeloCampo.isConverter() ) {
+                Platform.runLater( () -> {
+                    final TextInputDialog dialog = new TextInputDialog( modeloCampo.getNomeConverter() );
+                    dialog.setTitle( "Atenção" );
+                    dialog.setContentText( "Informe o nome do Enumerado" );
+                    Optional<String> possivelTexto = dialog.showAndWait();
+                    if ( possivelTexto.isPresent() ) {
+                        modeloCampo.nomeConverterProperty().setValue( possivelTexto.get() );
+                    } else {
+                        modeloCampo.nomeConverterProperty().setValue( "" );
+                        modeloCampo.converterProperty().setValue( false );
+                    }
+                });
+            } else {
+                modeloCampo.nomeConverterProperty().setValue( "" );
+            }
+            return modeloCampo.converterProperty();
+        }));
+        tcMapeamentoNomeConverter.setCellValueFactory( c -> c.getValue().nomeConverterProperty() );
 
         tblMapeamento.setItems( observableModelo );
     }

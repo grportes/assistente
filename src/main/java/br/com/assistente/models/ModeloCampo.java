@@ -39,6 +39,7 @@ public final class ModeloCampo {
     private final Boolean atributoLength;
     private final StringProperty tipoJava;
     private final BooleanProperty converter;
+    private final StringProperty nomeConverter;
     private final Boolean autoIncremento;
 
 
@@ -59,6 +60,7 @@ public final class ModeloCampo {
         this.tipoJava = new SimpleStringProperty( builder.tipoJava );
         this.colNull = new SimpleBooleanProperty( builder.colNull );
         this.converter = new SimpleBooleanProperty( builder.converter );
+        this.nomeConverter = new SimpleStringProperty( "" );
         this.atributoLength = builder.atributoLength;
         this.autoIncremento = builder.autoIncremento;
     }
@@ -158,6 +160,16 @@ public final class ModeloCampo {
     public BooleanProperty converterProperty() {
 
         return converter;
+    }
+
+    public StringProperty nomeConverterProperty() {
+
+        return nomeConverter;
+    }
+
+    public String getNomeConverter() {
+
+        return nomeConverter.get();
     }
 
     public Boolean isAtributoLength() {
@@ -341,12 +353,6 @@ public final class ModeloCampo {
         public Builder comColNull( final boolean value ) {
 
             this.colNull = value;
-            return this;
-        }
-
-        public Builder comConverter( final boolean value ) {
-
-            this.converter = value;
             return this;
         }
 
