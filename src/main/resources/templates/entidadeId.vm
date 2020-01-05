@@ -21,6 +21,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.StringJoiner;
 
     #foreach ( $import in $importsNecessarios )
 import $import;
