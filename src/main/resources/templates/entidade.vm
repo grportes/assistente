@@ -128,7 +128,6 @@ import $import;
     }
 
     #end
-
 #end
 
 #macro( macroComentarios )
@@ -172,5 +171,6 @@ import $import;
 
         return String.format( "$modelo.Entidade { id = %s }", this.getId() );
     }
+
 
 #end

@@ -118,6 +118,7 @@ import static java.util.Objects.isNull;
             #end
         );
     }
+
 #end
 
 #macro( macroExpressoesEquals $varObj )
