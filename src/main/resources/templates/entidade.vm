@@ -8,18 +8,10 @@
 #macroEntidade
 public class $modelo.getEntidade() extends Model {
 
-    #macroComentario( "COLUNAS MAPEADAS" )
-
-    #macroDeclaracaoAtributos
-
-    #macroComentario( "CONSTRUCTOR" )
-
+    #macroColunasMapeadas
+    #macroConstructor
     #macroGetterSetters
-
-    #macroComentario( "METODOS TRANSIENTES" )
-
-    #macroComentario( "CONSTANTES" )
-
+    #macroComentarios
     #macroEqualsHashcode
 
     #macroComentario( "METODOS AUXILIARES" )
@@ -63,7 +55,10 @@ import $import;
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #end
 
-#macro( macroDeclaracaoAtributos )
+#macro( macroColunasMapeadas )
+
+    #macroComentario( "COLUNAS MAPEADAS" )
+
     #if ( $modelo.isChaveComposta() )
     @EmbeddedId
     private $StringUtils.join( $modelo.getEntidade(), "Id" ) id;
@@ -90,6 +85,17 @@ import $import;
     @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()",#if ($campo.isAtributoLength()) length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
 #end
 
+#macro( macroConstructor )
+
+    #macroComentario( "CONSTRUCTOR" )
+
+    public $modelo.getEntidade() {
+
+        super();
+    }
+
+#end
+
 #macro( macroGetterSetters )
 
     #macroComentario( "GETTERS && SETTERS" )
@@ -105,8 +111,8 @@ import $import;
 
         this.id = id;
     }
-    #end
 
+    #end
     #foreach ( $campo in $campos )
         #set ( $nomeAtributo = $campo.getColunaJava() )
         #set ( $nomeMetodo = $StringUtils.capitalize( $nomeAtributo ) )
@@ -120,10 +126,25 @@ import $import;
 
         this.$nomeAtributo = $nomeAtributo;
     }
+
     #end
+
+#end
+
+#macro( macroComentarios )
+
+    #macroComentario( "RELACIONAMENTOS" )
+
+
+    #macroComentario( "METODOS TRANSIENTES" )
+
+
+    #macroComentario( "CONSTANTES" )
+
 #end
 
 #macro( macroEqualsHashcode )
+
     #macroComentario( "EQUALS && HASHCODE" )
 
     @Override
@@ -139,4 +160,5 @@ import $import;
 
         return Objects.hash( getId() );
     }
+
 #end
