@@ -68,7 +68,7 @@ import $import;
         #set ( $isPk = !$modelo.ChaveComposta && $campo.Pk )
         #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
         #if ( $isPk )
-    @Id #if ( $campo.isAutoIncremento() )@GeneratedValue( strategy = GenerationType.IDENTITY ) #end
+    @Id #if ( $campo.AutoIncremento )@GeneratedValue( strategy = GenerationType.IDENTITY ) #end
             #macroDefinicaoColumn( $campo )
         #else
             #if ( $StringUtils.equalsIgnoreCase( $campo.ColunaDB, "version" ) )
@@ -82,7 +82,7 @@ import $import;
 #end
 
 #macro( macroDefinicaoColumn $campo )
-    @Column( name = "$campo.ColunaDB", columnDefinition = "$campo.TipoDB",#if ($campo.isAtributoLength()) length = $campo.Tamanho,#end nullable = $campo.isColNull() )
+    @Column( name = "$campo.ColunaDB", columnDefinition = "$campo.TipoDB",#if ($campo.AtributoLength) length = $campo.Tamanho,#end nullable = $campo.ColNull )
 #end
 
 #macro( macroConstructor )
