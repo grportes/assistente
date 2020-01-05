@@ -1,12 +1,12 @@
 #macroImports
 
 /**
- * Classe que representa o Id da entidade {@link $modelo.getEntidade()}
+ * Classe que representa o Id da entidade {@link $modelo.Entidade}
  *
  * <p>Autor: $nomeAutor</p>
  */
 @Embeddable
-#set( $nomeEntidade = $StringUtils.join( $modelo.getEntidade(), "Id" ) )
+#set( $nomeEntidade = $StringUtils.join( $modelo.Entidade, "Id" ) )
 public class $nomeEntidade implements Serializable {
 
     #macroColunasMapeadas
@@ -40,8 +40,8 @@ import static java.util.Objects.isNull;
     #macroComentario( "COLUNAS MAPEADAS" )
 
     #foreach( $campo in $campos )
-    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()",#if ($campo.isAtributoLength()) length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
-    private $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava();
+    @Column( name = "$campo.ColunaDB", columnDefinition = "$campo.TipoDB",#if ($campo.AtributoLength) length = $campo.Tamanho,#end nullable = $campo.ColNull )
+    private $StringUtils.substringAfterLast($campo.TipoJava,".") $campo.ColunaJava;
 
     #end
 #end
@@ -57,14 +57,14 @@ import static java.util.Objects.isNull;
 
     public $nomeEntidade(
         #foreach ( $campo in $campos )
-            #set ( $nomeAtributo = $campo.getColunaJava() )
-            #set ( $tipo = $StringUtils.substringAfterLast( $campo.getTipoJava(), "." ) )
+            #set ( $nomeAtributo = $campo.ColunaJava )
+            #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
         final $tipo $nomeAtributo#if( $foreach.hasNext ),#end
         #end
     ) {
 
         #foreach ( $campo in $campos )
-            #set ( $nomeAtributo = $campo.getColunaJava() )
+            #set ( $nomeAtributo = $campo.ColunaJava )
         this.$nomeAtributo = $nomeAtributo;
         #end
     }
@@ -76,9 +76,9 @@ import static java.util.Objects.isNull;
     #macroComentario( "GETTERS && SETTERS" )
 
     #foreach ( $campo in $campos )
-        #set ( $nomeAtributo = $campo.getColunaJava() )
+        #set ( $nomeAtributo = $campo.ColunaJava )
         #set ( $nomeMetodo = $StringUtils.capitalize( $nomeAtributo ) )
-        #set ( $tipo = $StringUtils.substringAfterLast( $campo.getTipoJava(), "." ) )
+        #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
     public $tipo get$nomeMetodo() {
 
         return this.$nomeAtributo;
@@ -111,7 +111,7 @@ import static java.util.Objects.isNull;
 
         return Objects.hash(
             #foreach ( $campo in $campos )
-                #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.getColunaJava() ) ,"()" ) )
+                #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.ColunaJava ) ,"()" ) )
             $metodo#if( $foreach.hasNext ),#end
             #end
         );
@@ -121,8 +121,8 @@ import static java.util.Objects.isNull;
 #macro( macroExpressoesEquals $varObj )
     #set ( $primeiraLinha = true )
     #foreach ( $campo in $campos )
-        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.getColunaJava() ), "()" ) )
-        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.getColunaJava() , " )" ) )
+        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.ColunaJava ), "()" ) )
+        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.ColunaJava , " )" ) )
         #if ( $primeiraLinha  )
             #set ( $primeiraLinha = false )
         return $expressao
