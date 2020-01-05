@@ -13,6 +13,7 @@ public class $nomeEntidade implements Serializable {
     #macroConstructor( $nomeEntidade )
     #macroGetterSetters
     #macroEqualsHashcode( $nomeEntidade )
+    #macroToString( $nomeEntidade )
 }
 
 #macro( macroImports )
@@ -130,4 +131,20 @@ import static java.util.Objects.isNull;
             && $expressao #if( !$foreach.hasNext );#end
         #end
     #end
+#end
+
+#macro( macroToString $nomeEntidade )
+
+    #macroComentario( "TO_STRING" )
+
+    @Override
+    public String toString() {
+
+        return new StringJoiner( ", ", $StringUtils.join( $nomeEntidade, ".class.getSimpleName()" ) + "[", "]" )
+    #foreach ( $campo in $campos )
+            .add( "$campo.ColunaJava=" + $campo.ColunaJava )
+    #end
+            .toString();
+    }
+
 #end
