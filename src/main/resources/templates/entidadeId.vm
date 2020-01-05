@@ -9,12 +9,9 @@
 #set( $nomeEntidade = $StringUtils.join( $modelo.getEntidade(), "Id" ) )
 public class $nomeEntidade implements Serializable {
 
-    #macroDeclaracaoAtributos
-
+    #macroColunasMapeadas
     #macroConstructor( $nomeEntidade )
-
     #macroGetterSetters
-
     #macroEqualsHashcode( $nomeEntidade )
 }
 
@@ -31,22 +28,22 @@ import $import;
 import static java.util.Objects.isNull;
 #end
 
-#macro( macroDeclaracaoAtributos )
-    #macroComentario( "COLUNAS MAPEADAS" )
-    #foreach( $campo in $campos )
-    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()",#if ($campo.isAtributoLength()) length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
-    private $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava();
-
-    #end
-#end
-
 #macro( macroComentario $texto )
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // $texto
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#end
 
+#macro( macroColunasMapeadas )
+    #macroComentario( "COLUNAS MAPEADAS" )
+
+    #foreach( $campo in $campos )
+    @Column( name = "$campo.getColunaDB()", columnDefinition = "$campo.getTipoDB()",#if ($campo.isAtributoLength()) length = $campo.getTamanho(),#end nullable = $campo.isColNull() )
+    private $StringUtils.substringAfterLast($campo.getTipoJava(),".") $campo.getColunaJava();
+
+    #end
 #end
 
 #macro( macroConstructor $nomeEntidade )
@@ -71,6 +68,7 @@ import static java.util.Objects.isNull;
         this.$nomeAtributo = $nomeAtributo;
         #end
     }
+
 #end
 
 #macro( macroGetterSetters )
@@ -91,9 +89,11 @@ import static java.util.Objects.isNull;
         this.$nomeAtributo = $nomeAtributo;
     }
     #end
+
 #end
 
 #macro( macroEqualsHashcode $nomeEntidade )
+
     #set( $varObj = $StringUtils.join( $StringUtils.lowerCase($StringUtils.substring($nomeEntidade,0,1) ), $StringUtils.substring($nomeEntidade,1) ) )
     #macroComentario( "EQUALS && HASHCODE" )
 
@@ -131,8 +131,3 @@ import static java.util.Objects.isNull;
         #end
     #end
 #end
-
-
-
-
-
