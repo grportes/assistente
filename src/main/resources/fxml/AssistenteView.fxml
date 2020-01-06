@@ -82,7 +82,7 @@
                                     <TableColumn fx:id="tcMapeamentoTipoDB" minWidth="0.0" prefWidth="130.0" text="Tipo DB" />
                                     <TableColumn fx:id="tcMapeamentoTipoJava" prefWidth="160.0" text="Tipo Java" />
                                     <TableColumn fx:id="tcMapeamentoConverter" prefWidth="81.0" text="Converter" />
-                                    <TableColumn fx:id="tcMapeamentoNomeConverter" maxWidth="0.0" minWidth="0.0" prefWidth="0.0" visible="false" />
+                                    <TableColumn fx:id="tcMapeamentoNomeEnum" maxWidth="500.0" prefWidth="160.0" text="Enum" />
                                 </columns>
                               </TableView>
                            </children>

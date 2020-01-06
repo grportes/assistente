@@ -57,7 +57,7 @@ public class AssistenteController {
     @FXML private TableColumn<ModeloCampo, Integer> tcMapeamentoTamanho;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoTipoJava;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoConverter;
-    @FXML private TableColumn<ModeloCampo, String> tcMapeamentoNomeConverter;
+    @FXML private TableColumn<ModeloCampo, String> tcMapeamentoNomeEnum;
     @FXML private Button btnMapeamento;
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
@@ -126,7 +126,7 @@ public class AssistenteController {
             }
             return modeloCampo.converterProperty();
         }));
-        tcMapeamentoNomeConverter.setCellValueFactory( c -> c.getValue().nomeEnumProperty() );
+        tcMapeamentoNomeEnum.setCellValueFactory( c -> c.getValue().nomeEnumProperty() );
 
         tblMapeamento.setItems( observableModelo );
     }
