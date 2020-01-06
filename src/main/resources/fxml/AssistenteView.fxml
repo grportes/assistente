@@ -97,7 +97,57 @@
           </Tab>
           <Tab fx:id="tabConstante" text="Constante">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox layoutX="103.0" layoutY="36.0" prefHeight="399.0" prefWidth="784.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <Label text="Nome do Enum:" />
+                              <TextField maxWidth="-Infinity" prefHeight="26.0" prefWidth="332.0">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </TextField>
+                              <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="784.0" spacing="5.0">
+                                 <children>
+                                    <VBox prefHeight="51.0" prefWidth="213.0">
+                                       <children>
+                                          <Label text="Tipo:" />
+                                          <ComboBox prefHeight="26.0" prefWidth="226.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="100.0" prefWidth="156.0">
+                                       <children>
+                                          <Label text="Valor:" />
+                                          <TextField prefHeight="26.0" prefWidth="192.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="100.0" prefWidth="213.0">
+                                       <children>
+                                          <Label text="Descrição:" />
+                                          <TextField prefHeight="26.0" prefWidth="286.0" />
+                                       </children>
+                                    </VBox>
+                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="+">
+                                       <HBox.margin>
+                                          <Insets top="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <TableView prefHeight="252.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
+                                <columns>
+                                  <TableColumn prefWidth="75.0" text="C1" />
+                                  <TableColumn prefWidth="75.0" text="C2" />
+                                </columns>
+                              </TableView>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="33.0" prefWidth="784.0">
+                                 <children>
+                                    <Button alignment="CENTER" mnemonicParsing="false" text="Gerar Constante" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children></AnchorPane>
             </content>
           </Tab>
             <Tab fx:id="tabDto" text="DTO / Query">
