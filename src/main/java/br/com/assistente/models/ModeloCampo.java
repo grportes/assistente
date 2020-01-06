@@ -35,6 +35,7 @@ public final class ModeloCampo {
     private final StringProperty tipoDB;
     private final BooleanProperty colNull;
     private final IntegerProperty tamanho;
+    private final IntegerProperty digitoDecimal;
     private final StringProperty colunaJava;
     private final StringProperty tipoJava;
     private final BooleanProperty converter;
@@ -57,6 +58,7 @@ public final class ModeloCampo {
         this.tamanho = new SimpleIntegerProperty( builder.tamanho );
         this.colunaJava = new SimpleStringProperty( builder.colunaJava );
         this.tipoDB = new SimpleStringProperty( builder.tipoDB );
+        this.digitoDecimal = new SimpleIntegerProperty( builder.digitoDecimal );
         this.tipoJava = new SimpleStringProperty( builder.tipoJava );
         this.colNull = new SimpleBooleanProperty( builder.colNull );
         this.converter = new SimpleBooleanProperty( builder.converter );
@@ -130,6 +132,16 @@ public final class ModeloCampo {
     public StringProperty tipoDBProperty() {
 
         return tipoDB;
+    }
+
+    public IntegerProperty digitoDecimalProperty() {
+
+        return digitoDecimal;
+    }
+
+    public Integer getDigitoDecimal() {
+
+        return digitoDecimal.get();
     }
 
     public String getTipoJava() {
@@ -276,11 +288,12 @@ public final class ModeloCampo {
         private String colunaDB;
         private String colunaJava;
         private String tipoDB;
+        private int digitoDecimal;
         private String tipoJava;
         private boolean colNull;
         private boolean converter;
         private boolean atributoLength;
-        private Integer tamanho;
+        private int tamanho;
         private boolean autoIncremento;
 
         public Builder() {
@@ -290,11 +303,12 @@ public final class ModeloCampo {
             this.colunaDB = null;
             this.colunaJava = null;
             this.tipoDB = null;
+            this.digitoDecimal = 0;
             this.tipoJava = null;
             this.colNull = false;
             this.converter = false;
             this.atributoLength = false;
-            this.tamanho = null;
+            this.tamanho = 0;
             this.autoIncremento = false;
         }
 
@@ -306,6 +320,7 @@ public final class ModeloCampo {
             this.colunaJava = modeloCampo.getColunaJava();
             this.tipoDB = modeloCampo.getTipoDB();
             this.tipoJava = modeloCampo.getTipoJava();
+            this.digitoDecimal = modeloCampo.getDigitoDecimal();
             this.colNull = modeloCampo.isColNull();
             this.converter = modeloCampo.isConverter();
             this.tamanho = modeloCampo.getTamanho();
@@ -328,6 +343,12 @@ public final class ModeloCampo {
 
             this.colunaDB = lowerCase( value );
             this.colunaJava = ColunaId.getNomeAtributo( value ).orElse( convCamelCase( value, false ) );
+            return this;
+        }
+
+        public Builder comDigitoDecimal( final Integer value ) {
+
+            this.digitoDecimal = isNull( value ) ? 0 : value;
             return this;
         }
 

@@ -17,6 +17,7 @@ Ids:
   - { coluna: "filial", atributo: "idFilial" }
   - { coluna: "funcionario", atributo: "idFuncionario" }
   - { coluna: "fornecedor", atributo: "idFornecedor" }
+  - { coluna: "formaPagamento", atributo: "idFormaPagamento" }
   - { coluna: "folha", atributo: "idFolha" }
   - { coluna: "grupo_cidade", atributo: "idGrupoCidade" }
   - { coluna: "mercadoria", atributo: "idMercadoria" }

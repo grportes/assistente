@@ -18,6 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +35,7 @@ import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.trim;
 
 public class AssistenteController {
@@ -148,8 +150,8 @@ public class AssistenteController {
 
     public void onActionMapeamentoBtnLerTabela() {
 
-        txtMapeamentoOwner.setText( trim( txtMapeamentoOwner.getText() ) );
-        txfMapeamentoNomeTabela.setText( trim( txfMapeamentoNomeTabela.getText() ) );
+        txtMapeamentoOwner.setText( lowerCase( trim( txtMapeamentoOwner.getText() ) ) );
+        txfMapeamentoNomeTabela.setText( lowerCase( trim( txfMapeamentoNomeTabela.getText() ) ) );
 
         final Set<ModeloCampo> campos = mapeamentoService.extrair(
             new Modelo.Builder()
