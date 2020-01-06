@@ -119,6 +119,9 @@ import $import;
         #set ( $nomeAtributo = $campo.ColunaJava )
         #set ( $nomeMetodo = $StringUtils.capitalize( $nomeAtributo ) )
         #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
+        #if ( $campo.Converter )
+            #set( $tipo = $campo.NomeConverter )
+        #end
     public $tipo get$nomeMetodo() {
 
         return this.$nomeAtributo;
