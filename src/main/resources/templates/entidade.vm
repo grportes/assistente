@@ -65,24 +65,26 @@ import $import;
 
     #end
     #foreach( $campo in $campos )
-        #set ( $isPk = !$modelo.ChaveComposta && $campo.Pk )
-        #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
-        #if ( $isPk )
-    @Id #if ( $campo.AutoIncremento )@GeneratedValue( strategy = GenerationType.IDENTITY ) #end
-            #macroDefinicaoColumn( $campo )
-        #else
-            #if ( $StringUtils.equalsIgnoreCase( $campo.ColunaDB, "version" ) )
-    @Version
-            #end
-            #macroDefinicaoColumn( $campo )
-        #end
-    private $tipo #if ($campo.Pk)id;#{else}$campo.ColunaJava;#end
+        #macroDefinicaoColumn( $campo )
 
     #end
 #end
 
 #macro( macroDefinicaoColumn $campo )
+    #if ( !$modelo.ChaveComposta && $campo.Pk )
+    @Id #if ( $campo.AutoIncremento )@GeneratedValue( strategy = GenerationType.IDENTITY ) #end
+    #end
+    #if ( $StringUtils.equalsIgnoreCase( $campo.ColunaDB, "version" ) )
+    @Version
+    #end
     @Column( name = "$campo.ColunaDB", columnDefinition = "$campo.TipoDB",#if ($campo.AtributoLength) length = $campo.Tamanho,#end nullable = $campo.ColNull )
+    #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
+    #if ( $campo.Converter )
+        #set( $tipo = $campo.NomeConverter )
+    @Converter( converter = $StringUtils.join( $campo.NomeConverter, "Converter.class" ) )
+    #end
+    private $tipo #if ($campo.Pk)id;#{else}$campo.ColunaJava;#end
+
 #end
 
 #macro( macroConstructor )
