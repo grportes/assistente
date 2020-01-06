@@ -34,6 +34,12 @@ import java.util.Objects;
     #foreach ( $import in $importsNecessarios )
 import $import;
     #end
+    #foreach( $campo in $campos )
+        #if ( $campo.Converter )
+$StringUtils.join( "import models.commons.constantes.", $campo.NomeConverter, ";" )
+$StringUtils.join( "import models.commons.converters.", $campo.NomeConverter, "Converter;" )
+        #end
+    #end
 #end
 
 #macro( macroEntidade )
