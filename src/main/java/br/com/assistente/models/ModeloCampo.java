@@ -354,7 +354,7 @@ public final class ModeloCampo {
 
         public Builder comTamanho( final Integer value ) {
 
-            if ( isNull( this.tamanho ) ) this.tamanho = value;
+            if ( this.tamanho == 0 ) this.tamanho = isNull( value ) ? 0 : value;
             return this;
         }
 
