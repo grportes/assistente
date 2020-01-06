@@ -72,6 +72,9 @@ import static java.util.Objects.isNull;
         #foreach ( $campo in $campos )
             #set ( $nomeAtributo = $campo.ColunaJava )
             #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
+            #if ( $campo.Converter )
+                #set ( $tipo = $campo.NomeEnum )
+            #end
         final $tipo $nomeAtributo#if( $foreach.hasNext ),#end
         #end
     ) {
