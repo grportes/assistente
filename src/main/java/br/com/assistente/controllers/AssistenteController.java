@@ -110,23 +110,23 @@ public class AssistenteController {
             final ModeloCampo modeloCampo = observableModelo.get( index );
             if ( modeloCampo.isConverter() ) {
                 Platform.runLater( () -> {
-                    final TextInputDialog dialog = new TextInputDialog( modeloCampo.getNomeConverter() );
+                    final TextInputDialog dialog = new TextInputDialog( modeloCampo.getNomeEnum() );
                     dialog.setTitle( "Atenção" );
-                    dialog.setContentText( "Informe o nome do Enumerado" );
+                    dialog.setContentText( "Informe o nome do Enum:" );
                     Optional<String> possivelTexto = dialog.showAndWait();
                     if ( possivelTexto.isPresent() ) {
-                        modeloCampo.nomeConverterProperty().setValue( possivelTexto.get() );
+                        modeloCampo.nomeEnumProperty().setValue( possivelTexto.get() );
                     } else {
-                        modeloCampo.nomeConverterProperty().setValue( "" );
+                        modeloCampo.nomeEnumProperty().setValue( "" );
                         modeloCampo.converterProperty().setValue( false );
                     }
                 });
             } else {
-                modeloCampo.nomeConverterProperty().setValue( "" );
+                modeloCampo.nomeEnumProperty().setValue( "" );
             }
             return modeloCampo.converterProperty();
         }));
-        tcMapeamentoNomeConverter.setCellValueFactory( c -> c.getValue().nomeConverterProperty() );
+        tcMapeamentoNomeConverter.setCellValueFactory( c -> c.getValue().nomeEnumProperty() );
 
         tblMapeamento.setItems( observableModelo );
     }

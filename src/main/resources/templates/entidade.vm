@@ -36,8 +36,8 @@ import $import;
     #end
     #foreach( $campo in $campos )
         #if ( $campo.Converter )
-$StringUtils.join( "import models.commons.constantes.", $campo.NomeConverter, ";" )
-$StringUtils.join( "import models.commons.converters.", $campo.NomeConverter, "Converter;" )
+$StringUtils.join( "import models.commons.constantes.", $campo.NomeEnum, ";" )
+$StringUtils.join( "import models.commons.converters.", $campo.NomeEnum, "Converter;" )
         #end
     #end
 #end
@@ -86,8 +86,8 @@ $StringUtils.join( "import models.commons.converters.", $campo.NomeConverter, "C
     @Column( name = "$campo.ColunaDB", columnDefinition = "$campo.TipoDB",#if ($campo.AtributoLength) length = $campo.Tamanho,#end nullable = $campo.ColNull )
     #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
     #if ( $campo.Converter )
-        #set( $tipo = $campo.NomeConverter )
-    @Converter( converter = $StringUtils.join( $campo.NomeConverter, "Converter.class" ) )
+        #set( $tipo = $campo.NomeEnum )
+    @Converter( converter = $StringUtils.join( $campo.NomeEnum, "Converter.class" ) )
     #end
     private $tipo #if ($campo.Pk)id;#{else}$campo.ColunaJava;#end
 
@@ -126,7 +126,7 @@ $StringUtils.join( "import models.commons.converters.", $campo.NomeConverter, "C
         #set ( $nomeMetodo = $StringUtils.capitalize( $nomeAtributo ) )
         #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
         #if ( $campo.Converter )
-            #set( $tipo = $campo.NomeConverter )
+            #set( $tipo = $campo.NomeEnum )
         #end
     public $tipo get$nomeMetodo() {
 
