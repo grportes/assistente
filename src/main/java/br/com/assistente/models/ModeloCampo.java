@@ -195,6 +195,11 @@ public final class ModeloCampo {
         return autoIncremento;
     }
 
+    public Boolean isBigDecimal() {
+
+        return equalsIgnoreCase( "java.math.BigDecimal", getTipoJava() );
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // EQUALS && HASHCODE
