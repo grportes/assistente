@@ -18,7 +18,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +61,8 @@ public class AssistenteController {
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoNomeEnum;
     @FXML private Button btnMapeamento;
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
+
+    // Constante:
 
     // Result:
     @FXML private Tab tabResult;
