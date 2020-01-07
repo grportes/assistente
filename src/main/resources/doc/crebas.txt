@@ -29,6 +29,7 @@ create table clientes(
     empresa integer not null,
     cliente integer not null,
     razao_social varchar(250) not null,
+    vlr_limite decimal(10,2) null,
 
     primary key( empresa, cliente )
 );

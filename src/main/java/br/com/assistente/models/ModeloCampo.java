@@ -19,13 +19,14 @@ import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptySet;
 import static java.util.Comparator.comparing;
-import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.split;
 
 public final class ModeloCampo {
 
@@ -223,7 +224,8 @@ public final class ModeloCampo {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Extrair numero de p.ex: varchar(100)
-    private static final Pattern REGEX = Pattern.compile( "(.*)\\((\\d+)\\)" );
+    private static final Pattern REGEX_I = Pattern.compile( "(.*)\\((\\d+)\\)" );
+    private static final Pattern REGEX_II = Pattern.compile( "(.*)\\((\\d+,\\d+)\\)" );
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -348,24 +350,32 @@ public final class ModeloCampo {
 
         public Builder comDigitoDecimal( final Integer value ) {
 
-            this.digitoDecimal = isNull( value ) ? 0 : value;
+            if ( this.digitoDecimal == 0 && nonNull( value ) && value > 0 ) this.digitoDecimal = value;
             return this;
         }
 
         public Builder comTamanho( final Integer value ) {
 
-            if ( this.tamanho == 0 ) this.tamanho = isNull( value ) ? 0 : value;
+            if ( this.tamanho == 0 && nonNull( value ) && value > 0 ) this.tamanho = value;
             return this;
         }
 
         public Builder comTipoDB( final String value ) {
 
-            final Matcher matcher = REGEX.matcher( value );
+            Matcher matcher = REGEX_I.matcher( value );
             if ( matcher.find() ) {
                 this.tipoDB = matcher.group( 1 );
                 this.tamanho = parseInt( matcher.group( 2 ) );
             } else {
-                this.tipoDB = value;
+                matcher = REGEX_II.matcher( value );
+                if ( matcher.find() ) {
+                    this.tipoDB = matcher.group( 1 );
+                    final String[] valores = split( matcher.group( 2 ), "," );
+                    this.tamanho = parseInt( valores[0] );
+                    this.digitoDecimal = parseInt( valores[1] );
+                } else {
+                    this.tipoDB = value;
+                }
             }
 
             return this;
@@ -394,7 +404,6 @@ public final class ModeloCampo {
 
             return new ModeloCampo( this );
         }
-
     }
 
 }

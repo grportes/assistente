@@ -11,3 +11,4 @@ dataTypes:
   - { dbType: "VARCHAR", dbLength: true, javaType: "java.lang.String" }
   - { dbType: "CHAR", dbLength: true, javaType: "java.lang.String" }
   - { dbType: "TEXT", dbLength: true, javaType: "java.lang.String" }
+  - { dbType: "DECIMAL", dbLength: false, javaType: "java.math.BigDecimal" }
