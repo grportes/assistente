@@ -111,7 +111,7 @@ public class SetupUsuario {
 
     public static void load() {
 
-        setCache( find().orElseThrow( () -> new RuntimeException( "Não foi possível carregar Setup do Usuario" )) );
+        find().ifPresent( SetupUsuario::setCache );
     }
 
     public static void setCache( final SetupUsuario value ) {

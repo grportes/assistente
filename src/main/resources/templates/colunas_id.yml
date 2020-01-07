@@ -2,6 +2,7 @@ Ids:
   - { coluna: "acerto", atributo: "idAcerto" }
   - { coluna: "cliente", atributo: "idCliente" }
   - { coluna: "carga", atributo: "idCarga" }
+  - { coluna: "cda", atributo: "idCda" }
   - { coluna: "cidade", atributo: "idCidade" }
   - { coluna: "convenio", atributo: "idConvenio" }
   - { coluna: "conta", atributo: "idConta" }
