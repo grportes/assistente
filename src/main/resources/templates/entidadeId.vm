@@ -48,15 +48,27 @@ import static java.util.Objects.isNull;
     #macroComentario( "COLUNAS MAPEADAS" )
 
     #foreach( $campo in $campos )
-    @Column( name = "$campo.ColunaDB", columnDefinition = "$campo.TipoDB",#if ($campo.AtributoLength) length = $campo.Tamanho,#end nullable = $campo.ColNull )
-        #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
-        #if ( $campo.Converter )
-            #set( $tipo = $campo.NomeEnum )
-    @Converter( converter = $StringUtils.join( $campo.NomeEnum, "Converter.class" ) )
-        #end
-    private $tipo $campo.ColunaJava;
+        #macroDefinicaoColumn( $campo )
 
     #end
+#end
+
+#macro( macroDefinicaoColumn $campo )
+    #set ( $name = $StringUtils.join( "name = ", '"', $campo.ColunaDB, '"' ) )
+    #set ( $columnDefinition = $StringUtils.join( "columnDefinition = ", '"', $campo.TipoDB, '"' ) )
+    #if ( $campo.BigDecimal )
+        #set ( $decimalAtrib = "" )
+        #set ( $decimalAtrib = $StringUtils.join( "precision = ", $campo.Tamanho, ", scale = ", $campo.DigitoDecimal ) )
+    @Column( $name, $columnDefinition, $decimalAtrib, nullable = $campo.ColNull )
+    #else
+    @Column( $name, $columnDefinition,#if ($campo.AtributoLength) length = $campo.Tamanho,#end nullable = $campo.ColNull )
+    #end
+    #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
+    #if ( $campo.Converter )
+        #set( $tipo = $campo.NomeEnum )
+    @Converter( converter = $StringUtils.join( $campo.NomeEnum, "Converter.class" ) )
+    #end
+    private $tipo $campo.ColunaJava;
 #end
 
 #macro( macroConstructor $nomeEntidade )
