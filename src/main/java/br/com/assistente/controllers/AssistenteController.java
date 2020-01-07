@@ -3,6 +3,7 @@ package br.com.assistente.controllers;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
+import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.MapeamentoService;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -39,9 +40,7 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 public class AssistenteController {
 
-    // Services:
-    private final MapeamentoService mapeamentoService = new MapeamentoService();
-
+    // Container principal da Aplicação
     @FXML private VBox vboxContainer;
 
     // Mapeamento:
@@ -69,11 +68,22 @@ public class AssistenteController {
     @FXML private TextArea txtResult;
     @FXML private ComboBox<ResultMapeamento> cbxResultArquivos;
 
+    // Services:
+    private final MapeamentoService mapeamentoService = new MapeamentoService();
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // EVENTOS
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @FXML
+    public void initialize() {
+
+        SetupUsuario.load();
+        initializeMapeamento();
+    }
 
     public void onActionConfiguracoes() {
 
@@ -84,69 +94,6 @@ public class AssistenteController {
                     cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
                 }
             });
-    }
-
-    @FXML
-    public void initialize() {
-
-        initializeMapeamento();
-        cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
-//        if ( !SetupUsuarioRepository.isCnxDBInformada() )
-//            openViewConfiguracoes( vboxContainer.getScene().getWindow() );
-
-    }
-
-    private void initializeMapeamento() {
-
-        tcMapeamentoPosicao.setCellValueFactory( c -> c.getValue().posicaoProperty().asObject() );
-        tcMapeamentoColNull.setCellValueFactory( c -> c.getValue().colNullProperty() );
-        tcMapeamentoColNull.setCellFactory( forTableColumn(tcMapeamentoColNull) );
-        tcMapeamentoID.setCellValueFactory( c -> c.getValue().pkProperty() );
-        tcMapeamentoID.setCellFactory( forTableColumn(tcMapeamentoID) );
-        tcMapeamentoDB.setCellValueFactory( c -> c.getValue().colunaDBProperty() );
-        tcMapeamentoJava.setCellValueFactory( c -> c.getValue().colunaJavaProperty() );
-        tcMapeamentoTipoDB.setCellValueFactory( c -> c.getValue().tipoDBProperty() );
-        tcMapeamentoTipoJava.setCellValueFactory( c -> c.getValue().tipoJavaProperty() );
-        tcMapeamentoTamanho.setCellValueFactory( c -> c.getValue().tamanhoProperty().asObject() );
-        tcMapeamentoConverter.setCellValueFactory( c -> c.getValue().converterProperty() );
-        tcMapeamentoConverter.setCellFactory( forTableColumn( index -> {
-            final ModeloCampo modeloCampo = observableModelo.get( index );
-            if ( modeloCampo.isConverter() ) {
-                Platform.runLater( () -> {
-                    final TextInputDialog dialog = new TextInputDialog( modeloCampo.getNomeEnum() );
-                    dialog.setTitle( "Atenção" );
-                    dialog.setContentText( "Informe o nome do Enum:" );
-                    Optional<String> possivelTexto = dialog.showAndWait();
-                    if ( possivelTexto.isPresent() ) {
-                        modeloCampo.nomeEnumProperty().setValue( possivelTexto.get() );
-                    } else {
-                        modeloCampo.nomeEnumProperty().setValue( "" );
-                        modeloCampo.converterProperty().setValue( false );
-                    }
-                });
-            } else {
-                modeloCampo.nomeEnumProperty().setValue( "" );
-            }
-            return modeloCampo.converterProperty();
-        }));
-        tcMapeamentoNomeEnum.setCellValueFactory( c -> c.getValue().nomeEnumProperty() );
-
-        tblMapeamento.setItems( observableModelo );
-    }
-
-    private void desabilitarAcoesMapeamento( final boolean disable ) {
-
-        cbxMapeamentoBanco.setDisable(disable);
-        txtMapeamentoOwner.setDisable(disable);
-        txfMapeamentoNomeTabela.setDisable(disable);
-        if ( disable ) {
-            btnMapeamento.setDisable(false);
-        } else {
-            cbxMapeamentoBanco.setValue("");
-            txtMapeamentoOwner.setText("");
-            txfMapeamentoNomeTabela.setText("");
-            btnMapeamento.setDisable(true);
-        }
     }
 
     public void onActionMapeamentoBtnLerTabela() {
@@ -200,12 +147,6 @@ public class AssistenteController {
         });
     }
 
-    private void setarTab( final Tab tab ) {
-
-        tab.getTabPane().getSelectionModel().select( tab );
-    }
-
-    @FXML
     public void onActionResult( final ActionEvent event ) {
 
         if ( isNull(event) || isNull(event.getSource()) ) return;
@@ -237,4 +178,69 @@ public class AssistenteController {
         }
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // METODOS AUXILIARES
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void initializeMapeamento() {
+
+        tcMapeamentoPosicao.setCellValueFactory( c -> c.getValue().posicaoProperty().asObject() );
+        tcMapeamentoColNull.setCellValueFactory( c -> c.getValue().colNullProperty() );
+        tcMapeamentoColNull.setCellFactory( forTableColumn(tcMapeamentoColNull) );
+        tcMapeamentoID.setCellValueFactory( c -> c.getValue().pkProperty() );
+        tcMapeamentoID.setCellFactory( forTableColumn(tcMapeamentoID) );
+        tcMapeamentoDB.setCellValueFactory( c -> c.getValue().colunaDBProperty() );
+        tcMapeamentoJava.setCellValueFactory( c -> c.getValue().colunaJavaProperty() );
+        tcMapeamentoTipoDB.setCellValueFactory( c -> c.getValue().tipoDBProperty() );
+        tcMapeamentoTipoJava.setCellValueFactory( c -> c.getValue().tipoJavaProperty() );
+        tcMapeamentoTamanho.setCellValueFactory( c -> c.getValue().tamanhoProperty().asObject() );
+        tcMapeamentoConverter.setCellValueFactory( c -> c.getValue().converterProperty() );
+        tcMapeamentoConverter.setCellFactory( forTableColumn( index -> {
+            final ModeloCampo modeloCampo = observableModelo.get( index );
+            if ( modeloCampo.isConverter() ) {
+                Platform.runLater( () -> {
+                    final TextInputDialog dialog = new TextInputDialog( modeloCampo.getNomeEnum() );
+                    dialog.setTitle( "Atenção" );
+                    dialog.setContentText( "Informe o nome do Enum:" );
+                    Optional<String> possivelTexto = dialog.showAndWait();
+                    if ( possivelTexto.isPresent() ) {
+                        modeloCampo.nomeEnumProperty().setValue( possivelTexto.get() );
+                    } else {
+                        modeloCampo.nomeEnumProperty().setValue( "" );
+                        modeloCampo.converterProperty().setValue( false );
+                    }
+                });
+            } else {
+                modeloCampo.nomeEnumProperty().setValue( "" );
+            }
+            return modeloCampo.converterProperty();
+        }));
+        tcMapeamentoNomeEnum.setCellValueFactory( c -> c.getValue().nomeEnumProperty() );
+
+        tblMapeamento.setItems( observableModelo );
+        cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
+    }
+
+    private void desabilitarAcoesMapeamento( final boolean disable ) {
+
+        cbxMapeamentoBanco.setDisable(disable);
+        txtMapeamentoOwner.setDisable(disable);
+        txfMapeamentoNomeTabela.setDisable(disable);
+        if ( disable ) {
+            btnMapeamento.setDisable(false);
+        } else {
+            cbxMapeamentoBanco.setValue("");
+            txtMapeamentoOwner.setText("");
+            txfMapeamentoNomeTabela.setText("");
+            btnMapeamento.setDisable(true);
+        }
+    }
+
+    private void setarTab( final Tab tab ) {
+
+        tab.getTabPane().getSelectionModel().select( tab );
+    }
 }

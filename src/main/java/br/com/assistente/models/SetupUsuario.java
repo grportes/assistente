@@ -109,6 +109,11 @@ public class SetupUsuario {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public static void load() {
+
+        setCache( find().orElseThrow( () -> new RuntimeException( "Não foi possível carregar Setup do Usuario" )) );
+    }
+
     public static void setCache( final SetupUsuario value ) {
 
         cache = value;
