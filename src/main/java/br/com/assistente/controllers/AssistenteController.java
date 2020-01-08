@@ -1,9 +1,11 @@
 package br.com.assistente.controllers;
 
+import br.com.assistente.models.Constante;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
+import br.com.assistente.services.ConstanteService;
 import br.com.assistente.services.MapeamentoService;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -35,6 +37,7 @@ import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.trim;
 
@@ -47,7 +50,7 @@ public class AssistenteController {
     @FXML private ComboBox<String> cbxMapeamentoBanco;
     @FXML private TextField txtMapeamentoOwner;
     @FXML private TextField txfMapeamentoNomeTabela;
-    @FXML private TableView<ModeloCampo> tblMapeamento;
+    @FXML private TableView<ModeloCampo> tbvMapeamento;
     @FXML private TableColumn<ModeloCampo, Integer> tcMapeamentoPosicao;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoColNull;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoID;
@@ -62,6 +65,16 @@ public class AssistenteController {
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
     // Constante:
+    @FXML private ComboBox<String> cbxConstanteTipos;
+    @FXML private TextField txfConstanteEnum;
+    @FXML private TextField txfConstanteNome;
+    @FXML private TextField txfConstanteValor;
+    @FXML private TextField txfConstanteDescricao;
+    @FXML private TableView<Constante> tbvConstante;
+    @FXML private TableColumn<Constante, String> tcConstanteNome;
+    @FXML private TableColumn<Constante, String> tcConstanteValor;
+    @FXML private TableColumn<Constante, String> tcConstanteDescricao;
+    private ObservableList<Constante> constantes = observableArrayList();
 
     // Result:
     @FXML private Tab tabResult;
@@ -70,7 +83,7 @@ public class AssistenteController {
 
     // Services:
     private final MapeamentoService mapeamentoService = new MapeamentoService();
-
+    private final ConstanteService constanteService = new ConstanteService();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -83,6 +96,7 @@ public class AssistenteController {
 
         SetupUsuario.load();
         initializeMapeamento();
+        initializeConstantes();
     }
 
     public void onActionConfiguracoes() {
@@ -116,7 +130,7 @@ public class AssistenteController {
 
         observableModelo.clear();
         observableModelo.addAll( campos );
-        tblMapeamento.getSortOrder().add( tcMapeamentoPosicao );
+        tbvMapeamento.getSortOrder().add( tcMapeamentoPosicao );
         desabilitarAcoesMapeamento(true);
     }
 
@@ -145,6 +159,23 @@ public class AssistenteController {
             cbxResultArquivos.setValue( rm );
             txtResult.setText( rm.getConteudoEntidade() );
         });
+    }
+
+    public void onActionConstante( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnConstanteAdd":
+                adicionarConstante();
+                break;
+            case "btnConstanteGerar":
+                gerarResultConstante();
+                break;
+        }
+
     }
 
     public void onActionResult( final ActionEvent event ) {
@@ -220,7 +251,7 @@ public class AssistenteController {
         }));
         tcMapeamentoNomeEnum.setCellValueFactory( c -> c.getValue().nomeEnumProperty() );
 
-        tblMapeamento.setItems( observableModelo );
+        tbvMapeamento.setItems( observableModelo );
         cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
     }
 
@@ -243,4 +274,64 @@ public class AssistenteController {
 
         tab.getTabPane().getSelectionModel().select( tab );
     }
+
+    private void initializeConstantes() {
+
+        cbxConstanteTipos.setItems( observableArrayList( constanteService.buscarTipos() ) );
+        txfConstanteNome.focusedProperty().addListener( (ov, oldV, newV) -> {
+            if ( !newV && isBlank( txfConstanteDescricao.getText() )) {
+                txfConstanteDescricao.setText( txfConstanteNome.getText() );
+            }
+        });
+
+        // Definição da TableView
+        tcConstanteNome.setCellValueFactory( c -> c.getValue().nomeProperty() );
+        tcConstanteValor.setCellValueFactory( c -> c.getValue().valorProperty() );
+        tcConstanteDescricao.setCellValueFactory( c -> c.getValue().descricaoProperty() );
+        constantes = observableArrayList();
+        tbvConstante.setItems( constantes );
+    }
+
+    private void adicionarConstante() {
+
+        final Constante constante = constanteService.check(
+                cbxConstanteTipos.getValue(),
+                new Constante.Builder()
+                        .comNome( txfConstanteNome.getText() )
+                        .comValor( txfConstanteValor.getText() )
+                        .comDescricao( txfConstanteDescricao.getText() )
+                        .build()
+        );
+
+        if ( constantes.stream().noneMatch( c -> Objects.equals( c.getValor(), constante.getValor() ) ) )
+            constantes.add( constante );
+
+        txfConstanteNome.setText( "" );
+        txfConstanteValor.setText( "" );
+        txfConstanteDescricao.setText( "" );
+        txfConstanteNome.requestFocus();
+    }
+
+    private void gerarResultConstante() {
+
+        setarResultado(  constanteService.convTexto(
+            txfConstanteEnum.getText(),
+            cbxConstanteTipos.getValue(),
+            new HashSet<>( constantes )
+        ));
+    }
+
+    private void setarResultado( final Set<ResultMapeamento> results ) {
+
+        if ( isEmpty( results ) ) return;
+
+        cbxResultArquivos.setItems( observableArrayList( results ) );
+        setarTab( tabResult );
+
+        results.stream().findFirst().ifPresent( rm -> {
+            cbxResultArquivos.setValue( rm );
+            txtResult.setText( rm.getConteudoEntidade() );
+        });
+    }
+
 }

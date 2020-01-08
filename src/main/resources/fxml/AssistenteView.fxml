@@ -71,7 +71,7 @@
                         </HBox>
                         <HBox alignment="CENTER" layoutX="14.0" layoutY="61.0" prefHeight="313.0" prefWidth="789.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="61.0">
                            <children>
-                              <TableView fx:id="tblMapeamento" editable="true" prefHeight="108.0" prefWidth="777.0" HBox.hgrow="ALWAYS">
+                              <TableView fx:id="tbvMapeamento" editable="true" prefHeight="108.0" prefWidth="777.0" HBox.hgrow="ALWAYS">
                                 <columns>
                                     <TableColumn fx:id="tcMapeamentoPosicao" prefWidth="42.0" text="POS." visible="false" />
                                     <TableColumn fx:id="tcMapeamentoColNull" prefWidth="49.0" sortable="false" text="NULL" />
@@ -106,7 +106,7 @@
                                     <VBox prefHeight="89.0" prefWidth="371.0">
                                        <children>
                                           <Label text="Nome do Enum:" />
-                                          <TextField fx:id="txfConstanteNome" maxWidth="-Infinity" prefHeight="26.0" prefWidth="414.0">
+                                          <TextField fx:id="txfConstanteEnum" maxWidth="-Infinity" prefHeight="26.0" prefWidth="414.0">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
@@ -116,41 +116,48 @@
                                     <VBox prefHeight="66.0" prefWidth="265.0">
                                        <children>
                                           <Label text="Tipo:" />
-                                          <ComboBox fx:id="cbxConstanteTipo" prefHeight="26.0" prefWidth="233.0" />
+                                          <ComboBox fx:id="cbxConstanteTipos" prefHeight="26.0" prefWidth="233.0" />
                                        </children>
                                     </VBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="784.0" spacing="5.0">
                                  <children>
-                                    <VBox prefHeight="100.0" prefWidth="156.0">
+                                    <VBox prefHeight="50.0" prefWidth="239.0">
+                                       <children>
+                                          <Label text="Nome:" />
+                                          <TextField fx:id="txfConstanteNome" prefHeight="26.0" prefWidth="248.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="50.0" prefWidth="78.0">
                                        <children>
                                           <Label text="Valor:" />
-                                          <TextField fx:id="txfConstanteValor" prefHeight="26.0" prefWidth="192.0" />
+                                          <TextField fx:id="txfConstanteValor" prefHeight="26.0" prefWidth="88.0" />
                                        </children>
                                     </VBox>
-                                    <VBox prefHeight="100.0" prefWidth="213.0">
+                                    <VBox prefHeight="50.0" prefWidth="415.0">
                                        <children>
                                           <Label text="Descrição:" />
-                                          <TextField fx:id="txfConstanteDescricao" prefHeight="26.0" prefWidth="286.0" />
+                                          <TextField fx:id="txfConstanteDescricao" prefHeight="26.0" prefWidth="277.0" />
                                        </children>
                                     </VBox>
-                                    <Button fx:id="btnConstanteAdd" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="+">
+                                    <Button fx:id="btnConstanteAdd" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConstante" prefHeight="26.0" prefWidth="12.0" text="+">
                                        <HBox.margin>
                                           <Insets top="5.0" />
                                        </HBox.margin>
                                     </Button>
                                  </children>
                               </HBox>
-                              <TableView fx:id="tblConstante" prefHeight="252.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
+                              <TableView fx:id="tbvConstante" prefHeight="252.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                 <columns>
-                                  <TableColumn prefWidth="100.0" text="VALOR" />
-                                  <TableColumn prefWidth="555.0" text="DESCRIÇÃO" />
+                                    <TableColumn fx:id="tcConstanteNome" prefWidth="237.0" text="NOME" />
+                                  <TableColumn fx:id="tcConstanteValor" prefWidth="83.0" text="VALOR" />
+                                  <TableColumn fx:id="tcConstanteDescricao" prefWidth="447.0" text="DESCRIÇÃO" />
                                 </columns>
                               </TableView>
                               <HBox alignment="CENTER_RIGHT" prefHeight="33.0" prefWidth="784.0">
                                  <children>
-                                    <Button alignment="CENTER" mnemonicParsing="false" text="Gerar Constante" />
+                                    <Button fx:id="btnConstanteGerar" alignment="CENTER" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Constante" />
                                  </children>
                               </HBox>
                            </children>
