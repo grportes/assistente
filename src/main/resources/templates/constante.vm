@@ -1,0 +1,27 @@
+
+public enum $nomeEnum implements Constante<?> {
+
+
+    private ? valor;
+    private String descricao;
+
+    private $nomeEnum(
+        final ? vl
+    ) {
+
+        this.descricao = descricao;
+        this.valor = valor;
+    }
+
+
+    @Override
+    public $tipo getValor() {
+
+    }
+
+    @Override
+    public String getDescricao() {
+
+
+    }
+}
