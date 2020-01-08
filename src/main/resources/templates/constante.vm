@@ -1,27 +1,47 @@
+package models.commons.constantes;
 
-public enum $nomeEnum implements Constante<?> {
+import infra.model.Constante;
 
+/**
+ * Constante ref. ao conjunto de valores de ...
+ *
+ * <p>Autor: @nomeAutor</p>
+ */
+public enum $nomeEnum implements Constante<$tipoJava> {
 
-    private ? valor;
-    private String descricao;
+    #foreach ( $c in $constantes )
+    /**
+     * $constante.Valor
+     */
+    #set( $declaracao = $StringUtils.join( $c.Nome, '( "', $c.Descricao, ' "), ', $c.Descricao, " )"
+    #if( $foreach.hasNext )
+    $StringUtils.join($declaracao,',')
+    #else
+    $declaracao
+    ;
+    #end
 
-    private $nomeEnum(
-        final ? vl
+    private final String descricao;
+    private final Long valor;
+
+    $nomeEnum(
+        final String descricao,
+        final $tipoJava valor
     ) {
 
         this.descricao = descricao;
         this.valor = valor;
     }
 
-
-    @Override
-    public $tipo getValor() {
-
-    }
-
     @Override
     public String getDescricao() {
 
+        return this.descricao;
+    }
 
+    @Override
+    public $tipoJava getValor() {
+
+        return this.valor;
     }
 }

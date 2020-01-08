@@ -18,6 +18,7 @@ dataTypes:
   - { dbType: "numeric", dbLength: false, javaType: "java.math.BigDecimal" }
   - { dbType: "decimal", dbLength: false, javaType: "java.math.BigDecimal" }
   - { dbType: "money", dbLength: false, javaType: "java.math.BigDecimal" }
+  - { dbType: "binary", dbLength: false, javaType: "java.lang.Blob" }
   - { dbType: "image", dbLength: false, javaType: "java.lang.Blob" }
   - { dbType: "varbinary", dbLength: false, javaType: "java.sql.Blob" }
   - { dbType: "date", dbLength: false, javaType: "java.time.LocalDate" }

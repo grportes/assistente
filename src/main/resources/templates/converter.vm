@@ -1,0 +1,36 @@
+package models.commons.converters;
+
+import models.commons.constantes.$nomeEnum;
+
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
+
+import static infra.util.UtilConstante.getValor;
+import static infra.util.UtilEnum.getEnum;
+
+
+/**
+ * Classe converter para constante TipoOrigemItemPedido
+ *
+ * <p>Autor: $nomeAutor</p>
+ *
+ * @since 09/01/2019
+ *
+ * @see models.commons.constantes.$nomeEnum
+ */
+@Converter
+public class $StringUtils.join( $nomeEnum, "Converter" ) implements AttributeConverter<$nomeEnum,Long> {
+
+    @Override
+    public Long convertToDatabaseColumn( final $nomeEnum tipoOrigemItemPedido ) {
+
+        return getValor( tipoOrigemItemPedido );
+    }
+
+    @Override
+    public $nomeEnum convertToEntityAttribute( final Long valor ) {
+
+        return getEnum( $nomeEnum.class, valor );
+    }
+}
+

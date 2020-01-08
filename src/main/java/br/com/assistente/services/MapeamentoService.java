@@ -52,7 +52,8 @@ public class MapeamentoService {
                     .filter( type -> Objects.equals( m.getTipoDB(), type.getDbType() ) )
                     .findFirst()
                     .orElseThrow( () -> new RuntimeException( format(
-                        "%s - %s: não localizou tipo Java correspondente", m.getColunaDB(), m.getTipoDB()
+                        "Coluna [ %s ] do tipo [ %s ] Não localizou tipo Java correspondente",
+                        m.getColunaDB(), m.getTipoDB()
                     )));
                 return new ModeloCampo.Builder( m ).comDataType( dataType ).build();
             }).collect( toSet() );
