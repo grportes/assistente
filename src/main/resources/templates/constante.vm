@@ -5,19 +5,17 @@ import infra.model.Constante;
 /**
  * Constante ref. ao conjunto de valores de ...
  *
- * <p>Autor: @nomeAutor</p>
+ * <p>Autor: $nomeAutor</p>
  */
 public enum $nomeEnum implements Constante<$tipoJava> {
 
     #foreach ( $c in $constantes )
     /**
-     * $constante.Valor
+     * $c.Valor
      */
-    #set( $declaracao = $StringUtils.join( $c.Nome, '( "', $c.Descricao, ' "), ', $c.Descricao, " )"
-    #if( $foreach.hasNext )
-    $StringUtils.join($declaracao,',')
-    #else
-    $declaracao
+    #set ( $descricao = $StringUtils.join( '"', $c.Descricao, '"' ) )
+
+    $descricao
     ;
     #end
 

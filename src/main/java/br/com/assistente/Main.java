@@ -1,12 +1,19 @@
 package br.com.assistente;
 
 import br.com.assistente.infra.javafx.Dialog;
+import br.com.assistente.models.Constante;
+import br.com.assistente.models.ResultMapeamento;
+import br.com.assistente.services.ConstanteService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static br.com.assistente.infra.db.ConnectionFactory.closeConnection;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
@@ -51,6 +58,30 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        launch( args );
+//        launch( args );
+        testar();
     }
+
+    private static void testar() {
+
+
+//        ConstanteService c = new ConstanteService();
+//
+//        Set<Constante> constantes = new HashSet<>( Arrays.asList(
+//            new Constante.Builder().comNome("SIM").comValor("S").comDescricao("REPRESENTA SIM").build(),
+//            new Constante.Builder().comNome("NAO").comValor("N").comDescricao("REPRESENTA NÃO").build()
+//        ));
+//
+//        final Set<ResultMapeamento> resultMapeamentos = c.convTexto(
+//            "SimNao",
+//            "String",
+//            new HashSet<>(constantes)
+//        );
+//
+//        for ( ResultMapeamento resultMapeamento : resultMapeamentos ) {
+//            System.out.println(resultMapeamento.getConteudoEntidade());
+//        }
+
+    }
+
 }

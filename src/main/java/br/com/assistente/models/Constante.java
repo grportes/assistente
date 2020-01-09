@@ -3,7 +3,13 @@ package br.com.assistente.models;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 public final class Constante {
 
@@ -83,6 +89,77 @@ public final class Constante {
 
         return Objects.hash( getValor() );
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // CONSTANTES
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public enum Tipo {
+
+        SHORT( "Short" ) {
+            @Override
+            public boolean checkTipo( final String valor ) {
+
+                return permiteConverter(() -> Short.parseShort( valor ) );
+            }
+        },
+
+        INTEGER( "Integer" ) {
+            @Override
+            public boolean checkTipo( final String valor ) {
+
+                return permiteConverter(() -> Integer.parseInt( valor ) );
+            }
+        },
+
+        LONG( "Long" ) {
+            @Override
+            public boolean checkTipo( final String valor ) {
+
+                return permiteConverter(() -> Long.parseLong( valor ) );
+            }
+        },
+
+        STRING( "String" )
+        ;
+
+        private String nome;
+
+        Tipo( final String nome ) {
+
+            this.nome = nome;
+        }
+
+        public String getNome() {
+
+            return nome;
+        }
+
+        public boolean checkTipo( final String valor ) {
+
+            return true;
+        }
+
+        protected boolean permiteConverter( final Supplier<Object> check ) {
+
+            try {
+                check.get();
+                return true;
+            } catch ( final NumberFormatException e ) {
+                return false;
+            }
+        }
+
+        public static Optional<Tipo> getTipo( final String value ) {
+
+            return Arrays.stream( Tipo.values() )
+                .filter( tipo -> equalsIgnoreCase( tipo.getNome(), trim(value) ) )
+                .findFirst();
+        }
+    }
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

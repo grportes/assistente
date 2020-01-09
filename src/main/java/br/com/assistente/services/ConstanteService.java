@@ -12,10 +12,10 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
-import java.util.Objects;
 import java.util.Set;
 
-import static br.com.assistente.infra.util.UtilCollections.createSet;
+import static br.com.assistente.models.Constante.Tipo.getTipo;
+import static java.lang.String.format;
 import static java.util.Collections.singleton;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -24,16 +24,8 @@ import static org.apache.commons.lang3.StringUtils.trim;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
+
 public class ConstanteService {
-
-    private static final Set<String> tipos = createSet(
-    "Short;Integer;Long;String", ';'
-    );
-
-    public Set<String> buscarTipos() {
-
-        return tipos;
-    }
 
     public Constante check(
         final String tipo,
@@ -47,39 +39,18 @@ public class ConstanteService {
         if ( isEmpty( constante.getValor() ) ) throw new IllegalArgumentException( "Obrigatório informar o valor da constante!" );
         if ( isEmpty( constante.getDescricao() ) ) throw new IllegalArgumentException( "Obrigatório informar descrição da constante!" );
 
-        if ( tipos.stream().noneMatch( t -> Objects.equals(t, tipo) ) )
-            throw new IllegalArgumentException( "Não localizou tipo de dados" );
+        final Boolean valorOk = getTipo(tipo)
+            .map( t -> t.checkTipo( constante.getValor() ) )
+            .orElseThrow(() -> new RuntimeException(format("Tipo [%s] não reconhecido", tipo)));
 
-        try {
-
-            final String nome = replace( upperCase( trim( constante.getNome() ) ), " ", "_" );
-
-            final String valor = trim( constante.getValor() );
-            switch ( tipo ) {
-                case "Short":
-                    Short.parseShort( valor );
-                    break;
-                case "Integer":
-                    Integer.parseInt( valor );
-                    break;
-                case "Long":
-                    Long.parseLong( valor );
-                    break;
-                case "String":
-                    break;
-                default:
-                    throw new RuntimeException( "Tipo de dados não aceito" );
-            }
-
+        if ( valorOk )
             return new Constante.Builder()
-                .comNome( nome )
-                .comValor( valor )
+                .comNome( replace( upperCase( trim( constante.getNome() ) ), " ", "_" ) )
+                .comValor( constante.getValor() )
                 .comDescricao( constante.getDescricao().trim().toUpperCase() )
                 .build();
 
-        } catch ( NumberFormatException e ) {
-            throw new IllegalArgumentException( constante.getValor() + " inválido!" );
-        }
+        throw new RuntimeException( "Tipo de dados não aceito" );
     }
 
     public Set<ResultMapeamento> convTexto(
@@ -93,6 +64,8 @@ public class ConstanteService {
         final VelocityContext context = new VelocityContext();
         context.put( "nomeAutor", nomeAutor );
         context.put( "nomeEnum", nomeEnum );
+        context.put( "constantes", constantes );
+        context.put( "tipoJava", tipo );
 //        context.put( "campos", orderByPosicao( campos ) );
 //        context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "StringUtils", StringUtils.class );
