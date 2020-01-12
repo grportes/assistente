@@ -4,12 +4,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.trim;
+import static org.apache.commons.lang3.StringUtils.upperCase;
 
 public final class Constante {
 
@@ -137,6 +141,12 @@ public final class Constante {
             return nome;
         }
 
+        @Override
+        public String toString() {
+
+            return getNome();
+        }
+
         public boolean checkTipo( final String valor ) {
 
             return true;
@@ -152,9 +162,14 @@ public final class Constante {
             }
         }
 
+        public static List<Tipo> buscarTipos() {
+
+            return asList( values() );
+        }
+
         public static Optional<Tipo> getTipo( final String value ) {
 
-            return Arrays.stream( Tipo.values() )
+            return Arrays.stream( values() )
                 .filter( tipo -> equalsIgnoreCase( tipo.getNome(), trim(value) ) )
                 .findFirst();
         }
@@ -176,7 +191,7 @@ public final class Constante {
 
         public Builder comNome( final String value ) {
 
-            this.nome = value;
+            this.nome = replace( upperCase( trim( value ) ), " ", "_" );;
             return this;
         }
 
@@ -188,7 +203,7 @@ public final class Constante {
 
         public Builder comDescricao( final String value ) {
 
-            this.descricao = value;
+            this.descricao = upperCase( trim( value ) );
             return this;
         }
 

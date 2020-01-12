@@ -65,7 +65,7 @@ public class AssistenteController {
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
     // Constante:
-    @FXML private ComboBox<String> cbxConstanteTipos;
+    @FXML private ComboBox<Constante.Tipo> cbxConstanteTipos;
     @FXML private TextField txfConstanteEnum;
     @FXML private TextField txfConstanteNome;
     @FXML private TextField txfConstanteValor;
@@ -277,7 +277,7 @@ public class AssistenteController {
 
     private void initializeConstantes() {
 
-        cbxConstanteTipos.setItems( observableArrayList( constanteService.buscarTipos() ) );
+        cbxConstanteTipos.setItems( observableArrayList( Constante.Tipo.buscarTipos() ) );
         txfConstanteNome.focusedProperty().addListener( (ov, oldV, newV) -> {
             if ( !newV && isBlank( txfConstanteDescricao.getText() )) {
                 txfConstanteDescricao.setText( txfConstanteNome.getText() );
@@ -294,14 +294,11 @@ public class AssistenteController {
 
     private void adicionarConstante() {
 
-        final Constante constante = constanteService.check(
-                cbxConstanteTipos.getValue(),
-                new Constante.Builder()
-                        .comNome( txfConstanteNome.getText() )
-                        .comValor( txfConstanteValor.getText() )
-                        .comDescricao( txfConstanteDescricao.getText() )
-                        .build()
-        );
+        final Constante constante = new Constante.Builder()
+            .comNome( txfConstanteNome.getText() )
+            .comValor( txfConstanteValor.getText() )
+            .comDescricao( txfConstanteDescricao.getText() )
+            .build();
 
         if ( constantes.stream().noneMatch( c -> Objects.equals( c.getValor(), constante.getValor() ) ) )
             constantes.add( constante );

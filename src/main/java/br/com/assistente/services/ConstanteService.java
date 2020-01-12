@@ -14,48 +14,14 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.util.Set;
 
-import static br.com.assistente.models.Constante.Tipo.getTipo;
-import static java.lang.String.format;
 import static java.util.Collections.singleton;
-import static java.util.Objects.requireNonNull;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.replace;
-import static org.apache.commons.lang3.StringUtils.trim;
-import static org.apache.commons.lang3.StringUtils.upperCase;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
-
 
 public class ConstanteService {
 
-    public Constante check(
-        final String tipo,
-        final Constante constante
-    ) {
-
-        if ( isEmpty( tipo ) ) throw new IllegalArgumentException( "Obrigatório informar o tipo de dados da constante!" );
-        requireNonNull( constante, "Obrigatório informar dados" );
-
-        if ( isEmpty( constante.getNome() ) ) throw new IllegalArgumentException( "Obrigatório informar nome da constante!" );
-        if ( isEmpty( constante.getValor() ) ) throw new IllegalArgumentException( "Obrigatório informar o valor da constante!" );
-        if ( isEmpty( constante.getDescricao() ) ) throw new IllegalArgumentException( "Obrigatório informar descrição da constante!" );
-
-        final Boolean valorOk = getTipo(tipo)
-            .map( t -> t.checkTipo( constante.getValor() ) )
-            .orElseThrow(() -> new RuntimeException(format("Tipo [%s] não reconhecido", tipo)));
-
-        if ( valorOk )
-            return new Constante.Builder()
-                .comNome( replace( upperCase( trim( constante.getNome() ) ), " ", "_" ) )
-                .comValor( constante.getValor() )
-                .comDescricao( constante.getDescricao().trim().toUpperCase() )
-                .build();
-
-        throw new RuntimeException( "Tipo de dados não aceito" );
-    }
-
     public Set<ResultMapeamento> convTexto(
         final String nomeEnum,
-        final String tipo,
+        final Constante.Tipo tipo,
         final Set<Constante> constantes
     ) {
 
@@ -65,7 +31,7 @@ public class ConstanteService {
         context.put( "nomeAutor", nomeAutor );
         context.put( "nomeEnum", nomeEnum );
         context.put( "constantes", constantes );
-        context.put( "tipoJava", tipo );
+        context.put( "tipoJava", tipo.getNome() );
 //        context.put( "campos", orderByPosicao( campos ) );
 //        context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "StringUtils", StringUtils.class );
