@@ -31,7 +31,7 @@ public class ConstanteService {
         context.put( "nomeAutor", nomeAutor );
         context.put( "nomeEnum", nomeEnum );
         context.put( "constantes", constantes );
-        context.put( "tipoJava", tipo.getNome() );
+        context.put( "tipoJava", tipo );
 //        context.put( "campos", orderByPosicao( campos ) );
 //        context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "StringUtils", StringUtils.class );

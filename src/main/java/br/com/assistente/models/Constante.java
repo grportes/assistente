@@ -3,14 +3,13 @@ package br.com.assistente.models;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.trim;
 import static org.apache.commons.lang3.StringUtils.upperCase;
@@ -108,6 +107,12 @@ public final class Constante {
 
                 return permiteConverter(() -> Short.parseShort( valor ) );
             }
+
+            @Override
+            public String aplicarCast( final Object valor ) {
+
+                return format( "(Short) %s", valor );
+            }
         },
 
         INTEGER( "Integer" ) {
@@ -115,6 +120,12 @@ public final class Constante {
             public boolean checkTipo( final String valor ) {
 
                 return permiteConverter(() -> Integer.parseInt( valor ) );
+            }
+
+            @Override
+            public String aplicarCast( final Object valor ) {
+
+                return isNull( valor ) ? "null" : valor.toString();
             }
         },
 
@@ -124,10 +135,27 @@ public final class Constante {
 
                 return permiteConverter(() -> Long.parseLong( valor ) );
             }
+
+            @Override
+            public String aplicarCast( final Object valor ) {
+
+                return format( "%sL", valor );
+            }
         },
 
-        STRING( "String" )
-        ;
+        STRING( "String" ) {
+            @Override
+            public boolean checkTipo( final String valor ) {
+
+                return true;
+            }
+
+            @Override
+            public String aplicarCast( final Object valor ) {
+
+                return format( "\"%s\"", valor );
+            }
+        };
 
         private String nome;
 
@@ -147,10 +175,9 @@ public final class Constante {
             return getNome();
         }
 
-        public boolean checkTipo( final String valor ) {
+        public abstract boolean checkTipo( final String valor );
 
-            return true;
-        }
+        public abstract String aplicarCast( final Object valor );
 
         protected boolean permiteConverter( final Supplier<Object> check ) {
 
@@ -167,12 +194,6 @@ public final class Constante {
             return asList( values() );
         }
 
-        public static Optional<Tipo> getTipo( final String value ) {
-
-            return Arrays.stream( values() )
-                .filter( tipo -> equalsIgnoreCase( tipo.getNome(), trim(value) ) )
-                .findFirst();
-        }
     }
 
 
@@ -191,7 +212,7 @@ public final class Constante {
 
         public Builder comNome( final String value ) {
 
-            this.nome = replace( upperCase( trim( value ) ), " ", "_" );;
+            this.nome = replace( upperCase( trim( value ) ), " ", "_" );
             return this;
         }
 

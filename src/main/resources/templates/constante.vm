@@ -13,14 +13,20 @@ public enum $nomeEnum implements Constante<$tipoJava> {
     /**
      * $c.Valor
      */
+    #set ( $valor = $tipoJava.aplicarCast( $c.Valor ) )
     #set ( $descricao = $StringUtils.join( '"', $c.Descricao, '"' ) )
+    #set ( $declaracao = $StringUtils.join( $c.Nome, "( ", $descricao, ", ", $valor, " )" ) )
+    #if( $foreach.hasNext )
+    $declaracao,
 
-    $descricao
+    #else
+    $declaracao
     ;
+    #end
     #end
 
     private final String descricao;
-    private final Long valor;
+    private final $tipoJava valor;
 
     $nomeEnum(
         final String descricao,

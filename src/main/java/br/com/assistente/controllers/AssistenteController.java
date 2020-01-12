@@ -33,6 +33,7 @@ import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
@@ -293,6 +294,9 @@ public class AssistenteController {
     }
 
     private void adicionarConstante() {
+
+        final String valor = trim( txfConstanteValor.getText() );
+        requireNonNull( cbxConstanteTipos.getValue(), "Favor informar o tipo!" ).checkTipo( valor );
 
         final Constante constante = new Constante.Builder()
             .comNome( txfConstanteNome.getText() )
