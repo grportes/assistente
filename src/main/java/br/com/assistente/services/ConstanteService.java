@@ -12,9 +12,9 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static java.util.Collections.singleton;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
 public class ConstanteService {
@@ -26,6 +26,31 @@ public class ConstanteService {
     ) {
 
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
+        final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
+
+        results.add(
+            new ResultMapeamento.Builder()
+                .comNomeEntidade( nomeEnum )
+                .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/constante.vm") )
+                .build()
+        );
+        results.add(
+            new ResultMapeamento.Builder()
+                .comNomeEntidade( nomeEnum + "Converter" )
+                .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/converter.vm") )
+                .build()
+        );
+
+        return results;
+    }
+
+    private String gerarMapeamento(
+        final String nomeAutor,
+        final String nomeEnum,
+        final Constante.Tipo tipo,
+        final Set<Constante> constantes,
+        final String arquivoTemplate
+    ) {
 
         final VelocityContext context = new VelocityContext();
         context.put( "nomeAutor", nomeAutor );
@@ -38,20 +63,18 @@ public class ConstanteService {
 
         final VelocityEngine engine = new VelocityEngine();
         engine.setProperty( RESOURCE_LOADERS, "classpath" );
-        engine.setProperty( "resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+        engine.setProperty( "resource.loader.classpath.class", ClasspathResourceLoader.class.getName() );
         engine.init();
 
-        try ( final StringWriter writer = new StringWriter() ) {
-            final Template template = engine.getTemplate( "/templates/constante.vm" );
+        final Template template = engine.getTemplate( arquivoTemplate );
+
+        try ( final StringWriter writer = new StringWriter() ){
             template.merge( context, writer );
-            return singleton(
-                new ResultMapeamento.Builder()
-                    .comNomeEntidade( "" )
-                    .comConteudoEntidade( writer.toString() )
-                    .build()
-            );
+            return writer.toString();
         } catch ( IOException e) {
             throw new UncheckedIOException( e );
         }
+
     }
+
 }

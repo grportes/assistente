@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
-import static br.com.assistente.infra.util.UtilCollections.getTamanho;
 import static br.com.assistente.models.ModeloCampo.buscarImports;
 import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
