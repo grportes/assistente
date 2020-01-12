@@ -13,6 +13,7 @@ import static infra.util.UtilEnum.getEnum;
  *
  * <p>Autor: $nomeAutor</p>
  *
+ * @since $dataHora
  * @see models.commons.constantes.$nomeEnum
  */
 @Converter

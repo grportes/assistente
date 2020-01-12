@@ -6,6 +6,8 @@ import infra.model.Constante;
  * Constante ref. ao conjunto de valores de ...
  *
  * <p>Autor: $nomeAutor</p>
+ *
+ * @since $dataHora
  */
 public enum $nomeEnum implements Constante<$tipoJava> {
 

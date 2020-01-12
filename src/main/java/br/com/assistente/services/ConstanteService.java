@@ -15,6 +15,8 @@ import java.io.UncheckedIOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import static java.time.LocalDate.now;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
 public class ConstanteService {
@@ -60,6 +62,7 @@ public class ConstanteService {
 //        context.put( "campos", orderByPosicao( campos ) );
 //        context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "StringUtils", StringUtils.class );
+        context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
 
         final VelocityEngine engine = new VelocityEngine();
         engine.setProperty( RESOURCE_LOADERS, "classpath" );
