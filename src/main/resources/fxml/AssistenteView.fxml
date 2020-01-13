@@ -162,7 +162,7 @@
                               </TableView>
                               <HBox alignment="CENTER_RIGHT" prefHeight="33.0" prefWidth="784.0" spacing="30.0">
                                  <children>
-                                    <CheckBox mnemonicParsing="false" text="Gerar Converter" />
+                                    <CheckBox fx:id="cbxConstanteConverter" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Converter" />
                                     <Button fx:id="btnConstanteGerar" alignment="CENTER" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Constante" />
                                  </children>
                               </HBox>

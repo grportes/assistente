@@ -24,7 +24,8 @@ public class ConstanteService {
     public Set<ResultMapeamento> convTexto(
         final String nomeEnum,
         final Constante.Tipo tipo,
-        final Set<Constante> constantes
+        final Set<Constante> constantes,
+        final boolean gerarConverter
     ) {
 
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
@@ -36,12 +37,14 @@ public class ConstanteService {
                 .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/constante.vm") )
                 .build()
         );
-        results.add(
-            new ResultMapeamento.Builder()
-                .comNomeEntidade( nomeEnum + "Converter" )
-                .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/converter.vm") )
-                .build()
-        );
+
+        if ( gerarConverter )
+            results.add(
+                new ResultMapeamento.Builder()
+                    .comNomeEntidade( nomeEnum + "Converter" )
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/converter.vm") )
+                    .build()
+            );
 
         return results;
     }
