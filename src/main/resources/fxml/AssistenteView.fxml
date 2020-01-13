@@ -114,13 +114,16 @@
                                           </TextField>
                                        </children>
                                     </VBox>
-                                    <VBox prefHeight="66.0" prefWidth="265.0">
+                                    <VBox prefHeight="49.0" prefWidth="242.0">
                                        <children>
                                           <Label text="Tipo:" />
                                           <ComboBox fx:id="cbxConstanteTipos" prefHeight="26.0" prefWidth="233.0" />
                                        </children>
                                     </VBox>
-                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Limpar" />
+                                    <Button fx:id="btnConstanteLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConstante" prefHeight="25.0" prefWidth="86.0" text="Limpar" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets top="18.0" />
+                                       </HBox.margin></Button>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="784.0" spacing="5.0">

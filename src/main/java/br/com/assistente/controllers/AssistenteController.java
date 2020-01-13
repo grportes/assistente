@@ -169,6 +169,9 @@ public class AssistenteController {
         final Control source = (Control) event.getSource();
 
         switch ( source.getId() ) {
+            case "btnConstanteLimpar":
+                resetConstante();
+                break;
             case "btnConstanteAdd":
                 adicionarConstante();
                 break;
@@ -291,6 +294,16 @@ public class AssistenteController {
         tcConstanteDescricao.setCellValueFactory( c -> c.getValue().descricaoProperty() );
         constantes = observableArrayList();
         tbvConstante.setItems( constantes );
+    }
+
+    private void resetConstante() {
+
+        txfConstanteEnum.setText( " " );
+        txfConstanteNome.setText( "" );
+        txfConstanteValor.setText( "" );
+        txfConstanteDescricao.setText( "" );
+        constantes.clear();
+        txfConstanteEnum.requestFocus();
     }
 
     private void adicionarConstante() {
