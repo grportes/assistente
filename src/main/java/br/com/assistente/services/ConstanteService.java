@@ -62,6 +62,7 @@ public class ConstanteService {
 //        context.put( "campos", orderByPosicao( campos ) );
 //        context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "StringUtils", StringUtils.class );
+        context.put( "EnumTipoShort", Constante.Tipo.SHORT );
         context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
 
         final VelocityEngine engine = new VelocityEngine();

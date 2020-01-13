@@ -1,3 +1,4 @@
+#set( $tipoShort = $EnumTipoShort.equals( $tipoJava ) )
 package models.commons.converters;
 
 import models.commons.constantes.$nomeEnum;
@@ -5,6 +6,10 @@ import models.commons.constantes.$nomeEnum;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+#if ( $tipoShort )
+import static infra.util.UtilNumero.toShort;
+import static infra.util.UtilConstante.getValorInteger;
+#end
 import static infra.util.UtilConstante.getValor;
 import static infra.util.UtilEnum.getEnum;
 
@@ -17,18 +22,34 @@ import static infra.util.UtilEnum.getEnum;
  * @see models.commons.constantes.$nomeEnum
  */
 @Converter
+#if ( $tipoShort )
+public class $StringUtils.join( $nomeEnum, "Converter" ) implements AttributeConverter<$nomeEnum,Integer> {
+
+    @Override
+    public Integer convertToDatabaseColumn( final $nomeEnum value ) {
+
+        return getValorInteger( value );
+    }
+
+    @Override
+    public $nomeEnum convertToEntityAttribute( final Integer dbValue ) {
+
+        return getEnum( $StringUtils.join( $nomeEnum, '.class' ), toShort( dbValue ) );
+    }
+}
+#else
 public class $StringUtils.join( $nomeEnum, "Converter" ) implements AttributeConverter<$nomeEnum,$tipoJava> {
 
     @Override
-    public $tipoJava convertToDatabaseColumn( final $nomeEnum tipoOrigemItemPedido ) {
+    public $tipoJava convertToDatabaseColumn( final $nomeEnum value ) {
 
-        return getValor( tipoOrigemItemPedido );
+        return getValor( value );
     }
 
     @Override
-    public $nomeEnum convertToEntityAttribute( final $tipoJava valor ) {
+    public $nomeEnum convertToEntityAttribute( final $tipoJava dbValue ) {
 
-        return getEnum( $StringUtils.join( $nomeEnum, '.class' ), valor );
+        return getEnum( $StringUtils.join( $nomeEnum, '.class' ), dbValue );
     }
 }
-
+#end
