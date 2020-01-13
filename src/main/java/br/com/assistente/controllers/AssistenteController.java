@@ -17,6 +17,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -38,6 +39,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
+import static javafx.scene.input.KeyCode.DELETE;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
@@ -295,6 +297,29 @@ public class AssistenteController {
         tcConstanteValor.setCellValueFactory( c -> c.getValue().valorProperty() );
         tcConstanteDescricao.setCellValueFactory( c -> c.getValue().descricaoProperty() );
         constantes = observableArrayList();
+        tbvConstante.setRowFactory( tv -> {
+            // Duplo Clique!!
+            final TableRow<Constante> row = new TableRow<>();
+            row.setOnMouseClicked( event -> {
+                if ( event.getClickCount() == 2 && !row.isEmpty() ) {
+                    final Constante item = row.getItem();
+                    txfConstanteNome.setText( item.getNome() );
+                    txfConstanteValor.setText( item.getValor() );
+                    txfConstanteDescricao.setText( item.getDescricao() );
+                    txfConstanteNome.requestFocus();
+                }
+            });
+            return row;
+        });
+        tbvConstante.setOnKeyPressed( event -> {
+            if ( Objects.equals( event.getCode(), DELETE ) ) {
+                final Constante constante = tbvConstante.getSelectionModel().getSelectedItem();
+                if ( nonNull( constante ) ) {
+                    constantes.removeIf( c -> Objects.equals( c.getValor(), constante.getValor() ) );
+                    txfConstanteNome.requestFocus();
+                }
+            }
+        });
         tbvConstante.setItems( constantes );
     }
 
@@ -320,8 +345,10 @@ public class AssistenteController {
             .comDescricao( txfConstanteDescricao.getText() )
             .build();
 
-        if ( constantes.stream().noneMatch( c -> Objects.equals( c.getValor(), constante.getValor() ) ) )
-            constantes.add( constante );
+        constantes.removeIf( c ->
+            Objects.equals( c.getNome(), constante.getNome() ) || Objects.equals( c.getValor(), constante.getValor() )
+        );
+        constantes.add( constante );
 
         txfConstanteNome.setText( "" );
         txfConstanteValor.setText( "" );

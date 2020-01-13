@@ -3,14 +3,17 @@ package br.com.assistente.models;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.function.Supplier;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.trim;
 import static org.apache.commons.lang3.StringUtils.upperCase;
@@ -219,7 +222,7 @@ public final class Constante {
 
         public Builder comValor( final String value ) {
 
-            this.valor = value;
+            this.valor = trim( value );
             return this;
         }
 
@@ -230,6 +233,13 @@ public final class Constante {
         }
 
         public Constante build() {
+
+            final StringJoiner msg = new StringJoiner( " " );
+            if ( isBlank( nome ) ) msg.add( "Nome" );
+            if ( isBlank( valor ) ) msg.add( "Valor" );
+            if ( isBlank( descricao ) ) msg.add( "Descricao" );
+            if ( msg.length() > 0 )
+                throw new IllegalArgumentException( format( "É necessário informar [%s]", msg.toString() ) );
 
             return new Constante( this );
         }
