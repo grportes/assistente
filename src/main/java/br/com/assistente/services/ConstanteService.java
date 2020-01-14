@@ -9,12 +9,23 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
@@ -84,4 +95,34 @@ public class ConstanteService {
 
     }
 
+    public Set<Constante> lerArquivoCSV( final String arquivo ) {
+
+        final Path path = Paths.get( arquivo );
+        if ( !Files.exists( path ) )
+            throw new IllegalArgumentException( "Arquivo não localizado!" );
+
+        final File fileHandle = path.toFile();
+
+        try (
+            final InputStream inputStream = new FileInputStream(fileHandle);
+            final BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream));
+        ){
+
+            final Function<String, Constante> fnMapToConstante = row -> {
+                final String[] cols = row.split( "\t" );
+                if ( cols.length == 2 )
+                    return new Constante.Builder()
+                            .comNome( cols[0] )
+                            .comValor( cols[1] )
+                            .comDescricao( cols[0] )
+                            .build();
+                throw new RuntimeException( format( "Linha inválida: %s", row ) );
+            };
+
+            return buffer.lines().skip(1).map( fnMapToConstante ).collect( Collectors.toSet() );
+
+        } catch ( final IOException e ) {
+            throw new RuntimeException( e );
+        }
+    }
 }

@@ -7,6 +7,7 @@ import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.ConstanteService;
 import br.com.assistente.services.MapeamentoService;
+import io.vavr.Tuple2;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +34,8 @@ import java.util.Set;
 
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
+import static br.com.assistente.infra.javafx.Dialog.msgInfo;
+import static br.com.assistente.infra.javafx.Dialog.selecionarArquivo;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -41,6 +45,7 @@ import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static javafx.scene.input.KeyCode.DELETE;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.trim;
@@ -178,6 +183,9 @@ public class AssistenteController {
                 break;
             case "btnConstanteAdd":
                 adicionarConstante();
+                break;
+            case "btnConstanteImportar":
+                importarConstante();
                 break;
             case "btnConstanteGerar":
                 gerarResultConstante();
@@ -321,6 +329,26 @@ public class AssistenteController {
             }
         });
         tbvConstante.setItems( constantes );
+    }
+
+    private void importarConstante() {
+
+        msgInfo( "Arquivo csv deve estar no formato:\n\n \"DESCRICAO<TAB>VALOR\"");
+
+        selecionarArquivo(
+                "Selecione o arquivo",
+                vboxContainer.getScene().getWindow(),
+                new Tuple2<>( "Texto (CSV - tabulação)", "*.csv" )
+        )
+        .map( File::getAbsolutePath )
+        .ifPresent( arquivo ->{
+            final Set<Constante> constantesArquivo = constanteService.lerArquivoCSV( arquivo );
+            if ( isNotEmpty( constantesArquivo ) ) {
+                constantes.removeAll( constantesArquivo );
+                constantes.addAll( constantesArquivo );
+            }
+        });
+
     }
 
     private void resetConstante() {

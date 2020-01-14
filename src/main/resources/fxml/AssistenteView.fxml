@@ -153,19 +153,28 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <TableView fx:id="tbvConstante" prefHeight="252.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
+                              <TableView fx:id="tbvConstante" prefHeight="284.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                 <columns>
                                     <TableColumn fx:id="tcConstanteNome" prefWidth="237.0" text="NOME" />
                                   <TableColumn fx:id="tcConstanteValor" prefWidth="83.0" text="VALOR" />
                                   <TableColumn fx:id="tcConstanteDescricao" prefWidth="447.0" text="DESCRIÇÃO" />
                                 </columns>
                               </TableView>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="33.0" prefWidth="784.0" spacing="30.0">
+                              <AnchorPane prefHeight="5.0" prefWidth="784.0">
                                  <children>
-                                    <CheckBox fx:id="cbxConstanteConverter" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Converter" />
-                                    <Button fx:id="btnConstanteGerar" alignment="CENTER" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Constante" />
+                                    <HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="338.0" spacing="30.0">
+                                       <children>
+                                          <Button fx:id="btnConstanteImportar" alignment="CENTER" mnemonicParsing="false" onAction="#onActionConstante" text="Importar CSV" textAlignment="CENTER" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" layoutX="446.0" prefHeight="33.0" prefWidth="338.0" spacing="30.0" AnchorPane.rightAnchor="0.0">
+                                       <children>
+                                          <CheckBox fx:id="cbxConstanteConverter" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Converter" />
+                                          <Button fx:id="btnConstanteGerar" alignment="CENTER" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Constante" />
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
+                              </AnchorPane>
                            </children>
                         </VBox>
                      </children></AnchorPane>

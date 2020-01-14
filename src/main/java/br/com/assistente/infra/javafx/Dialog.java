@@ -1,14 +1,18 @@
 package br.com.assistente.infra.javafx;
 
+import io.vavr.Tuple2;
 import javafx.scene.control.Alert;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
 public final class Dialog {
 
@@ -68,6 +72,24 @@ public final class Dialog {
 
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle( titulo );
+        return ofNullable( fileChooser.showOpenDialog(windowPai) );
+    }
+
+    public static Optional<File> selecionarArquivo(
+        final String titulo,
+        final Window windowPai,
+        final Tuple2<String, String>... extensoes
+    ) {
+
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle( titulo );
+
+        final List<FileChooser.ExtensionFilter> filters = Arrays
+                .stream( extensoes )
+                .map( t -> new FileChooser.ExtensionFilter( t._1(), t._2() ) )
+                .collect( toList() );
+
+        fileChooser.getExtensionFilters().addAll( filters );
         return ofNullable( fileChooser.showOpenDialog(windowPai) );
     }
 
