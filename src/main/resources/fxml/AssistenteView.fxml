@@ -120,7 +120,7 @@
                                           <ComboBox fx:id="cbxConstanteTipos" prefHeight="26.0" prefWidth="233.0" />
                                        </children>
                                     </VBox>
-                                    <Button fx:id="btnConstanteLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConstante" prefHeight="25.0" prefWidth="86.0" text="Limpar" HBox.hgrow="ALWAYS">
+                                    <Button fx:id="btnConstanteLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConstante" prefHeight="25.0" prefWidth="61.0" text="Limpar" HBox.hgrow="ALWAYS">
                                        <HBox.margin>
                                           <Insets top="18.0" />
                                        </HBox.margin></Button>
@@ -140,13 +140,13 @@
                                           <TextField fx:id="txfConstanteValor" prefHeight="26.0" prefWidth="88.0" />
                                        </children>
                                     </VBox>
-                                    <VBox prefHeight="50.0" prefWidth="415.0">
+                                    <VBox prefHeight="44.0" prefWidth="406.0">
                                        <children>
                                           <Label text="Descrição:" />
                                           <TextField fx:id="txfConstanteDescricao" prefHeight="26.0" prefWidth="277.0" />
                                        </children>
                                     </VBox>
-                                    <Button fx:id="btnConstanteAdd" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConstante" prefHeight="26.0" prefWidth="12.0" text="+">
+                                    <Button fx:id="btnConstanteAdd" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConstante" prefHeight="26.0" prefWidth="26.0" text="+">
                                        <HBox.margin>
                                           <Insets top="5.0" />
                                        </HBox.margin>
@@ -186,25 +186,42 @@
                      <children>
                         <VBox layoutX="25.0" layoutY="31.0" prefHeight="393.0" prefWidth="784.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
-                              <Label text="Nome do DTO:" />
-                              <TextField maxWidth="-Infinity" prefHeight="26.0" prefWidth="291.0" />
-                              <HBox prefHeight="48.0" prefWidth="784.0" spacing="5.0">
+                              <HBox prefHeight="48.0" prefWidth="784.0">
                                  <children>
-                                    <VBox prefHeight="100.0" prefWidth="223.0">
+                                    <HBox prefHeight="48.0" prefWidth="332.0">
+                                       <children>
+                                          <VBox prefHeight="48.0" prefWidth="321.0">
+                                             <children>
+                                                <Label text="Nome do DTO:" />
+                                                <TextField fx:id="txfDtoNomeClasse" maxWidth="-Infinity" prefHeight="26.0" prefWidth="307.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <Button fx:id="btnDtoLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDto" text="Limpar" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets top="18.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="37.0" prefWidth="784.0" spacing="5.0">
+                                 <children>
+                                    <VBox prefHeight="50.0" prefWidth="239.0">
                                        <children>
                                           <Label text="Tipo:" />
-                                          <ComboBox prefHeight="26.0" prefWidth="222.0" />
+                                          <ComboBox fx:id="cbxDtoTipo" prefHeight="26.0" prefWidth="222.0" />
                                        </children>
                                     </VBox>
-                                    <VBox prefHeight="100.0" prefWidth="304.0">
+                                    <VBox prefHeight="50.0" prefWidth="239.0">
                                        <children>
                                           <Label text="Nome Atributo:" />
-                                          <TextField />
+                                          <TextField fx:id="txfDtoNomeAtributo" />
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="+" />
+                                          <Button fx:id="btnDtoAdd" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDto" text="+" />
                                        </children>
                                        <HBox.margin>
                                           <Insets top="15.0" />
@@ -212,16 +229,16 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <TableView prefHeight="250.0" prefWidth="784.0">
+                              <TableView fx:id="tbvDto" prefHeight="270.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                 <columns>
-                                  <TableColumn prefWidth="225.0" text="Tipo" />
-                                  <TableColumn prefWidth="309.0" text="Nome Atributo" />
+                                  <TableColumn fx:id="tcDtoTipo" prefWidth="225.0" text="Tipo" />
+                                  <TableColumn fx:id="tcDtoNomeAtributo" prefWidth="309.0" text="Nome Atributo" />
                                 </columns>
                               </TableView>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="51.0" prefWidth="784.0" spacing="15.0">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="784.0" spacing="15.0">
                                  <children>
-                                    <CheckBox mnemonicParsing="false" text="Pattern Builder" />
-                                    <Button mnemonicParsing="false" text="Gerar" />
+                                    <CheckBox fx:id="cbxDtoAplicarBuilder" mnemonicParsing="false" text="Pattern Builder" />
+                                    <Button fx:id="btnDtoGerar" mnemonicParsing="false" onAction="#onActionDto" text="Gerar" />
                                  </children>
                               </HBox>
                            </children>

@@ -1,9 +1,7 @@
 package br.com.assistente.models;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -199,7 +197,6 @@ public final class Constante {
         }
 
     }
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

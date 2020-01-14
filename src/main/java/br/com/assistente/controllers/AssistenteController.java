@@ -1,6 +1,7 @@
 package br.com.assistente.controllers;
 
 import br.com.assistente.models.Constante;
+import br.com.assistente.models.DefinicaoDto;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
@@ -86,6 +87,16 @@ public class AssistenteController {
     private ObservableList<Constante> constantes = observableArrayList();
     @FXML private CheckBox cbxConstanteConverter;
 
+    // DTO:
+    @FXML TextField txfDtoNomeClasse;
+    @FXML TextField txfDtoNomeAtributo;
+    @FXML ComboBox<DefinicaoDto.Tipo> cbxDtoTipo;
+    @FXML TableView<DefinicaoDto> tbvDto;
+    @FXML private TableColumn<DefinicaoDto, String> tcDtoTipo;
+    @FXML private TableColumn<DefinicaoDto, String> tcDtoNomeAtributo;
+    private ObservableList<DefinicaoDto> definicaoDtos;
+    @FXML CheckBox cbxDtoAplicarBuilder;
+
     // Result:
     @FXML private Tab tabResult;
     @FXML private TextArea txtResult;
@@ -107,6 +118,7 @@ public class AssistenteController {
         SetupUsuario.load();
         initializeMapeamento();
         initializeConstantes();
+        initializeDto();
     }
 
     public void onActionConfiguracoes() {
@@ -174,7 +186,6 @@ public class AssistenteController {
     public void onActionConstante( final ActionEvent event ) {
 
         if ( isNull(event) || isNull(event.getSource()) ) return;
-
         final Control source = (Control) event.getSource();
 
         switch ( source.getId() ) {
@@ -192,6 +203,24 @@ public class AssistenteController {
                 break;
         }
 
+    }
+
+    public void onActionDto( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnDtoLimpar":
+                resetDto();
+                break;
+            case "btnDtoAdd":
+                adicionarItemDto();
+                break;
+            case "btnDtoGerar":
+                gerarResultDto();
+                break;
+        }
     }
 
     public void onActionResult( final ActionEvent event ) {
@@ -383,6 +412,49 @@ public class AssistenteController {
         txfConstanteDescricao.setText( "" );
         txfConstanteNome.requestFocus();
     }
+
+    private void initializeDto() {
+
+        cbxDtoTipo.setItems( observableArrayList( DefinicaoDto.Tipo.buscarTipos() ) );
+        tcDtoTipo.setCellValueFactory( c -> c.getValue().tipoProperty() );
+        tcDtoNomeAtributo.setCellValueFactory( c -> c.getValue().nomeAtributoProperty() );
+        definicaoDtos = observableArrayList();
+        tbvDto.setItems( definicaoDtos );
+    }
+
+    private void resetDto() {
+
+        txfDtoNomeClasse.setText( "" );
+        cbxDtoTipo.setValue( null );
+        txfDtoNomeAtributo.setText( "" );
+        cbxDtoAplicarBuilder.setSelected( false );
+        definicaoDtos.clear();
+        txfDtoNomeClasse.requestFocus();
+    }
+
+    private void adicionarItemDto() {
+
+        final DefinicaoDto definicaoDto = new DefinicaoDto.Builder()
+            .comNomeAtributo( txfDtoNomeAtributo.getText() )
+            .comTipo( cbxDtoTipo.getValue() )
+            .build();
+
+        definicaoDtos.removeIf( c ->
+            Objects.equals( c.getNomeAtributo(), definicaoDto.getNomeAtributo() )
+            || Objects.equals( c.getTipo(), definicaoDto.getTipo() )
+        );
+        definicaoDtos.add( definicaoDto );
+
+        txfDtoNomeAtributo.setText( "" );
+        cbxDtoTipo.setValue( null );
+        cbxDtoTipo.requestFocus();
+    }
+
+
+    private void gerarResultDto() {
+
+    }
+
 
     private void gerarResultConstante() {
 
