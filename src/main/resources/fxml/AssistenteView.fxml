@@ -184,14 +184,44 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <VBox layoutX="25.0" layoutY="31.0" prefHeight="393.0" prefWidth="784.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                        <VBox layoutX="25.0" layoutY="31.0" prefHeight="393.0" prefWidth="784.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
                               <Label text="Nome do DTO:" />
                               <TextField maxWidth="-Infinity" prefHeight="26.0" prefWidth="291.0" />
-                              <HBox prefHeight="22.0" prefWidth="784.0" />
-                              <HBox prefHeight="68.0" prefWidth="784.0" spacing="10.0">
+                              <HBox prefHeight="48.0" prefWidth="784.0" spacing="5.0">
                                  <children>
-                                    <VBox prefHeight="100.0" prefWidth="188.0" />
+                                    <VBox prefHeight="100.0" prefWidth="223.0">
+                                       <children>
+                                          <Label text="Tipo:" />
+                                          <ComboBox prefHeight="26.0" prefWidth="222.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="100.0" prefWidth="304.0">
+                                       <children>
+                                          <Label text="Nome Atributo:" />
+                                          <TextField />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="+" />
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets top="15.0" />
+                                       </HBox.margin>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <TableView prefHeight="250.0" prefWidth="784.0">
+                                <columns>
+                                  <TableColumn prefWidth="225.0" text="Tipo" />
+                                  <TableColumn prefWidth="309.0" text="Nome Atributo" />
+                                </columns>
+                              </TableView>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="51.0" prefWidth="784.0" spacing="15.0">
+                                 <children>
+                                    <CheckBox mnemonicParsing="false" text="Pattern Builder" />
+                                    <Button mnemonicParsing="false" text="Gerar" />
                                  </children>
                               </HBox>
                            </children>
@@ -202,7 +232,21 @@
             </Tab>
             <Tab fx:id="tabDto" text="DTO / Query">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <HBox layoutX="36.0" layoutY="14.0" prefHeight="53.0" prefWidth="794.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                           <children>
+                              <VBox prefHeight="53.0" prefWidth="312.0">
+                                 <children>
+                                    <Label text="Nome do Dto:" />
+                                    <TextField />
+                                 </children>
+                              </VBox>
+                              <Button mnemonicParsing="false" text="Gerar" />
+                           </children>
+                        </HBox>
+                        <TextArea layoutX="41.0" layoutY="66.0" prefHeight="342.0" prefWidth="794.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                     </children></AnchorPane>
               </content>
             </Tab>
             <Tab fx:id="tabResult" text="Result">
