@@ -1,6 +1,8 @@
 package br.com.assistente.models;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -19,6 +21,7 @@ public class DefinicaoDto {
 
     private final ObjectProperty<DefinicaoDto.Tipo> tipo;
     private final StringProperty nomeAtributo;
+    private final BooleanProperty atributoId;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +34,7 @@ public class DefinicaoDto {
 
         this.tipo = new SimpleObjectProperty<>( builder.tipo );
         this.nomeAtributo = new SimpleStringProperty( builder.nomeAtributo );
+        this.atributoId = new SimpleBooleanProperty( builder.atributoId );
     }
 
 
@@ -60,6 +64,15 @@ public class DefinicaoDto {
         return nomeAtributo;
     }
 
+    public Boolean isAtributoId() {
+
+        return atributoId.get();
+    }
+
+    public BooleanProperty atributoIdProperty() {
+
+        return atributoId;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -198,6 +211,7 @@ public class DefinicaoDto {
 
         private Tipo tipo;
         private String nomeAtributo;
+        private Boolean atributoId;
 
         public Builder() {
 
@@ -216,6 +230,12 @@ public class DefinicaoDto {
 
             if ( isBlank( value ) ) throw new IllegalArgumentException( "Obrigatório informar o nome do atributo" );
             this.nomeAtributo = convCamelCase( value, false );
+            return this;
+        }
+
+        public Builder comAtributoId( final Boolean value ) {
+
+            this.atributoId = value;
             return this;
         }
 

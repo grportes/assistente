@@ -92,10 +92,13 @@ public class AssistenteController {
     @FXML TextField txfDtoNomeClasse;
     @FXML TextField txfDtoNomeAtributo;
     @FXML ComboBox<DefinicaoDto.Tipo> cbxDtoTipo;
+    @FXML CheckBox cbxAtributoId;
     @FXML TableView<DefinicaoDto> tbvDto;
     @FXML private TableColumn<DefinicaoDto, DefinicaoDto.Tipo> tcDtoTipo;
     @FXML private TableColumn<DefinicaoDto, String> tcDtoNomeAtributo;
+    @FXML private TableColumn<DefinicaoDto, Boolean> tcDtoAtributoId;
     private ObservableList<DefinicaoDto> definicaoDtos;
+    @FXML CheckBox cbxDtoJsonAnnotation;
     @FXML CheckBox cbxDtoAplicarBuilder;
 
     // Result:
@@ -430,6 +433,7 @@ public class AssistenteController {
         cbxDtoTipo.setItems( observableArrayList( DefinicaoDto.Tipo.buscarTipos() ) );
         tcDtoTipo.setCellValueFactory( c -> c.getValue().tipoProperty() );
         tcDtoNomeAtributo.setCellValueFactory( c -> c.getValue().nomeAtributoProperty() );
+        tcDtoAtributoId.setCellValueFactory( c -> c.getValue().atributoIdProperty() );
         definicaoDtos = observableArrayList();
         tbvDto.setRowFactory( tv -> {
             // Duplo Clique!!
@@ -463,6 +467,7 @@ public class AssistenteController {
         cbxDtoTipo.setValue( null );
         txfDtoNomeAtributo.setText( "" );
         cbxDtoAplicarBuilder.setSelected( false );
+        cbxDtoJsonAnnotation.setSelected( false );
         definicaoDtos.clear();
         txfDtoNomeClasse.requestFocus();
     }
@@ -472,6 +477,7 @@ public class AssistenteController {
         final DefinicaoDto definicaoDto = new DefinicaoDto.Builder()
             .comNomeAtributo( txfDtoNomeAtributo.getText() )
             .comTipo( cbxDtoTipo.getValue() )
+            .comAtributoId( cbxAtributoId.isSelected() )
             .build();
 
         definicaoDtos.removeIf( d -> Objects.equals( d, definicaoDto ) );
@@ -479,15 +485,16 @@ public class AssistenteController {
 
         txfDtoNomeAtributo.setText( "" );
         cbxDtoTipo.setValue( null );
+        cbxAtributoId.setSelected( false );
         cbxDtoTipo.requestFocus();
     }
-
 
     private void gerarResultDto() {
 
         setarResultado( definicaoDtoService.convTexto(
             txfDtoNomeClasse.getText(),
             new HashSet<>( definicaoDtos ),
+            cbxDtoJsonAnnotation.isSelected(),
             cbxDtoAplicarBuilder.isSelected()
         ));
     }

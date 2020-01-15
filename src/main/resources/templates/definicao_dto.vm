@@ -1,11 +1,153 @@
+package models.commons.dtos;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Objects;
+
 
 /**
+ * Classe que representa informações...
  *
- * <p>Autor: $NomeAutor
+ * <p>Autor: $nomeAutor</p>
  *
- *
+ * @since 10/01/2020
  */
 public class $nomeClasse implements Serializable {
 
-
+    #macroDeclaracaoVariaves
+    #macroConstructor
+    #macroGetters
+    #macroEqualsHashcode
+    #macroBuilder
 }
+
+#macro( macroComentario $texto )
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // $texto
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#end
+
+#macro( macroDeclaracaoVariaves )
+    #foreach( $definicao in $definicoes )
+    private final $StringUtils( $definicao.Tipo, ' ', $definicao.NomeAtributo, ';' )
+    #end
+#end
+
+#macro( macroConstructor )
+
+    #macroComentario( "CONSTRUCTOR" )
+
+    public $nomeClasse() {
+
+        super();
+    }
+
+    public $nomeClasse(
+        #foreach ( $definicao in $definicoes )
+        final $definicao.Tipo $definicao.NomeAtributo#if( $foreach.hasNext ),#end
+        #end
+    ) {
+
+        #foreach ( $definicao in $definicoes )
+        this.$definicao.NomeAtributo = $definicao.NomeAtributo;
+        #end
+    }
+
+#end
+
+#macro( macroGetters )
+
+    #macroComentario( "GETTERS" )
+
+    #foreach ( $definicao in $definicoes )
+    #if ( $gerarJsonAnnotations )
+    @JsonProperty( "$definicao.NomeAtributo" )
+    #end
+    public $definicao.NomeAtributo get$definicao.NomeAtributo {
+
+        return this.$definicao.NomeAtributo;
+    }
+
+    #end
+#end
+
+#macro( macroEqualsHashcode )
+
+    #set( $varObj = $StringUtils.join( $StringUtils.lowerCase($StringUtils.substring($nomeClasse,0,1) ), $StringUtils.substring($nomeClasse,1) ) )
+    #macroComentario( "EQUALS && HASHCODE" )
+
+    @Override
+    public boolean equals( final Object obj ) {
+
+        if ( this == obj ) return true;
+        if ( isNull( obj ) || getClass() != o.getClass() ) return false;
+        final $nomeClasse $varObj = ($nomeClasse) obj;
+        #macroExpressoesEquals( $varObj )
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(
+            #foreach ( $campo in $campos )
+                #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.ColunaJava ) ,"()" ) )
+            $metodo#if( $foreach.hasNext ),#end
+            #end
+        );
+    }
+
+#end
+
+#macro( macroExpressoesEquals $varObj )
+    #set ( $primeiraLinha = true )
+    #foreach ( $campo in $campos )
+        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.ColunaJava ), "()" ) )
+        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.ColunaJava , " )" ) )
+        #if ( $primeiraLinha  )
+            #set ( $primeiraLinha = false )
+        return $expressao
+        #else
+            && $expressao #if( !$foreach.hasNext );#end
+        #end
+    #end
+#end
+
+
+#macro( macroBuilder )
+
+    #macroComentario( "BUILDER" )
+
+    public static class Builder {
+
+    #foreach ( $definicao in $definicoes )
+        private $definicao.Tipo $definicao.NomeAtributo;
+    #end
+
+        public Builder() {
+
+    #foreach ( $definicao in $definicoes )
+            this.$definicao.NomeAtributo = $definicao.NomeAtributo;
+    #end
+        }
+
+    #foreach ( $definicao in $definicoes )
+        public Builder com$definicao.NomeAtributo( final $definicao.Tipo value ) {
+
+            this.$definicao.NomeAtributo = value;
+            return this;
+        }
+    #end
+
+        public $nomeClasse build() {
+
+            return new $nomeClasse( this );
+        }
+
+     }
+
+#end
+

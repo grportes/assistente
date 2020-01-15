@@ -3,6 +3,7 @@ package br.com.assistente.services;
 import br.com.assistente.models.DefinicaoDto;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -21,6 +22,7 @@ public class DefinicaoDtoService {
     public Set<ResultMapeamento> convTexto(
         final String nomeClasse,
         final Set<DefinicaoDto> definicoes,
+        boolean gerarJsonAnnotations,
         boolean gerarClasseBuilder
     ) {
 
@@ -30,7 +32,9 @@ public class DefinicaoDtoService {
         context.put( "nomeAutor", nomeAutor );
         context.put( "nomeClasse", nomeClasse );
         context.put( "definicoes", definicoes );
+        context.put( "gerarJsonAnnotations", gerarJsonAnnotations );
         context.put( "gerarClasseBuilder", gerarClasseBuilder );
+        context.put( "StringUtils", StringUtils.class );
 
         final VelocityEngine engine = new VelocityEngine();
         engine.setProperty( RESOURCE_LOADERS, "classpath" );
