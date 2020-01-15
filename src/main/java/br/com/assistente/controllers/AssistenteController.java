@@ -92,7 +92,7 @@ public class AssistenteController {
     @FXML TextField txfDtoNomeAtributo;
     @FXML ComboBox<DefinicaoDto.Tipo> cbxDtoTipo;
     @FXML TableView<DefinicaoDto> tbvDto;
-    @FXML private TableColumn<DefinicaoDto, String> tcDtoTipo;
+    @FXML private TableColumn<DefinicaoDto, DefinicaoDto.Tipo> tcDtoTipo;
     @FXML private TableColumn<DefinicaoDto, String> tcDtoNomeAtributo;
     private ObservableList<DefinicaoDto> definicaoDtos;
     @FXML CheckBox cbxDtoAplicarBuilder;
@@ -441,7 +441,7 @@ public class AssistenteController {
 
         definicaoDtos.removeIf( c ->
             Objects.equals( c.getNomeAtributo(), definicaoDto.getNomeAtributo() )
-            || Objects.equals( c.getTipo(), definicaoDto.getTipo() )
+            && Objects.equals( c.getTipo(), definicaoDto.getTipo() )
         );
         definicaoDtos.add( definicaoDto );
 

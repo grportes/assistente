@@ -1,5 +1,7 @@
 package br.com.assistente.models;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,10 +12,11 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class DefinicaoDto {
 
-    private final StringProperty tipo;
+    private final ObjectProperty<DefinicaoDto.Tipo> tipo;
     private final StringProperty nomeAtributo;
 
 
@@ -25,7 +28,7 @@ public class DefinicaoDto {
 
     public DefinicaoDto( final Builder builder ) {
 
-        this.tipo = new SimpleStringProperty( builder.tipo.getNome() );
+        this.tipo = new SimpleObjectProperty<>( builder.tipo );
         this.nomeAtributo = new SimpleStringProperty( builder.nomeAtributo );
     }
 
@@ -36,12 +39,12 @@ public class DefinicaoDto {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public String getTipo() {
+    public Tipo getTipo() {
 
         return tipo.get();
     }
 
-    public StringProperty tipoProperty() {
+    public ObjectProperty<DefinicaoDto.Tipo> tipoProperty() {
 
         return tipo;
     }
@@ -174,6 +177,7 @@ public class DefinicaoDto {
 
         public Builder comNomeAtributo( final String value ) {
 
+            if ( isBlank( value ) ) throw new IllegalArgumentException( "Obrigatório informar o nome do atributo" );
             this.nomeAtributo = value;
             return this;
         }
