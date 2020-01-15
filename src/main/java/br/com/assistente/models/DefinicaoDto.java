@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 import java.util.List;
 import java.util.Objects;
 
+import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
@@ -70,16 +71,15 @@ public class DefinicaoDto {
     public boolean equals( Object o ) {
 
         if ( this == o ) return true;
-        if ( !(o instanceof DefinicaoDto) ) return false;
+        if ( o == null || getClass() != o.getClass() ) return false;
         DefinicaoDto that = (DefinicaoDto) o;
-        return Objects.equals(getTipo(), that.getTipo()) &&
-            Objects.equals(getNomeAtributo(), that.getNomeAtributo());
+        return Objects.equals( getNomeAtributo(), that.getNomeAtributo() );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getTipo(), getNomeAtributo());
+        return Objects.hash( getNomeAtributo() );
     }
 
 
@@ -112,6 +112,43 @@ public class DefinicaoDto {
             public String aplicarCast( final Object valor ) {
 
                 return format("%sL", valor);
+            }
+        },
+
+        BIGDECIMAL( "BigDecimal" ) {
+
+            @Override
+            public String aplicarCast( Object valor ) {
+
+                return null;
+            }
+        },
+
+        LOCAL_DATE( "LocalDate" ) {
+            @Override
+            public String aplicarCast( Object valor ) {
+                return null;
+            }
+        },
+
+        LOCAL_DATETIME( "LocalDateTime") {
+            @Override
+            public String aplicarCast( Object valor ) {
+                return null;
+            }
+        },
+
+        LOCAL_TIME( "LocalTime") {
+            @Override
+            public String aplicarCast( Object valor ) {
+                return null;
+            }
+        },
+
+        CHAR( "Char" ) {
+            @Override
+            public String aplicarCast( Object valor ) {
+                return null;
             }
         },
 
@@ -178,7 +215,7 @@ public class DefinicaoDto {
         public Builder comNomeAtributo( final String value ) {
 
             if ( isBlank( value ) ) throw new IllegalArgumentException( "Obrigatório informar o nome do atributo" );
-            this.nomeAtributo = value;
+            this.nomeAtributo = convCamelCase( value, false );
             return this;
         }
 
@@ -187,4 +224,5 @@ public class DefinicaoDto {
             return new DefinicaoDto(this );
         }
     }
+
 }

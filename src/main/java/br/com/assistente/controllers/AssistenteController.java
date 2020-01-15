@@ -419,6 +419,29 @@ public class AssistenteController {
         tcDtoTipo.setCellValueFactory( c -> c.getValue().tipoProperty() );
         tcDtoNomeAtributo.setCellValueFactory( c -> c.getValue().nomeAtributoProperty() );
         definicaoDtos = observableArrayList();
+        tbvDto.setRowFactory( tv -> {
+            // Duplo Clique!!
+            final TableRow<DefinicaoDto> row = new TableRow<>();
+            row.setOnMouseClicked( event -> {
+                if ( event.getClickCount() == 2 && !row.isEmpty() ) {
+                    final DefinicaoDto item = row.getItem();
+                    cbxDtoTipo.setValue( item.getTipo() );
+                    txfDtoNomeAtributo.setText( item.getNomeAtributo() );
+                    txfDtoNomeAtributo.requestFocus();
+                }
+            });
+            return row;
+        });
+        tbvDto.setOnKeyPressed( event -> {
+            if ( Objects.equals( event.getCode(), DELETE ) ) {
+                final DefinicaoDto definicaoDto = tbvDto.getSelectionModel().getSelectedItem();
+                if ( nonNull( definicaoDto ) ) {
+                    definicaoDtos.removeIf( d -> Objects.equals( d, definicaoDto ) );
+                    txfDtoNomeAtributo.requestFocus();
+                }
+            }
+        });
+
         tbvDto.setItems( definicaoDtos );
     }
 
@@ -439,10 +462,7 @@ public class AssistenteController {
             .comTipo( cbxDtoTipo.getValue() )
             .build();
 
-        definicaoDtos.removeIf( c ->
-            Objects.equals( c.getNomeAtributo(), definicaoDto.getNomeAtributo() )
-            && Objects.equals( c.getTipo(), definicaoDto.getTipo() )
-        );
+        definicaoDtos.removeIf( d -> Objects.equals( d, definicaoDto ) );
         definicaoDtos.add( definicaoDto );
 
         txfDtoNomeAtributo.setText( "" );
