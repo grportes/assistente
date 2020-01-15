@@ -7,6 +7,7 @@ import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.ConstanteService;
+import br.com.assistente.services.DefinicaoDtoService;
 import br.com.assistente.services.MapeamentoService;
 import io.vavr.Tuple2;
 import javafx.application.Platform;
@@ -105,6 +106,7 @@ public class AssistenteController {
     // Services:
     private final MapeamentoService mapeamentoService = new MapeamentoService();
     private final ConstanteService constanteService = new ConstanteService();
+    private final DefinicaoDtoService definicaoDtoService = new DefinicaoDtoService();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -413,6 +415,16 @@ public class AssistenteController {
         txfConstanteNome.requestFocus();
     }
 
+    private void gerarResultConstante() {
+
+        setarResultado( constanteService.convTexto(
+            txfConstanteEnum.getText(),
+            cbxConstanteTipos.getValue(),
+            new HashSet<>( constantes ),
+            cbxConstanteConverter.isSelected()
+        ));
+    }
+
     private void initializeDto() {
 
         cbxDtoTipo.setItems( observableArrayList( DefinicaoDto.Tipo.buscarTipos() ) );
@@ -473,16 +485,10 @@ public class AssistenteController {
 
     private void gerarResultDto() {
 
-    }
-
-
-    private void gerarResultConstante() {
-
-        setarResultado(  constanteService.convTexto(
-            txfConstanteEnum.getText(),
-            cbxConstanteTipos.getValue(),
-            new HashSet<>( constantes ),
-            cbxConstanteConverter.isSelected()
+        setarResultado( definicaoDtoService.convTexto(
+            txfDtoNomeClasse.getText(),
+            new HashSet<>( definicaoDtos ),
+            cbxDtoAplicarBuilder.isSelected()
         ));
     }
 

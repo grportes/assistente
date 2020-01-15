@@ -1,0 +1,11 @@
+
+/**
+ *
+ * <p>Autor: $NomeAutor
+ *
+ *
+ */
+public class $nomeClasse implements Serializable {
+
+
+}
