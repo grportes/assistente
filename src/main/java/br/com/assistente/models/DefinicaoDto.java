@@ -134,6 +134,17 @@ public class DefinicaoDto {
                 .collect( toSet() );
     }
 
+    public static Set<String> buscarImportsSerializer( final Set<DefinicaoDto> lista ) {
+
+        return isEmpty( lista )
+            ? emptySet()
+            : lista.stream()
+                .map( DefinicaoDto::getTipo )
+                .map( Tipo::getJsonSerialize )
+                .filter( StringUtils::isNotBlank )
+                .collect( toSet() );
+    }
+
     public static Set<DefinicaoDto> orderByPosicao( final Set<DefinicaoDto> lista ) {
 
         return isEmpty( lista )
@@ -167,6 +178,11 @@ public class DefinicaoDto {
 
                 return "";
             }
+
+            @Override
+            public String getJsonSerialize() {
+                return "";
+            }
         },
 
         INTEGER("Integer") {
@@ -175,11 +191,22 @@ public class DefinicaoDto {
 
                 return "";
             }
+
+            @Override
+            public String getJsonSerialize() {
+                return "";
+            }
         },
 
         LONG("Long") {
             @Override
             public String getImportNecessario() {
+
+                return "";
+            }
+
+            @Override
+            public String getJsonSerialize() {
 
                 return "";
             }
@@ -191,6 +218,12 @@ public class DefinicaoDto {
 
                 return "java.math.BigDecimal";
             }
+
+            @Override
+            public String getJsonSerialize() {
+
+                return "";
+            }
         },
 
         LOCAL_DATE( "LocalDate" ) {
@@ -198,6 +231,12 @@ public class DefinicaoDto {
             public String getImportNecessario() {
 
                 return "java.util.LocalDate";
+            }
+
+            @Override
+            public String getJsonSerialize() {
+
+                return "infra.json.Serializer.SerializerLocalDateSerializer";
             }
         },
 
@@ -207,6 +246,12 @@ public class DefinicaoDto {
 
                 return "java.util.LocalDateTime";
             }
+
+            @Override
+            public String getJsonSerialize() {
+
+                return "infra.json.Serializer.SerializerLocalDateTimeSerializer";
+            }
         },
 
         LOCAL_TIME( "LocalTime") {
@@ -214,6 +259,12 @@ public class DefinicaoDto {
             public String getImportNecessario() {
 
                 return "java.util.LocalTime";
+            }
+
+            @Override
+            public String getJsonSerialize() {
+
+                return "infra.json.Serializer.SerializerLocalTime";
             }
         },
 
@@ -223,11 +274,23 @@ public class DefinicaoDto {
 
                 return "";
             }
+
+            @Override
+            public String getJsonSerialize() {
+
+                return "";
+            }
         },
 
         STRING("String") {
             @Override
             public String getImportNecessario() {
+
+                return "";
+            }
+
+            @Override
+            public String getJsonSerialize() {
 
                 return "";
             }
@@ -252,6 +315,7 @@ public class DefinicaoDto {
         }
 
         public abstract String getImportNecessario();
+        public abstract String getJsonSerialize();
 
         public static List<Tipo> buscarTipos() {
 

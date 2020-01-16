@@ -15,6 +15,7 @@ import java.io.UncheckedIOException;
 import java.util.Set;
 
 import static br.com.assistente.models.DefinicaoDto.buscarImports;
+import static br.com.assistente.models.DefinicaoDto.buscarImportsSerializer;
 import static br.com.assistente.models.DefinicaoDto.buscarTodosAtributoId;
 import static br.com.assistente.models.DefinicaoDto.orderByPosicao;
 import static java.time.LocalDate.now;
@@ -40,6 +41,7 @@ public class DefinicaoDtoService {
         context.put( "gerarJsonAnnotations", gerarJsonAnnotations );
         context.put( "gerarClasseBuilder", gerarClasseBuilder );
         context.put( "importsNecessarios", buscarImports( definicoes ) );
+        context.put( "importsNecessariosSerializer", buscarImportsSerializer( definicoes ) );
         context.put( "identificadores", buscarTodosAtributoId( definicoes ) );
         context.put( "StringUtils", StringUtils.class );
         context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
