@@ -99,8 +99,8 @@ public class $nomeClasse implements Serializable {
     public int hashCode() {
 
         return Objects.hash(
-            #foreach ( $campo in $campos )
-                #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.ColunaJava ) ,"()" ) )
+            #foreach ( $definicao in $identificadores )
+                #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $definicao.NomeAtributo ) ,"()" ) )
             $metodo#if( $foreach.hasNext ),#end
             #end
         );
@@ -110,9 +110,9 @@ public class $nomeClasse implements Serializable {
 
 #macro( macroExpressoesEquals $varObj )
     #set ( $primeiraLinha = true )
-    #foreach ( $campo in $campos )
-        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.ColunaJava ), "()" ) )
-        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.ColunaJava , " )" ) )
+    #foreach ( $campo in $identificadores )
+        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.NomeAtributo ), "()" ) )
+        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.NomeAtributo , " )" ) )
         #if ( $primeiraLinha  )
             #set ( $primeiraLinha = false )
         return $expressao

@@ -110,10 +110,19 @@ public class DefinicaoDto {
         return isEmpty( lista )
             ? emptySet()
             : lista.stream()
-            .map( DefinicaoDto::getTipo )
-            .map( Tipo::getImportNecessario )
-            .filter( StringUtils::isNotBlank )
-            .collect( toSet() );
+                .map( DefinicaoDto::getTipo )
+                .map( Tipo::getImportNecessario )
+                .filter( StringUtils::isNotBlank )
+                .collect( toSet() );
+    }
+
+    public static Set<DefinicaoDto> buscarTodosAtributoId( final Set<DefinicaoDto> lista ) {
+
+        return isEmpty( lista )
+            ? emptySet()
+            : lista.stream()
+                .filter( DefinicaoDto::isAtributoId )
+                .collect( toSet() );
     }
 
 
