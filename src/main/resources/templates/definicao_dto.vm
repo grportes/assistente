@@ -1,9 +1,13 @@
 package models.commons.dtos;
 
+#if ( $gerarJsonAnnotations )
 import com.fasterxml.jackson.annotation.JsonProperty;
+#end
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+    #foreach ( $import in $importsNecessarios )
+import $import;
+    #end
 import java.util.Objects;
 
 
@@ -12,7 +16,7 @@ import java.util.Objects;
  *
  * <p>Autor: $nomeAutor</p>
  *
- * @since 10/01/2020
+ * @since $dataHora
  */
 public class $nomeClasse implements Serializable {
 
@@ -33,8 +37,9 @@ public class $nomeClasse implements Serializable {
 
 #macro( macroDeclaracaoVariaves )
     #foreach( $definicao in $definicoes )
-    private final $StringUtils( $definicao.Tipo, ' ', $definicao.NomeAtributo, ';' )
+    private final $StringUtils.join( $definicao.Tipo, ' ', $definicao.NomeAtributo, ';' )
     #end
+
 #end
 
 #macro( macroConstructor )
@@ -67,7 +72,8 @@ public class $nomeClasse implements Serializable {
     #if ( $gerarJsonAnnotations )
     @JsonProperty( "$definicao.NomeAtributo" )
     #end
-    public $definicao.NomeAtributo get$definicao.NomeAtributo {
+    #set ( $nomeMetodo = $StringUtils.capitalize( $definicao.NomeAtributo ) )
+    public $definicao.Tipo $StringUtils.join( 'get', $nomeMetodo, '() {' )
 
         return this.$definicao.NomeAtributo;
     }
@@ -130,18 +136,19 @@ public class $nomeClasse implements Serializable {
         public Builder() {
 
     #foreach ( $definicao in $definicoes )
-            this.$definicao.NomeAtributo = $definicao.NomeAtributo;
+            this.$definicao.NomeAtributo = null;
     #end
         }
 
     #foreach ( $definicao in $definicoes )
-        public Builder com$definicao.NomeAtributo( final $definicao.Tipo value ) {
+        #set ( $nomeMetodo = $StringUtils.capitalize( $definicao.NomeAtributo ) )
+        public Builder $StringUtils.join( 'com', $nomeMetodo, '(' ) final $definicao.Tipo value ) {
 
             this.$definicao.NomeAtributo = value;
             return this;
         }
-    #end
 
+    #end
         public $nomeClasse build() {
 
             return new $nomeClasse( this );

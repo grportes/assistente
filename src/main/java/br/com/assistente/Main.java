@@ -2,8 +2,10 @@ package br.com.assistente;
 
 import br.com.assistente.infra.javafx.Dialog;
 import br.com.assistente.models.Constante;
+import br.com.assistente.models.DefinicaoDto;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.services.ConstanteService;
+import br.com.assistente.services.DefinicaoDtoService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static br.com.assistente.infra.db.ConnectionFactory.closeConnection;
@@ -58,29 +61,26 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        launch( args );
-//        testar();
+//        launch( args );
+        testar();
     }
 
     private static void testar() {
 
+        Set<DefinicaoDto> dtos = new LinkedHashSet<>(  );
+        dtos.add( new DefinicaoDto.Builder().comTipo( DefinicaoDto.Tipo.INTEGER ).comNomeAtributo( "id_cliente" ).comAtributoId( true ).build() );
+        dtos.add( new DefinicaoDto.Builder().comTipo( DefinicaoDto.Tipo.SHORT ).comNomeAtributo( "id empresa" ).comAtributoId( true ).build() );
+        dtos.add( new DefinicaoDto.Builder().comTipo( DefinicaoDto.Tipo.STRING ).comNomeAtributo( "RazaoSocial" ).comAtributoId( false ).build() );
+        dtos.add( new DefinicaoDto.Builder().comTipo( DefinicaoDto.Tipo.LOCAL_DATE ).comNomeAtributo( "implantacao" ).comAtributoId( false ).build() );
+        dtos.add( new DefinicaoDto.Builder().comTipo( DefinicaoDto.Tipo.LOCAL_DATETIME ).comNomeAtributo( "alteracao" ).comAtributoId( false ).build() );
+        dtos.add( new DefinicaoDto.Builder().comTipo( DefinicaoDto.Tipo.BIGDECIMAL ).comNomeAtributo( "vlrLimiteCredito" ).comAtributoId( false ).build() );
+        DefinicaoDtoService d = new DefinicaoDtoService();
+        Set<ResultMapeamento> results = d.convTexto( "ClienteDto", dtos, true, true );
+        for ( ResultMapeamento result : results ) {
+            System.out.println(result.getConteudoEntidade());
+            System.out.println("\n\n");
+        }
 
-//        ConstanteService c = new ConstanteService();
-//
-//        Set<Constante> constantes = new HashSet<>( Arrays.asList(
-//            new Constante.Builder().comNome("SIM").comValor("S").comDescricao("REPRESENTA SIM").build(),
-//            new Constante.Builder().comNome("NAO").comValor("N").comDescricao("REPRESENTA NÃO").build()
-//        ));
-//
-//        final Set<ResultMapeamento> resultMapeamentos = c.convTexto(
-//            "SimNao",
-//            "String",
-//            new HashSet<>(constantes)
-//        );
-//
-//        for ( ResultMapeamento resultMapeamento : resultMapeamentos ) {
-//            System.out.println(resultMapeamento.getConteudoEntidade());
-//        }
 
     }
 

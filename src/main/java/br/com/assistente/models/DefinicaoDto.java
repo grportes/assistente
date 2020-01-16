@@ -6,15 +6,18 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
-import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static java.util.Objects.isNull;
+import static java.util.Collections.emptySet;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class DefinicaoDto {
@@ -98,6 +101,24 @@ public class DefinicaoDto {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    // METODOS AUXLIARES
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static Set<String> buscarImports( final Set<DefinicaoDto> lista ) {
+
+        return isEmpty( lista )
+            ? emptySet()
+            : lista.stream()
+            .map( DefinicaoDto::getTipo )
+            .map( Tipo::getImportNecessario )
+            .filter( StringUtils::isNotBlank )
+            .collect( toSet() );
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     // CONSTANTES
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,70 +127,73 @@ public class DefinicaoDto {
 
         SHORT("Short") {
             @Override
-            public String aplicarCast( final Object valor ) {
+            public String getImportNecessario() {
 
-                return format("(Short) %s", valor);
+                return "";
             }
         },
 
         INTEGER("Integer") {
             @Override
-            public String aplicarCast( final Object valor ) {
+            public String getImportNecessario() {
 
-                return isNull(valor) ? "null" : valor.toString();
+                return "";
             }
         },
 
         LONG("Long") {
             @Override
-            public String aplicarCast( final Object valor ) {
+            public String getImportNecessario() {
 
-                return format("%sL", valor);
+                return "";
             }
         },
 
         BIGDECIMAL( "BigDecimal" ) {
-
             @Override
-            public String aplicarCast( Object valor ) {
+            public String getImportNecessario() {
 
-                return null;
+                return "java.math.BigDecimal";
             }
         },
 
         LOCAL_DATE( "LocalDate" ) {
             @Override
-            public String aplicarCast( Object valor ) {
-                return null;
+            public String getImportNecessario() {
+
+                return "java.util.LocalDate";
             }
         },
 
         LOCAL_DATETIME( "LocalDateTime") {
             @Override
-            public String aplicarCast( Object valor ) {
-                return null;
+            public String getImportNecessario() {
+
+                return "java.util.LocalDateTime";
             }
         },
 
         LOCAL_TIME( "LocalTime") {
             @Override
-            public String aplicarCast( Object valor ) {
-                return null;
+            public String getImportNecessario() {
+
+                return "java.util.LocalTime";
             }
         },
 
         CHAR( "Char" ) {
             @Override
-            public String aplicarCast( Object valor ) {
-                return null;
+            public String getImportNecessario() {
+
+                return "";
             }
         },
 
         STRING("String") {
             @Override
-            public String aplicarCast( final Object valor ) {
+            public String getImportNecessario() {
 
-                return format("\"%s\"", valor);
+                return "";
             }
         };
 
@@ -191,7 +215,7 @@ public class DefinicaoDto {
             return getNome();
         }
 
-        public abstract String aplicarCast( final Object valor );
+        public abstract String getImportNecessario();
 
         public static List<Tipo> buscarTipos() {
 

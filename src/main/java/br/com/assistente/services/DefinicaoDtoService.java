@@ -14,6 +14,9 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.util.Set;
 
+import static br.com.assistente.models.DefinicaoDto.buscarImports;
+import static java.time.LocalDate.now;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Collections.singleton;
 import static org.apache.velocity.runtime.RuntimeConstants.RESOURCE_LOADERS;
 
@@ -34,7 +37,9 @@ public class DefinicaoDtoService {
         context.put( "definicoes", definicoes );
         context.put( "gerarJsonAnnotations", gerarJsonAnnotations );
         context.put( "gerarClasseBuilder", gerarClasseBuilder );
+        context.put( "importsNecessarios", buscarImports( definicoes ) );
         context.put( "StringUtils", StringUtils.class );
+        context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
 
         final VelocityEngine engine = new VelocityEngine();
         engine.setProperty( RESOURCE_LOADERS, "classpath" );
