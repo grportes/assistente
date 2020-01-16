@@ -21,10 +21,16 @@ import java.util.Objects;
 public class $nomeClasse implements Serializable {
 
     #macroDeclaracaoVariaves
+    #if ( $gerarClasseBuilder )
+    #macroConstructorBuilder
+    #else
     #macroConstructor
+    #end
     #macroGetters
     #macroEqualsHashcode
+    #if ( $gerarClasseBuilder )
     #macroBuilder
+    #end
 }
 
 #macro( macroComentario $texto )
@@ -63,6 +69,20 @@ public class $nomeClasse implements Serializable {
     }
 
 #end
+
+#macro( macroConstructorBuilder )
+
+    #macroComentario( "CONSTRUCTOR" )
+
+    private $nomeClasse( final Builder builder ) {
+
+        #foreach ( $definicao in $definicoes )
+        this.$definicao.NomeAtributo = builder.$definicao.NomeAtributo;
+        #end
+    }
+
+#end
+
 
 #macro( macroGetters )
 
