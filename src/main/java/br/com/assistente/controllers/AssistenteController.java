@@ -26,6 +26,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.File;
 import java.util.HashSet;
@@ -48,6 +49,7 @@ import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static javafx.scene.input.KeyCode.DELETE;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+import static org.apache.commons.collections4.CollectionUtils.size;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.trim;
@@ -97,6 +99,7 @@ public class AssistenteController {
     @FXML private TableColumn<DefinicaoDto, DefinicaoDto.Tipo> tcDtoTipo;
     @FXML private TableColumn<DefinicaoDto, String> tcDtoNomeAtributo;
     @FXML private TableColumn<DefinicaoDto, Boolean> tcDtoAtributoId;
+    @FXML private TableColumn<DefinicaoDto, Integer> tcDtoPosicao;
     private ObservableList<DefinicaoDto> definicaoDtos;
     @FXML CheckBox cbxDtoJsonAnnotation;
     @FXML CheckBox cbxDtoAplicarBuilder;
@@ -110,6 +113,7 @@ public class AssistenteController {
     private final MapeamentoService mapeamentoService = new MapeamentoService();
     private final ConstanteService constanteService = new ConstanteService();
     private final DefinicaoDtoService definicaoDtoService = new DefinicaoDtoService();
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -434,6 +438,7 @@ public class AssistenteController {
         tcDtoTipo.setCellValueFactory( c -> c.getValue().tipoProperty() );
         tcDtoNomeAtributo.setCellValueFactory( c -> c.getValue().nomeAtributoProperty() );
         tcDtoAtributoId.setCellValueFactory( c -> c.getValue().atributoIdProperty() );
+        tcDtoPosicao.setCellValueFactory( c -> c.getValue().posicaoProperty().asObject() );
         definicaoDtos = observableArrayList();
         tbvDto.setRowFactory( tv -> {
             // Duplo Clique!!
@@ -475,6 +480,7 @@ public class AssistenteController {
     private void adicionarItemDto() {
 
         final DefinicaoDto definicaoDto = new DefinicaoDto.Builder()
+            .comPosicao( size( definicaoDtos ) + 1 )
             .comNomeAtributo( txfDtoNomeAtributo.getText() )
             .comTipo( cbxDtoTipo.getValue() )
             .comAtributoId( cbxAtributoId.isSelected() )

@@ -1,13 +1,16 @@
 package br.com.assistente.models;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -15,13 +18,16 @@ import java.util.Set;
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
+import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class DefinicaoDto {
 
+    private final IntegerProperty posicao;
     private final ObjectProperty<DefinicaoDto.Tipo> tipo;
     private final StringProperty nomeAtributo;
     private final BooleanProperty atributoId;
@@ -35,6 +41,7 @@ public class DefinicaoDto {
 
     public DefinicaoDto( final Builder builder ) {
 
+        this.posicao = new SimpleIntegerProperty( builder.posicao );
         this.tipo = new SimpleObjectProperty<>( builder.tipo );
         this.nomeAtributo = new SimpleStringProperty( builder.nomeAtributo );
         this.atributoId = new SimpleBooleanProperty( builder.atributoId );
@@ -46,6 +53,17 @@ public class DefinicaoDto {
     // GETTERS
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public int getPosicao() {
+
+        return posicao.get();
+    }
+
+    public IntegerProperty posicaoProperty() {
+
+        return posicao;
+    }
 
     public Tipo getTipo() {
 
@@ -114,6 +132,15 @@ public class DefinicaoDto {
                 .map( Tipo::getImportNecessario )
                 .filter( StringUtils::isNotBlank )
                 .collect( toSet() );
+    }
+
+    public static Set<DefinicaoDto> orderByPosicao( final Set<DefinicaoDto> lista ) {
+
+        return isEmpty( lista )
+                ? emptySet()
+                : lista.stream()
+                .sorted( comparing( DefinicaoDto::getPosicao ) )
+                .collect( toCollection( LinkedHashSet::new ) );
     }
 
     public static Set<DefinicaoDto> buscarTodosAtributoId( final Set<DefinicaoDto> lista ) {
@@ -242,14 +269,24 @@ public class DefinicaoDto {
 
     public static class Builder {
 
+        public Integer posicao;
         private Tipo tipo;
         private String nomeAtributo;
         private Boolean atributoId;
 
         public Builder() {
 
+            this.posicao = null;
             this.tipo = null;
             this.nomeAtributo = null;
+            this.atributoId = null;
+        }
+
+        public Builder comPosicao( final Integer value ) {
+
+            requireNonNull( value, "Obrigatório informar posição do atributo" );
+            this.posicao = value;
+            return this;
         }
 
         public Builder comTipo( final Tipo value ) {

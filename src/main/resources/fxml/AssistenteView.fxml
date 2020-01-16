@@ -240,6 +240,7 @@
                                   <TableColumn fx:id="tcDtoTipo" prefWidth="225.0" text="Tipo" />
                                   <TableColumn fx:id="tcDtoNomeAtributo" prefWidth="309.0" text="Nome Atributo" />
                                     <TableColumn fx:id="tcDtoAtributoId" prefWidth="75.0" text="ID" />
+                                    <TableColumn fx:id="tcDtoPosicao" prefWidth="75.0" visible="false" />
                                 </columns>
                               </TableView>
                               <HBox alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="784.0" spacing="15.0">

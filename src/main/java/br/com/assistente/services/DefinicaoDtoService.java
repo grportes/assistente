@@ -16,6 +16,7 @@ import java.util.Set;
 
 import static br.com.assistente.models.DefinicaoDto.buscarImports;
 import static br.com.assistente.models.DefinicaoDto.buscarTodosAtributoId;
+import static br.com.assistente.models.DefinicaoDto.orderByPosicao;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Collections.singleton;
@@ -35,7 +36,7 @@ public class DefinicaoDtoService {
         final VelocityContext context = new VelocityContext();
         context.put( "nomeAutor", nomeAutor );
         context.put( "nomeClasse", nomeClasse );
-        context.put( "definicoes", definicoes );
+        context.put( "definicoes", orderByPosicao( definicoes ) );
         context.put( "gerarJsonAnnotations", gerarJsonAnnotations );
         context.put( "gerarClasseBuilder", gerarClasseBuilder );
         context.put( "importsNecessarios", buscarImports( definicoes ) );
