@@ -243,9 +243,9 @@
                                     <TableColumn fx:id="tcDtoPosicao" prefWidth="75.0" visible="false" />
                                 </columns>
                               </TableView>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="784.0" spacing="15.0">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="14.0" prefWidth="784.0" spacing="15.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <CheckBox fx:id="cbxDtoJsonAnnotation" mnemonicParsing="false" text="JsonAnnotations" />
+                                    <CheckBox fx:id="cbxDtoJsonAnnotation" mnemonicParsing="false" text="Json Annotations" />
                                     <CheckBox fx:id="cbxDtoAplicarBuilder" mnemonicParsing="false" text="Pattern Builder" />
                                     <Button fx:id="btnDtoGerar" mnemonicParsing="false" onAction="#onActionDto" text="Gerar" />
                                  </children>
@@ -260,18 +260,41 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <HBox layoutX="36.0" layoutY="14.0" prefHeight="53.0" prefWidth="794.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                        <VBox layoutX="32.0" layoutY="22.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
-                              <VBox prefHeight="53.0" prefWidth="312.0">
+                              <HBox prefHeight="49.0" prefWidth="784.0" spacing="10.0">
                                  <children>
-                                    <Label text="Nome do Dto:" />
-                                    <TextField />
+                                    <VBox alignment="BOTTOM_LEFT" prefHeight="42.0" prefWidth="9.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Nome do DTO:" />
+                                          <TextField />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="BOTTOM_LEFT" prefHeight="42.0" prefWidth="201.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Button mnemonicParsing="false" text="Limpar" VBox.vgrow="ALWAYS" />
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <VBox prefHeight="343.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Query:" />
+                                    <TextArea prefHeight="218.0" prefWidth="784.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
-                              <Button mnemonicParsing="false" text="Gerar" />
+                              <HBox alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="784.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <CheckBox mnemonicParsing="false" text="Json Annotations" />
+                                    <CheckBox mnemonicParsing="false" text="Pattern Builder" />
+                                    <Button mnemonicParsing="false" text="Gerar" />
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
-                        <TextArea layoutX="41.0" layoutY="66.0" prefHeight="342.0" prefWidth="794.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                        </VBox>
                      </children></AnchorPane>
               </content>
             </Tab>
