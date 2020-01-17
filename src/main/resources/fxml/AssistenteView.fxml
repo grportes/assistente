@@ -102,7 +102,7 @@
                      <children>
                         <VBox layoutX="103.0" layoutY="36.0" prefHeight="399.0" prefWidth="784.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
-                              <HBox prefHeight="49.0" prefWidth="784.0" spacing="10.0">
+                              <HBox prefHeight="30.0" prefWidth="784.0" spacing="10.0">
                                  <children>
                                     <VBox alignment="BOTTOM_LEFT" prefHeight="89.0" prefWidth="371.0">
                                        <children>
@@ -161,7 +161,7 @@
                                   <TableColumn fx:id="tcConstanteDescricao" prefWidth="447.0" text="DESCRIÇÃO" />
                                 </columns>
                               </TableView>
-                              <AnchorPane prefHeight="5.0" prefWidth="784.0">
+                              <AnchorPane prefHeight="17.0" prefWidth="784.0">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="338.0" spacing="30.0">
                                        <children>
@@ -267,12 +267,12 @@
                                     <VBox alignment="BOTTOM_LEFT" prefHeight="42.0" prefWidth="346.0">
                                        <children>
                                           <Label text="Nome do DTO:" />
-                                          <TextField prefHeight="26.0" prefWidth="342.0" />
+                                          <TextField fx:id="txfQueryNomeClasse" prefHeight="26.0" prefWidth="342.0" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="BOTTOM_LEFT" prefHeight="42.0" prefWidth="96.0">
                                        <children>
-                                          <Button mnemonicParsing="false" text="Limpar" VBox.vgrow="ALWAYS" />
+                                          <Button fx:id="btnQueryLimpar" mnemonicParsing="false" text="Limpar" VBox.vgrow="ALWAYS" />
                                        </children>
                                        <HBox.margin>
                                           <Insets />
@@ -283,14 +283,14 @@
                               <VBox prefHeight="343.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Label text="Query:" />
-                                    <TextArea prefHeight="218.0" prefWidth="784.0" VBox.vgrow="ALWAYS" />
+                                    <TextArea fx:id="txfQuery" prefHeight="218.0" prefWidth="784.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="784.0" spacing="15.0">
                                  <children>
-                                    <CheckBox mnemonicParsing="false" text="Json Annotations" />
-                                    <CheckBox mnemonicParsing="false" text="Pattern Builder" />
-                                    <Button mnemonicParsing="false" text="Gerar" />
+                                    <CheckBox fx:id="cbxQueryJsonAnnotation" mnemonicParsing="false" text="Json Annotations" />
+                                    <CheckBox fx:id="cbxQueryAplicarBuilder" mnemonicParsing="false" text="Pattern Builder" />
+                                    <Button fx:id="btnQueryGerar" mnemonicParsing="false" text="Gerar" />
                                  </children>
                               </HBox>
                            </children>
