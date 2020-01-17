@@ -26,7 +26,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.File;
 import java.util.HashSet;
@@ -39,6 +38,7 @@ import static br.com.assistente.controllers.SetupController.openViewConfiguracoe
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.infra.javafx.Dialog.msgInfo;
 import static br.com.assistente.infra.javafx.Dialog.selecionarArquivo;
+import static br.com.assistente.models.DefinicaoDto.convPadraoNomeClasse;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -497,6 +497,7 @@ public class AssistenteController {
 
     private void gerarResultDto() {
 
+        txfDtoNomeClasse.setText( convPadraoNomeClasse( txfDtoNomeClasse.getText() ) );
         setarResultado( definicaoDtoService.convTexto(
             txfDtoNomeClasse.getText(),
             new HashSet<>( definicaoDtos ),

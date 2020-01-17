@@ -24,6 +24,7 @@ import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
 
 public class DefinicaoDto {
 
@@ -161,6 +162,14 @@ public class DefinicaoDto {
             : lista.stream()
                 .filter( DefinicaoDto::isAtributoId )
                 .collect( toSet() );
+    }
+
+    public static String convPadraoNomeClasse( final String nomeClasse ) {
+
+        if ( isBlank( nomeClasse ) ) throw new IllegalArgumentException( "Favor informar o nome da classe" );
+        String tmp = convCamelCase( nomeClasse, true );
+        return ( lastIndexOfIgnoreCase( tmp, "dto" ) == -1 ) ? tmp.concat( "Dto" ) : tmp;
+
     }
 
 

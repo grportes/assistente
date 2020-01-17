@@ -99,14 +99,14 @@ public final class UtilString {
         if ( newStr.contains( " " ) ) newStr = newStr.replaceAll( " ", "_" );
         if ( newStr.contains( "_" ) ) {
             newStr = Arrays.stream( newStr.split( "_" ) )
-                    .map( String::toLowerCase )
-                    .map( UtilString::convPluralToSingular )
-                    .collect( joining( "_" ) );
+                .map( String::toLowerCase )
+                .map( UtilString::convPluralToSingular )
+                .collect( joining( "_" ) );
         } else if ( Objects.equals( newStr, str.trim() ) && !isAllUpperCase( newStr ) ) {
             char firstLetter = newStr.charAt( 0 );
             return ( !capitalizeFirst && isUpperCase( firstLetter ) )
                 ? StringUtils.join( toLowerCase( firstLetter ), newStr.substring( 1 ) )
-                : newStr;
+                : StringUtils.capitalize( newStr );
         }
         return toCamelCase( newStr, capitalizeFirst, '_' );
     }
