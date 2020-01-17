@@ -7,12 +7,14 @@ import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.SetupUsuario;
 import io.vavr.Tuple2;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -45,8 +47,8 @@ public final class ConnectionFactory {
 
             try {
                 connection = isNotBlank( cnxBanco.getUserName() )
-                        ? DriverManager.getConnection( jdbcUrl, cnxBanco.getUserName(), descriptografar(cnxBanco.getPassword()) )
-                        : DriverManager.getConnection( jdbcUrl );
+                    ? DriverManager.getConnection( jdbcUrl, cnxBanco.getUserName(), descriptografar(cnxBanco.getPassword()) )
+                    : DriverManager.getConnection( jdbcUrl );
             } catch ( final SQLException e ) {
                 e.printStackTrace();
                 throw new RuntimeException( format(
@@ -135,6 +137,37 @@ public final class ConnectionFactory {
             e.printStackTrace();
             throw new RuntimeException( e.getMessage() );
         }
+    }
+
+    public static void execQuery( final String query ) {
+
+        try {
+            final ResultSetHandler<Object[]> h = rs -> {
+
+                if (!rs.next()) {
+                    return null;
+                }
+
+                ResultSetMetaData meta = rs.getMetaData();
+                int cols = meta.getColumnCount();
+                Object[] result = new Object[cols];
+
+                for (int i = 0; i < cols; i++) {
+                    result[i] = rs.getObject(i + 1);
+                }
+
+                return result;
+            };
+
+            final Tuple2<Connection, DriverCnx> tuple = getConnection();
+            final Connection con = tuple._1();
+            final QueryRunner run = new QueryRunner();
+            run.query( con, query, h );
+        } catch ( final SQLException e ) {
+            e.printStackTrace();
+            throw new RuntimeException( e.getMessage() );
+        }
+
     }
 
 }

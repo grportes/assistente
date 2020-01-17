@@ -9,6 +9,7 @@ import br.com.assistente.models.SetupUsuario;
 import br.com.assistente.services.ConstanteService;
 import br.com.assistente.services.DefinicaoDtoService;
 import br.com.assistente.services.MapeamentoService;
+import br.com.assistente.services.QueryService;
 import io.vavr.Tuple2;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -121,7 +122,7 @@ public class AssistenteController {
     private final MapeamentoService mapeamentoService = new MapeamentoService();
     private final ConstanteService constanteService = new ConstanteService();
     private final DefinicaoDtoService definicaoDtoService = new DefinicaoDtoService();
-
+    private final QueryService queryService = new QueryService();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -255,6 +256,7 @@ public class AssistenteController {
                 desabilitarAcoesQuery( cbxQueryTuple.isSelected() );
                 break;
             case "btnQueryGerar":
+                gerarResultQuery();
                 break;
         }
     }
@@ -574,6 +576,13 @@ public class AssistenteController {
         txfQueryNomeClasse.setDisable( desabilitar );
         cbxQueryJsonAnnotation.setDisable( desabilitar );
         cbxQueryAplicarBuilder.setDisable( desabilitar );
+    }
+
+    public void gerarResultQuery() {
+
+        if ( cbxQueryTuple.isSelected() ) {
+            queryService.convTexto( txaQuery.getText() );
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
