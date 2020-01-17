@@ -105,6 +105,13 @@ public class AssistenteController {
     @FXML CheckBox cbxDtoJsonAnnotation;
     @FXML CheckBox cbxDtoAplicarBuilder;
 
+    // Query:
+    @FXML TextField txfQueryNomeClasse;
+    @FXML TextArea txaQuery;
+    @FXML CheckBox cbxQueryTuple;
+    @FXML CheckBox cbxQueryJsonAnnotation;
+    @FXML CheckBox cbxQueryAplicarBuilder;
+
     // Result:
     @FXML private Tab tabResult;
     @FXML private TextArea txtResult;
@@ -129,6 +136,7 @@ public class AssistenteController {
         initializeMapeamento();
         initializeConstantes();
         initializeDto();
+        initializeQuery();
     }
 
     public void onActionConfiguracoes() {
@@ -233,6 +241,24 @@ public class AssistenteController {
         }
     }
 
+    public void onActionQuery( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnQueryLimpar":
+                resetQuery();
+                break;
+            case "cbxQueryTuple":
+                desabilitarAcoesQuery( cbxQueryTuple.isSelected() );
+                break;
+            case "btnQueryGerar":
+                break;
+        }
+    }
+
     public void onActionResult( final ActionEvent event ) {
 
         if ( isNull(event) || isNull(event.getSource()) ) return;
@@ -329,6 +355,12 @@ public class AssistenteController {
 
         tab.getTabPane().getSelectionModel().select( tab );
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // CONSTANTES
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void initializeConstantes() {
 
@@ -435,6 +467,12 @@ public class AssistenteController {
         ));
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // DTO
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private void initializeDto() {
 
         cbxDtoTipo.setItems( observableArrayList( DefinicaoDto.Tipo.buscarTipos() ) );
@@ -508,6 +546,41 @@ public class AssistenteController {
             cbxDtoAplicarBuilder.isSelected()
         ));
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // QUERY
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void initializeQuery() {
+
+
+    }
+
+    private void resetQuery() {
+
+        txfQueryNomeClasse.setText( "" );
+        txaQuery.setText( "" );
+        cbxQueryTuple.setSelected( false );
+        cbxQueryJsonAnnotation.setSelected( false );
+        cbxQueryAplicarBuilder.setSelected( false );
+    }
+
+    private void desabilitarAcoesQuery( final boolean desabilitar ) {
+
+        if ( desabilitar )
+            txfQueryNomeClasse.setText( "" );
+        txfQueryNomeClasse.setDisable( desabilitar );
+        cbxQueryJsonAnnotation.setDisable( desabilitar );
+        cbxQueryAplicarBuilder.setDisable( desabilitar );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // RESULTADO.
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void setarResultado( final Set<ResultMapeamento> results ) {
 

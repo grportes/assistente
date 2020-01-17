@@ -35,7 +35,7 @@
     </MenuBar>
       <TabPane prefHeight="485.0" prefWidth="772.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
-          <Tab fx:id="tabMapeamento" text="Mapeamento">
+          <Tab text="Mapeamento">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="564.0" prefWidth="804.0">
                      <children>
@@ -96,7 +96,7 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-          <Tab fx:id="tabConstante" text="Constante">
+          <Tab text="Constante">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -256,7 +256,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab fx:id="tabDto" text="DTO / Query">
+            <Tab text="Query">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -272,7 +272,7 @@
                                     </VBox>
                                     <VBox alignment="BOTTOM_LEFT" prefHeight="42.0" prefWidth="96.0">
                                        <children>
-                                          <Button fx:id="btnQueryLimpar" mnemonicParsing="false" text="Limpar" VBox.vgrow="ALWAYS" />
+                                          <Button fx:id="btnQueryLimpar" mnemonicParsing="false" onAction="#onActionQuery" text="Limpar" VBox.vgrow="ALWAYS" />
                                        </children>
                                        <HBox.margin>
                                           <Insets />
@@ -283,14 +283,15 @@
                               <VBox prefHeight="343.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Label text="Query:" />
-                                    <TextArea fx:id="txfQuery" prefHeight="218.0" prefWidth="784.0" VBox.vgrow="ALWAYS" />
+                                    <TextArea fx:id="txaQuery" prefHeight="218.0" prefWidth="784.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="784.0" spacing="15.0">
                                  <children>
+                                    <CheckBox fx:id="cbxQueryTuple" mnemonicParsing="false" onAction="#onActionQuery" text="Usar Tuple como retorno" />
                                     <CheckBox fx:id="cbxQueryJsonAnnotation" mnemonicParsing="false" text="Json Annotations" />
                                     <CheckBox fx:id="cbxQueryAplicarBuilder" mnemonicParsing="false" text="Pattern Builder" />
-                                    <Button fx:id="btnQueryGerar" mnemonicParsing="false" text="Gerar" />
+                                    <Button fx:id="btnQueryGerar" mnemonicParsing="false" onAction="#onActionQuery" text="Gerar" />
                                  </children>
                               </HBox>
                            </children>
