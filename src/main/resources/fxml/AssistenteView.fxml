@@ -186,54 +186,53 @@
                      <children>
                         <VBox layoutX="25.0" layoutY="31.0" prefHeight="393.0" prefWidth="784.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
-                              <HBox prefHeight="48.0" prefWidth="784.0">
+                              <HBox prefHeight="32.0" prefWidth="784.0" spacing="5.0">
                                  <children>
-                                    <HBox prefHeight="48.0" prefWidth="332.0">
+                                    <VBox alignment="BOTTOM_LEFT" prefHeight="49.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <VBox prefHeight="48.0" prefWidth="321.0">
-                                             <children>
-                                                <Label text="Nome do DTO:" />
-                                                <TextField fx:id="txfDtoNomeClasse" maxWidth="-Infinity" prefHeight="26.0" prefWidth="307.0" />
-                                             </children>
-                                          </VBox>
+                                          <Label text="Nome do DTO:" />
+                                          <TextField fx:id="txfDtoNomeClasse" maxWidth="-Infinity" prefHeight="26.0" prefWidth="546.0" VBox.vgrow="ALWAYS" />
                                        </children>
-                                    </HBox>
-                                    <Button fx:id="btnDtoLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDto" text="Limpar" HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets top="18.0" />
-                                       </HBox.margin>
-                                    </Button>
+                                    </VBox>
+                                    <VBox alignment="BOTTOM_LEFT" prefHeight="28.0" prefWidth="495.0">
+                                       <children>
+                                          <Button fx:id="btnDtoLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDto" text="Limpar" />
+                                       </children>
+                                    </VBox>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                               </HBox>
                               <HBox prefHeight="37.0" prefWidth="784.0" spacing="5.0">
                                  <children>
-                                    <VBox prefHeight="42.0" prefWidth="230.0">
+                                    <VBox alignment="BOTTOM_LEFT" prefHeight="43.0" prefWidth="270.0">
                                        <children>
                                           <Label text="Tipo:" />
-                                          <ComboBox fx:id="cbxDtoTipo" prefHeight="26.0" prefWidth="222.0" />
+                                          <ComboBox fx:id="cbxDtoTipo" prefHeight="26.0" prefWidth="265.0" VBox.vgrow="ALWAYS" />
                                        </children>
                                     </VBox>
-                                    <VBox prefHeight="50.0" prefWidth="239.0">
+                                    <VBox alignment="BOTTOM_LEFT" prefHeight="43.0" prefWidth="330.0">
                                        <children>
                                           <Label text="Nome Atributo:" />
                                           <TextField fx:id="txfDtoNomeAtributo" />
                                        </children>
                                     </VBox>
-                                    <VBox alignment="CENTER" prefHeight="42.0" prefWidth="50.0">
+                                    <VBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="43.0">
                                        <children>
                                           <Label text="ID:" />
                                           <CheckBox fx:id="cbxAtributoId" mnemonicParsing="false" />
                                        </children>
                                     </VBox>
-                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <VBox alignment="BOTTOM_CENTER" prefHeight="43.0" prefWidth="48.0">
                                        <children>
                                           <Button fx:id="btnDtoAdd" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDto" text="+" />
                                        </children>
-                                       <HBox.margin>
-                                          <Insets top="15.0" />
-                                       </HBox.margin>
                                     </VBox>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                               </HBox>
                               <TableView fx:id="tbvDto" prefHeight="270.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                 <columns>
@@ -243,7 +242,7 @@
                                     <TableColumn fx:id="tcDtoPosicao" prefWidth="75.0" visible="false" />
                                 </columns>
                               </TableView>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="14.0" prefWidth="784.0" spacing="15.0" VBox.vgrow="ALWAYS">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="14.0" prefWidth="784.0" spacing="15.0">
                                  <children>
                                     <CheckBox fx:id="cbxDtoJsonAnnotation" mnemonicParsing="false" text="Json Annotations" />
                                     <CheckBox fx:id="cbxDtoAplicarBuilder" mnemonicParsing="false" text="Pattern Builder" />
