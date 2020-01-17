@@ -169,7 +169,6 @@ public class DefinicaoDto {
         if ( isBlank( nomeClasse ) ) throw new IllegalArgumentException( "Favor informar o nome da classe" );
         String tmp = convCamelCase( nomeClasse, true );
         return ( lastIndexOfIgnoreCase( tmp, "dto" ) == -1 ) ? tmp.concat( "Dto" ) : tmp;
-
     }
 
 

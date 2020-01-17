@@ -38,6 +38,7 @@ import static br.com.assistente.controllers.SetupController.openViewConfiguracoe
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.infra.javafx.Dialog.msgInfo;
 import static br.com.assistente.infra.javafx.Dialog.selecionarArquivo;
+import static br.com.assistente.models.Constante.convPadraoNomeEnum;
 import static br.com.assistente.models.DefinicaoDto.convPadraoNomeClasse;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
 import static java.util.Objects.isNull;
@@ -423,6 +424,8 @@ public class AssistenteController {
     }
 
     private void gerarResultConstante() {
+
+        txfConstanteEnum.setText( convPadraoNomeEnum( txfConstanteEnum.getText() ) );
 
         setarResultado( constanteService.convTexto(
             txfConstanteEnum.getText(),

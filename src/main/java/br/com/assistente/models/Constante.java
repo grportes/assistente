@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Supplier;
 
+import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
@@ -94,6 +95,20 @@ public final class Constante {
 
         return Objects.hash( getValor() );
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // METODOS AUXLIARES
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static String convPadraoNomeEnum( final String nomeClasse ) {
+
+        if ( isBlank( nomeClasse ) ) throw new IllegalArgumentException( "Favor informar o nome do Enum" );
+        return convCamelCase( nomeClasse, true );
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
