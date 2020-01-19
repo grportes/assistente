@@ -16,12 +16,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilCrypto.descriptografar;
 import static java.lang.String.format;
+import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.apache.commons.dbutils.DbUtils.closeQuietly;
@@ -139,30 +141,33 @@ public final class ConnectionFactory {
         }
     }
 
-    public static void execQuery( final String query ) {
+    public static Set<ModeloCampo> execQuery( final String query ) {
 
         try {
-            final ResultSetHandler<Object[]> h = rs -> {
-
-                if (!rs.next()) {
-                    return null;
+            final ResultSetHandler<Set<ModeloCampo>> h = rs -> {
+                if (!rs.next()) return emptySet();
+                final Set<ModeloCampo> campos = new LinkedHashSet<>();
+                final ResultSetMetaData meta = rs.getMetaData();
+                int columnCount = meta.getColumnCount();
+                for (int index = 0; index < columnCount; index++) {
+                    int pos = index + 1;
+                    campos.add(
+                        new ModeloCampo.Builder()
+                            .comPosicao( pos )
+                            .comColunaDB( meta.getColumnName( pos ) )
+                            .comTamanho( meta.getPrecision( pos ) )
+                            .comTipoDB( meta.getColumnTypeName( pos ) )
+                            .comDigitoDecimal( meta.getScale( pos )  )
+                            .build()
+                    );
                 }
-
-                ResultSetMetaData meta = rs.getMetaData();
-                int cols = meta.getColumnCount();
-                Object[] result = new Object[cols];
-
-                for (int i = 0; i < cols; i++) {
-                    result[i] = rs.getObject(i + 1);
-                }
-
-                return result;
+                return campos;
             };
 
             final Tuple2<Connection, DriverCnx> tuple = getConnection();
             final Connection con = tuple._1();
             final QueryRunner run = new QueryRunner();
-            run.query( con, query, h );
+            return run.query( con, query, h );
         } catch ( final SQLException e ) {
             e.printStackTrace();
             throw new RuntimeException( e.getMessage() );

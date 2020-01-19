@@ -38,13 +38,11 @@ create table clientes(
 insert into perfis( descricao, version ) values ( "ADMINISTRADOR", 0 );
 insert into perfis( descricao, version ) values ( "ANALISTA", 0 );
 
-select * from perfis;
-
 insert into usuarios( nome, cpf, id_perfil, version ) values ( "ABC", "03226355600", 1, 0 );
 insert into usuarios( nome, cpf, id_perfil, version ) values ( "XXX", "03526355622", 2, 0 );
 
-select * from usuarios;
-
 insert into parametros( id, descricao, numero, version ) values ( 1, 'PROXIMO CODIGO', 0, 0 );
+
+insert into clientes( empresa, cliente, razao_social, vlr_limite ) values ( 1, 10, 'TESTE', 950.50 );
 
 .exit
