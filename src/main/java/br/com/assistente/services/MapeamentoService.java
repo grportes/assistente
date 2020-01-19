@@ -1,11 +1,9 @@
 package br.com.assistente.services;
 
 import br.com.assistente.models.DataType;
-import br.com.assistente.models.DriverCnx;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
-import br.com.assistente.models.SetupCnxBanco;
 import br.com.assistente.models.SetupUsuario;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
@@ -25,7 +23,6 @@ import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
 import static br.com.assistente.models.ModeloCampo.buscarImports;
 import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
-import static br.com.assistente.models.SetupUsuario.buscarCnxAtivaDoUsuario;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
@@ -37,11 +34,7 @@ public class MapeamentoService {
 
     public Set<ModeloCampo> extrair( final Modelo modelo )  {
 
-        final List<DataType> dataTypes = buscarCnxAtivaDoUsuario()
-            .map( SetupCnxBanco::getIdDriver )
-            .flatMap( DriverCnx::findById )
-            .map( DriverCnx::getDataTypes )
-            .orElseThrow( () -> new RuntimeException( "Não foi possivel localizar driver de conexão!!" ) );
+        final List<DataType> dataTypes = SetupUsuario.buscarDataTypes();
 
         return getMetaData( modelo )
             .stream()

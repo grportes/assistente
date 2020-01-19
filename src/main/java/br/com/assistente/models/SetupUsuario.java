@@ -198,5 +198,13 @@ public class SetupUsuario {
             .collect( LinkedHashSet::new, Set::addAll, Set::addAll );
     }
 
+    public static List<DataType> buscarDataTypes() {
+
+        return buscarCnxAtivaDoUsuario()
+                .map( SetupCnxBanco::getIdDriver )
+                .flatMap( DriverCnx::findById )
+                .map( DriverCnx::getDataTypes )
+                .orElseThrow( () -> new RuntimeException( "Não foi possivel localizar driver de conexão!!" ) );
+    }
 
 }

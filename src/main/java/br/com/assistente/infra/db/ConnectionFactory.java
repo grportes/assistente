@@ -16,7 +16,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -143,13 +142,16 @@ public final class ConnectionFactory {
 
     public static Set<ModeloCampo> execQuery( final String query ) {
 
+        if ( isBlank( query ) )
+            throw new IllegalArgumentException( "Faltou definir query de execução" );
+
         try {
-            final ResultSetHandler<Set<ModeloCampo>> h = rs -> {
+            final ResultSetHandler<Set<ModeloCampo>> resultSet = rs -> {
                 if (!rs.next()) return emptySet();
                 final Set<ModeloCampo> campos = new LinkedHashSet<>();
                 final ResultSetMetaData meta = rs.getMetaData();
                 int columnCount = meta.getColumnCount();
-                for (int index = 0; index < columnCount; index++) {
+                for ( int index = 0; index < columnCount; index++ ) {
                     int pos = index + 1;
                     campos.add(
                         new ModeloCampo.Builder()
@@ -167,7 +169,7 @@ public final class ConnectionFactory {
             final Tuple2<Connection, DriverCnx> tuple = getConnection();
             final Connection con = tuple._1();
             final QueryRunner run = new QueryRunner();
-            return run.query( con, query, h );
+            return run.query( con, query, resultSet );
         } catch ( final SQLException e ) {
             e.printStackTrace();
             throw new RuntimeException( e.getMessage() );

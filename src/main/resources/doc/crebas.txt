@@ -44,5 +44,6 @@ insert into usuarios( nome, cpf, id_perfil, version ) values ( "XXX", "035263556
 insert into parametros( id, descricao, numero, version ) values ( 1, 'PROXIMO CODIGO', 0, 0 );
 
 insert into clientes( empresa, cliente, razao_social, vlr_limite ) values ( 1, 10, 'TESTE', 950.50 );
+insert into clientes( empresa, cliente, razao_social, vlr_limite ) values ( 1, 20, 'TESTE 20', 1000 );
 
 .exit
