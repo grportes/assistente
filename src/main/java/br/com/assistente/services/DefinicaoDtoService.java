@@ -1,5 +1,6 @@
 package br.com.assistente.services;
 
+import br.com.assistente.infra.util.UtilVelocity;
 import br.com.assistente.models.DefinicaoDto;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
@@ -45,6 +46,8 @@ public class DefinicaoDtoService {
         context.put( "identificadores", buscarTodosAtributoId( definicoes ) );
         context.put( "StringUtils", StringUtils.class );
         context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
+
+//        UtilVelocity.exec( context, "/templates/definicao_dto.vm" )
 
         final VelocityEngine engine = new VelocityEngine();
         engine.setProperty( RESOURCE_LOADERS, "classpath" );
