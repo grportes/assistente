@@ -1,0 +1,189 @@
+package models.commons.dtos;
+
+/**
+ * Classe que representa informações...
+ *
+ * <p>Autor: </p>
+ *
+ * @since
+ */
+public class BaixaPedidoECommerceV2Dto implements Serializable {
+
+    private final Long idBaixaECommerce;
+    private final BigDecimal vlrBruto;
+    private final LocalDateTime dataDownloadViagem;
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // CONSTRUCTOR
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public BaixaPedidoECommerceDto(
+        final Long idBaixaECommerce,
+        final BigDecimal vlrBruto,
+        final java.util.Date dataDownloadViagem
+    ) {
+
+        this.idBaixaECommerce = idBaixaECommerce;
+        this.vlrBruto = vlrBruto;
+        this.dataDownloadViage = toLocalDateTime( dataDownloadViagem );
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // GETTERS
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @JsonProperty( "idBaixaECommerce" )
+    public Long getIdBaixaECommerce() {
+
+        return this.idBaixaECommerce;
+    }
+
+    @JsonProperty( "vlrBruto" )
+    public BigDecimal getVlrBruto() {
+
+        return this.vlrBruto;
+    }
+
+    @JsonProperty( "vlrLiquido" )
+    public BigDecimal getVlrLiquido() {
+
+        return this.vlrLiquido;
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // EQUALS & HASHCODE
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaixaPedidoECommerceV2Dto that = (BaixaPedidoECommerceV2Dto) o;
+        return Objects.equals(getIdBaixaECommerce(), that.getIdBaixaECommerce());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdBaixaECommerce());
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // BUILDER
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static class Builder {
+
+        private Long idBaixaECommerce;
+        private BigDecimal vlrBruto;
+        private BigDecimal vlrLiquido;
+        private BigDecimal vlrTaxa;
+        private BigDecimal vlrAbsorcao;
+        private BigDecimal vlrRendimento;
+        private String pedidoOrigem;
+        private Long idPedidoEcommerce;
+        private Short origem;
+        private BigDecimal vlrPedido;
+        private Long idCliente;
+        private String razaoSocial;
+
+        public Builder( final Long idBaixaECommerce ) {
+
+            this.idBaixaECommerce = idBaixaECommerce;
+            this.vlrBruto = null;
+            this.vlrLiquido = null;
+            this.vlrTaxa = null;
+            this.vlrAbsorcao = null;
+            this.vlrRendimento = null;
+            this.pedidoOrigem = null;
+            this.idPedidoEcommerce = null;
+            this.origem = null;
+            this.vlrPedido = null;
+            this.idCliente = null;
+            this.razaoSocial = null;
+        }
+
+        public Builder comVlrBruto( final BigDecimal value ) {
+
+            this.vlrBruto = value;
+            return this;
+        }
+
+        public Builder comVlrLiquido( final BigDecimal value ) {
+
+            this.vlrLiquido = value;
+            return this;
+        }
+
+        public Builder comVlrTaxa( final BigDecimal value ) {
+
+            this.vlrTaxa = value;
+            return this;
+        }
+
+        public Builder comVlrAbsorcao( final BigDecimal value ) {
+
+            this.vlrAbsorcao = value;
+            return this;
+        }
+
+        public Builder comVlrRendimento( final BigDecimal value ) {
+
+            this.vlrRendimento = value;
+            return this;
+        }
+
+        public Builder comPedidoOrigem( final String value ) {
+
+            this.pedidoOrigem = value;
+            return this;
+        }
+
+        public Builder comIdPedidoECommerce( final Long value ) {
+
+            this.idPedidoEcommerce = value;
+            return this;
+        }
+
+        public Builder comOrigem( final Short value ) {
+
+            this.origem = value;
+            return this;
+        }
+
+        public Builder comVlrPedido( final BigDecimal value ) {
+
+            this.vlrPedido = value;
+            return this;
+        }
+
+        public Builder comIdCliente( final Long value ) {
+
+            this.idCliente = value;
+            return this;
+        }
+
+        public Builder comRazaoSocial( final String value ) {
+
+            this.razaoSocial = value;
+            return this;
+        }
+
+        public BaixaPedidoECommerceV2Dto build() {
+
+            return new BaixaPedidoECommerceV2Dto( this );
+        }
+    }
+}
+

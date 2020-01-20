@@ -1,0 +1,14 @@
+#if ( $exibirResultClass )
+<named-native-query
+    name="?????"
+    result-class="models.domains.transp.AcompanhamentoEntrega"
+>
+#else
+<named-native-query name="?????">
+#end
+    <query><![CDATA[
+
+    $query
+
+    ]]></query>
+</named-native-query>

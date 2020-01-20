@@ -56,9 +56,8 @@ public class MapeamentoService {
         if ( isNull( modelo ) || isEmpty( modelo.getCampos() ) ) return emptySet();
 
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
-
         final Set<ModeloCampo> camposPk = buscarPks( modelo.getCampos() );
-        Set<ModeloCampo> campos = modelo.getCampos();
+        final Set<ModeloCampo> campos = modelo.getCampos();
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
 
         if ( modelo.isChaveComposta() ) {

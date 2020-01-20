@@ -1,0 +1,4 @@
+#foreach ( $campo in $campos )
+#set ( $nomeColuna = $campo.ColunaDB )
+$StringUtils.join( 'row.get( "', $nomeColuna, '" )' )
+#end

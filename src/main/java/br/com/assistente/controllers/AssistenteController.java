@@ -581,7 +581,7 @@ public class AssistenteController {
     public void gerarResultQuery() {
 
         if ( cbxQueryTuple.isSelected() ) {
-            queryService.convTexto( txaQuery.getText() );
+            setarResultado( queryService.convTexto( txaQuery.getText() ) );
         }
     }
 

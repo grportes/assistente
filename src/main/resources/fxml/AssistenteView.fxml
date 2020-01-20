@@ -288,7 +288,7 @@
                               </VBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="784.0" spacing="15.0">
                                  <children>
-                                    <CheckBox fx:id="cbxQueryTuple" mnemonicParsing="false" onAction="#onActionQuery" text="Usar Tuple como retorno" />
+                                    <CheckBox fx:id="cbxQueryTuple" mnemonicParsing="false" onAction="#onActionQuery" text="Leitura via Tuple" />
                                     <CheckBox fx:id="cbxQueryJsonAnnotation" mnemonicParsing="false" text="Json Annotations" />
                                     <CheckBox fx:id="cbxQueryAplicarBuilder" mnemonicParsing="false" text="Pattern Builder" />
                                     <Button fx:id="btnQueryGerar" mnemonicParsing="false" onAction="#onActionQuery" text="Gerar" />
