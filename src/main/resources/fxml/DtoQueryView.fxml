@@ -25,7 +25,7 @@
                   </HBox>
                </children>
             </HBox>
-            <TableView fx:id="tbvDto" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tbvDto" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="tcDtoNomeAtributo" prefWidth="214.0" text="Atributo" />
                 <TableColumn fx:id="tcDtoAtributoId" prefWidth="48.0" text="ID" />

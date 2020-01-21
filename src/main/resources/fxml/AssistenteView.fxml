@@ -235,7 +235,7 @@
                                     <Insets />
                                  </VBox.margin>
                               </HBox>
-                              <TableView fx:id="tbvDto" prefHeight="270.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
+                              <TableView fx:id="tbvDto" editable="true" prefHeight="270.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                 <columns>
                                   <TableColumn fx:id="tcDtoTipo" prefWidth="225.0" text="Tipo" />
                                   <TableColumn fx:id="tcDtoNomeAtributo" prefWidth="309.0" text="Nome Atributo" />

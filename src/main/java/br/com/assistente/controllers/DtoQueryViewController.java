@@ -22,6 +22,7 @@ import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static java.util.Objects.nonNull;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static javafx.stage.Modality.WINDOW_MODAL;
 
 public class DtoQueryViewController  {
@@ -44,6 +45,7 @@ public class DtoQueryViewController  {
 
         tcDtoNomeAtributo.setCellValueFactory( c -> c.getValue().nomeAtributoProperty() );
         tcDtoAtributoId.setCellValueFactory( c -> c.getValue().atributoIdProperty() );
+        tcDtoAtributoId.setCellFactory( forTableColumn(tcDtoAtributoId) );
         definicaoDtos = observableArrayList();
 
         runLater(() -> {

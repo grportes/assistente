@@ -488,6 +488,7 @@ public class AssistenteController {
         tcDtoTipo.setCellValueFactory( c -> c.getValue().tipoProperty() );
         tcDtoNomeAtributo.setCellValueFactory( c -> c.getValue().nomeAtributoProperty() );
         tcDtoAtributoId.setCellValueFactory( c -> c.getValue().atributoIdProperty() );
+        tcDtoAtributoId.setCellFactory( forTableColumn(tcDtoAtributoId) );
         tcDtoPosicao.setCellValueFactory( c -> c.getValue().posicaoProperty().asObject() );
         definicaoDtos = observableArrayList();
         tbvDto.setRowFactory( tv -> {
