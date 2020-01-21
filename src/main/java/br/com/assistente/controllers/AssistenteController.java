@@ -95,11 +95,11 @@ public class AssistenteController {
     @FXML private CheckBox cbxConstanteConverter;
 
     // DTO:
-    @FXML TextField txfDtoNomeClasse;
-    @FXML TextField txfDtoNomeAtributo;
-    @FXML ComboBox<DefinicaoDto.Tipo> cbxDtoTipo;
-    @FXML CheckBox cbxAtributoId;
-    @FXML TableView<DefinicaoDto> tbvDto;
+    @FXML private TextField txfDtoNomeClasse;
+    @FXML private TextField txfDtoNomeAtributo;
+    @FXML private ComboBox<DefinicaoDto.Tipo> cbxDtoTipo;
+    @FXML private CheckBox cbxAtributoId;
+    @FXML private TableView<DefinicaoDto> tbvDto;
     @FXML private TableColumn<DefinicaoDto, DefinicaoDto.Tipo> tcDtoTipo;
     @FXML private TableColumn<DefinicaoDto, String> tcDtoNomeAtributo;
     @FXML private TableColumn<DefinicaoDto, Boolean> tcDtoAtributoId;
@@ -109,11 +109,11 @@ public class AssistenteController {
     @FXML CheckBox cbxDtoAplicarBuilder;
 
     // Query:
-    @FXML TextField txfQueryNomeClasse;
-    @FXML TextArea txaQuery;
-    @FXML CheckBox cbxQueryTuple;
-    @FXML CheckBox cbxQueryJsonAnnotation;
-    @FXML CheckBox cbxQueryAplicarBuilder;
+    @FXML private TextField txfQueryNomeClasse;
+    @FXML private TextArea txaQuery;
+    @FXML private CheckBox cbxQueryTuple;
+    @FXML private CheckBox cbxQueryJsonAnnotation;
+    @FXML private CheckBox cbxQueryAplicarBuilder;
 
     // Result:
     @FXML private Tab tabResult;

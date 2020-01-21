@@ -25,10 +25,10 @@
                   </HBox>
                </children>
             </HBox>
-            <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tbvDto" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn prefWidth="214.0" text="Atributo" />
-                <TableColumn prefWidth="48.0" text="ID" />
+                <TableColumn fx:id="tcDtoNomeAtributo" prefWidth="214.0" text="Atributo" />
+                <TableColumn fx:id="tcDtoAtributoId" prefWidth="48.0" text="ID" />
               </columns>
             </TableView>
          </children>
