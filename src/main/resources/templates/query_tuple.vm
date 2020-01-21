@@ -1,4 +1,15 @@
+// imports...
+#foreach ( $import in $importsTupleConverter )
+import static $import;
+#end
+
+// rows...
 #foreach ( $campo in $campos )
-#set ( $nomeColuna = $campo.ColunaDB )
+#set ( $nomeColuna = $campo.NomeAtributo )
+#set ( $converter = $StringUtils.substringAfterLast( $campo.Tipo.TupleConverter, '.' ) )
+#if ( $StringUtils.isBlank( $converter ) )
 $StringUtils.join( 'row.get( "', $nomeColuna, '" )' )
+#else
+$StringUtils.join( 'row.get( ', $converter, '( "', $nomeColuna, '") ) ' )
+#end
 #end

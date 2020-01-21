@@ -148,6 +148,17 @@ public class DefinicaoDto {
                 .collect( toSet() );
     }
 
+    public static Set<String> buscarImportsTupleConverter( final Set<DefinicaoDto> lista ) {
+
+        return isEmpty( lista )
+            ? emptySet()
+            : lista.stream()
+                .map( DefinicaoDto::getTipo )
+                .map( Tipo::getTupleConverter )
+                .filter( StringUtils::isNotBlank )
+                .collect( toSet() );
+    }
+
     public static Set<DefinicaoDto> orderByPosicao( final Set<DefinicaoDto> lista ) {
 
         return isEmpty( lista )

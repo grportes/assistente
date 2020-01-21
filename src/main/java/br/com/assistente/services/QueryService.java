@@ -3,7 +3,6 @@ package br.com.assistente.services;
 import br.com.assistente.infra.db.ConnectionFactory;
 import br.com.assistente.models.DataType;
 import br.com.assistente.models.DefinicaoDto;
-import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
@@ -17,6 +16,7 @@ import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilVelocity.exec;
 import static br.com.assistente.models.DefinicaoDto.buscarImports;
+import static br.com.assistente.models.DefinicaoDto.buscarImportsTupleConverter;
 import static br.com.assistente.models.DefinicaoDto.orderByPosicao;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toSet;
@@ -55,12 +55,11 @@ public class QueryService {
 
         final Set<DefinicaoDto> campos = extrairColunas( query );
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
-        final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
 
         results.add(
             new ResultMapeamento.Builder()
                 .comNomeEntidade( "Frag. Codigo" )
-                .comConteudoEntidade( gerarMapeamento( nomeAutor, null, campos,"/templates/query_tuple.vm"))
+                .comConteudoEntidade( gerarMapeamento(  campos) )
                 .build()
         );
 
@@ -74,21 +73,15 @@ public class QueryService {
         return results;
     }
 
-    private String gerarMapeamento(
-        final String nomeAutor,
-        final Modelo modelo,
-        final Set<DefinicaoDto> campos,
-        final String arquivoTemplate
-    ) {
+    private String gerarMapeamento( final Set<DefinicaoDto> campos ) {
 
         final VelocityContext context = new VelocityContext();
-        context.put( "nomeAutor", nomeAutor );
-        context.put( "modelo", modelo );
         context.put( "campos", orderByPosicao( campos ) );
         context.put( "importsNecessarios", buscarImports( campos ) );
+        context.put( "importsTupleConverter", buscarImportsTupleConverter( campos ) );
         context.put( "StringUtils", StringUtils.class );
         context.put( "query", StringUtils.class );
-        return exec( context, arquivoTemplate );
+        return exec( context, "/templates/query_tuple.vm" );
     }
 
     private String gerarXMLQuery(
