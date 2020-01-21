@@ -27,6 +27,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.util.HashSet;
@@ -299,6 +300,11 @@ public class AssistenteController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private Window getParent() {
+
+        return vboxContainer.getScene().getWindow();
+    }
+
     private void initializeMapeamento() {
 
         tcMapeamentoPosicao.setCellValueFactory( c -> c.getValue().posicaoProperty().asObject() );
@@ -409,9 +415,9 @@ public class AssistenteController {
         msgInfo( "Arquivo csv deve estar no formato:\n\n \"DESCRICAO<TAB>VALOR\"");
 
         selecionarArquivo(
-                "Selecione o arquivo",
-                vboxContainer.getScene().getWindow(),
-                new Tuple2<>( "Texto (CSV - tabulação)", "*.csv" )
+            "Selecione o arquivo",
+            vboxContainer.getScene().getWindow(),
+            new Tuple2<>( "Texto (CSV - tabulação)", "*.csv" )
         )
         .map( File::getAbsolutePath )
         .ifPresent( arquivo ->{
@@ -582,6 +588,18 @@ public class AssistenteController {
 
         if ( cbxQueryTuple.isSelected() ) {
             setarResultado( queryService.convTexto( txaQuery.getText() ) );
+        } else {
+            queryService.convTexto(
+                txfQueryNomeClasse.getText(),
+                txaQuery.getText(),
+                cbxQueryJsonAnnotation.isSelected(),
+                cbxQueryAplicarBuilder.isSelected(),
+                dto -> {
+
+                    final DtoQueryViewController controller = DtoQueryViewController.openViewDtoIdentity( getParent() );
+                    return controller.getIdentities();
+                }
+            );
         }
     }
 
