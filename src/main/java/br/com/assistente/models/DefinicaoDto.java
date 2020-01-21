@@ -23,8 +23,10 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 
 public class DefinicaoDto {
 
@@ -191,6 +193,11 @@ public class DefinicaoDto {
             public String getJsonSerialize() {
                 return "";
             }
+
+            @Override
+            public String getTupleConverter() {
+                return "infra.util.UtilNumber.toShort";
+            }
         },
 
         INTEGER("Integer") {
@@ -203,6 +210,11 @@ public class DefinicaoDto {
             @Override
             public String getJsonSerialize() {
                 return "";
+            }
+
+            @Override
+            public String getTupleConverter() {
+                return "infra.util.UtilNumber.toInteger";
             }
         },
 
@@ -218,6 +230,11 @@ public class DefinicaoDto {
 
                 return "";
             }
+
+            @Override
+            public String getTupleConverter() {
+                return "infra.util.UtilNumber.toLong";
+            }
         },
 
         BIGDECIMAL( "BigDecimal" ) {
@@ -231,6 +248,12 @@ public class DefinicaoDto {
             public String getJsonSerialize() {
 
                 return "";
+            }
+
+            @Override
+            public String getTupleConverter() {
+
+                return "infra.util.UtilNumber.toBigDecimal";
             }
         },
 
@@ -246,6 +269,12 @@ public class DefinicaoDto {
 
                 return "infra.json.Serializer.SerializerLocalDateSerializer";
             }
+
+            @Override
+            public String getTupleConverter() {
+
+                return "infra.util.UtilDate.toLocalDate";
+            }
         },
 
         LOCAL_DATETIME( "LocalDateTime") {
@@ -259,6 +288,12 @@ public class DefinicaoDto {
             public String getJsonSerialize() {
 
                 return "infra.json.Serializer.SerializerLocalDateTimeSerializer";
+            }
+
+            @Override
+            public String getTupleConverter() {
+
+                return "infra.util.UtilDate.toLocalDateTime";
             }
         },
 
@@ -274,6 +309,12 @@ public class DefinicaoDto {
 
                 return "infra.json.Serializer.SerializerLocalTime";
             }
+
+            @Override
+            public String getTupleConverter() {
+
+                return "infra.util.UtilDate.toLocalTime";
+            }
         },
 
         CHAR( "Char" ) {
@@ -288,6 +329,12 @@ public class DefinicaoDto {
 
                 return "";
             }
+
+            @Override
+            public String getTupleConverter() {
+
+                return "";
+            }
         },
 
         STRING("String") {
@@ -299,6 +346,12 @@ public class DefinicaoDto {
 
             @Override
             public String getJsonSerialize() {
+
+                return "";
+            }
+
+            @Override
+            public String getTupleConverter() {
 
                 return "";
             }
@@ -324,6 +377,7 @@ public class DefinicaoDto {
 
         public abstract String getImportNecessario();
         public abstract String getJsonSerialize();
+        public abstract String getTupleConverter();
 
         public static List<Tipo> buscarTipos() {
 
@@ -351,7 +405,7 @@ public class DefinicaoDto {
             this.posicao = null;
             this.tipo = null;
             this.nomeAtributo = null;
-            this.atributoId = null;
+            this.atributoId = false;
         }
 
         public Builder comPosicao( final Integer value ) {
@@ -365,6 +419,18 @@ public class DefinicaoDto {
 
             requireNonNull( value, "Obrigatório informar o tipo do atributo" );
             this.tipo = value;
+            return this;
+        }
+
+        public Builder comTipo( final DataType dataType ) {
+
+            requireNonNull( dataType, "Obrigatório informar o tipo do atributo" );
+            final String javaType = substringAfterLast( dataType.getJavaType(), "." );
+            this.tipo = Tipo.buscarTipos()
+                .stream()
+                .filter( t -> equalsIgnoreCase( t.getNome(), javaType ) )
+                .findFirst()
+                .orElseThrow( () -> new IllegalArgumentException( "Nao localizou tipo de dados" ) );
             return this;
         }
 
@@ -385,6 +451,7 @@ public class DefinicaoDto {
 
             return new DefinicaoDto(this );
         }
+
     }
 
 }

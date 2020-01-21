@@ -2,6 +2,7 @@ package br.com.assistente.services;
 
 import br.com.assistente.infra.db.ConnectionFactory;
 import br.com.assistente.models.DataType;
+import br.com.assistente.models.DefinicaoDto;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
@@ -15,15 +16,15 @@ import java.util.Objects;
 import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilVelocity.exec;
-import static br.com.assistente.models.ModeloCampo.buscarImports;
-import static br.com.assistente.models.ModeloCampo.orderByPosicao;
+import static br.com.assistente.models.DefinicaoDto.buscarImports;
+import static br.com.assistente.models.DefinicaoDto.orderByPosicao;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 public class QueryService {
 
-    private Set<ModeloCampo> extrairColunas( final String query ) {
+    private Set<DefinicaoDto> extrairColunas( final String query ) {
 
         final List<DataType> dataTypes = SetupUsuario.buscarDataTypes();
 
@@ -41,14 +42,18 @@ public class QueryService {
                     "Coluna [ %s ] do tipo [ %s ] Não localizou tipo Java correspondente",
                     m.getColunaDB(), m.getTipoDB()
                 ) ) );
-            return new ModeloCampo.Builder( m ).comDataType( dataType ).build();
+            return new DefinicaoDto.Builder()
+                .comPosicao( m.getPosicao() )
+                .comNomeAtributo( m.getColunaJava() )
+                .comTipo( dataType )
+                .build();
         } ).collect( toSet() );
     }
 
 
     public Set<ResultMapeamento> convTexto( final String query ) {
 
-        final Set<ModeloCampo> campos = extrairColunas( query );
+        final Set<DefinicaoDto> campos = extrairColunas( query );
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
 
@@ -72,7 +77,7 @@ public class QueryService {
     private String gerarMapeamento(
         final String nomeAutor,
         final Modelo modelo,
-        final Set<ModeloCampo> campos,
+        final Set<DefinicaoDto> campos,
         final String arquivoTemplate
     ) {
 
