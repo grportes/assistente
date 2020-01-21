@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import static br.com.assistente.controllers.DtoQueryViewController.openViewDtoIdentity;
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.infra.javafx.Dialog.msgInfo;
@@ -596,7 +597,7 @@ public class AssistenteController {
                 cbxQueryAplicarBuilder.isSelected(),
                 dtos -> {
 
-                    DtoQueryViewController.openViewDtoIdentity( getParent(), dtos, d -> {
+                    openViewDtoIdentity( getParent(), dtos, d -> {
 
                         System.out.println("Saiu da modal");
                     });

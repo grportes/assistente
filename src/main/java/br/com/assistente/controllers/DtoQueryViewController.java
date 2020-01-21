@@ -3,6 +3,7 @@ package br.com.assistente.controllers;
 import br.com.assistente.models.DefinicaoDto;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -31,8 +32,17 @@ public class DtoQueryViewController  {
     @FXML
     public void onActionBtnConfirmar( ) {
 
-        System.out.println("teste");
 
+
+        System.out.println("teste");
+        fechar();
+
+    }
+
+    private void fechar() {
+
+        final Stage stage = (Stage) rootContainer.getScene().getWindow();
+        stage.close();
     }
 
     public Set<DefinicaoDto> getIdentities() {
