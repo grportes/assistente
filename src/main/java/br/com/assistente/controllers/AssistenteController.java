@@ -594,10 +594,14 @@ public class AssistenteController {
                 txaQuery.getText(),
                 cbxQueryJsonAnnotation.isSelected(),
                 cbxQueryAplicarBuilder.isSelected(),
-                dto -> {
+                dtos -> {
 
-                    final DtoQueryViewController controller = DtoQueryViewController.openViewDtoIdentity( getParent() );
-                    return controller.getIdentities();
+                    DtoQueryViewController.openViewDtoIdentity( getParent(), dtos, d -> {
+
+                        System.out.println("Saiu da modal");
+                    });
+                    System.out.println("Apos chamada da modal");
+                    return null;
                 }
             );
         }
