@@ -13,6 +13,7 @@ import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isAllUpperCase;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.text.CaseUtils.toCamelCase;
@@ -110,5 +111,23 @@ public final class UtilString {
         }
         return toCamelCase( newStr, capitalizeFirst, '_' );
     }
+
+    public static String requireNotBlank( final String str ) {
+
+        return requireNotBlank( str, "String vazia não permitida" );
+    }
+
+    public static String requireNotBlank(
+        final String str,
+        final String message
+    ) {
+
+        if ( isBlank( str ) )
+            throw new NullPointerException( message );
+
+        return str;
+    }
+
+
 
 }

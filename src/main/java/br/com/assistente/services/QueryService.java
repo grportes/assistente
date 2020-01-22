@@ -13,15 +13,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static br.com.assistente.infra.util.UtilVelocity.exec;
 import static br.com.assistente.models.DefinicaoDto.buscarImports;
 import static br.com.assistente.models.DefinicaoDto.buscarImportsTupleConverter;
 import static br.com.assistente.models.DefinicaoDto.orderByPosicao;
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
@@ -106,20 +107,20 @@ public class QueryService {
         final Function<Set<DefinicaoDto>, Set<DefinicaoDto>> callback
     ) {
 
-        final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
+        requireNotBlank( nomeClasse, "Nome da DTO vazio!" );
+        requireNotBlank( query, "Query vazia!" );
+        requireNonNull( callback, "Callback necessário para gerar DTO/Query!" );
 
-        Set<DefinicaoDto> dtos = extrairColunas( query );
+        final Set<DefinicaoDto> dtos = extrairColunas( query );
+
+        final Set<DefinicaoDto> dtosComIdentity = callback.apply( dtos );
+
+        final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
 
         results.addAll(
             new DefinicaoDtoService()
-            .convTexto( nomeClasse, dtos, gerarJsonAnnotations, gerarClasseBuilder )
+            .convTexto( nomeClasse, dtosComIdentity, gerarJsonAnnotations, gerarClasseBuilder )
         );
-
-        Set<DefinicaoDto> apply = callback.apply( dtos );
-
-        for ( DefinicaoDto definicaoDto : apply ) {
-            System.out.println(definicaoDto);
-        }
 
         results.add(
             new ResultMapeamento.Builder()
@@ -129,6 +130,5 @@ public class QueryService {
         );
 
         return results;
-
     }
 }

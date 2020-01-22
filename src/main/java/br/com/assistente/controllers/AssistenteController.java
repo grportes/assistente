@@ -579,8 +579,7 @@ public class AssistenteController {
 
     private void desabilitarAcoesQuery( final boolean desabilitar ) {
 
-        if ( desabilitar )
-            txfQueryNomeClasse.setText( "" );
+        if ( desabilitar ) txfQueryNomeClasse.setText( "" );
         txfQueryNomeClasse.setDisable( desabilitar );
         cbxQueryJsonAnnotation.setDisable( desabilitar );
         cbxQueryAplicarBuilder.setDisable( desabilitar );
@@ -591,12 +590,15 @@ public class AssistenteController {
         if ( cbxQueryTuple.isSelected() ) {
             setarResultado( queryService.convTexto( txaQuery.getText() ) );
         } else {
-            queryService.convTexto(
-                txfQueryNomeClasse.getText(),
-                txaQuery.getText(),
-                cbxQueryJsonAnnotation.isSelected(),
-                cbxQueryAplicarBuilder.isSelected(),
-                queryDto -> openViewDtoIdentity( getParent(), queryDto )
+            txfQueryNomeClasse.setText( convPadraoNomeClasse( txfQueryNomeClasse.getText() ) );
+            setarResultado(
+                queryService.convTexto(
+                    txfQueryNomeClasse.getText(),
+                    txaQuery.getText(),
+                    cbxQueryJsonAnnotation.isSelected(),
+                    cbxQueryAplicarBuilder.isSelected(),
+                    queryDto -> openViewDtoIdentity( getParent(), queryDto )
+                )
             );
         }
     }
