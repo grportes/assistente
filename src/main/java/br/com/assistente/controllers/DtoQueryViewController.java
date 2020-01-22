@@ -14,9 +14,8 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static java.util.Objects.nonNull;
@@ -63,27 +62,13 @@ public class DtoQueryViewController  {
     @FXML
     public void onActionBtnConfirmar( ) {
 
-        System.out.println("teste");
-        fechar();
-
-    }
-
-    private void fechar() {
-
-        final Stage stage = (Stage) rootContainer.getScene().getWindow();
-        stage.getUserData();
+        final Stage stage = getStage();
+        assert stage != null;
+        stage.setUserData( definicaoDtos );
         stage.close();
     }
 
-    public Set<DefinicaoDto> getIdentities() {
 
-        return Collections.singleton(
-            new DefinicaoDto.Builder()
-                .comTipo( DefinicaoDto.Tipo.INTEGER )
-                .comNomeAtributo( "TESTE" )
-                .build()
-        );
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -97,10 +82,9 @@ public class DtoQueryViewController  {
         return nonNull( scene ) ? (Stage) scene.getWindow() : null;
     }
 
-    public static void openViewDtoIdentity(
+    public static Set<DefinicaoDto> openViewDtoIdentity(
         final Window windowPai,
-        final Set<DefinicaoDto> definicaoDtos,
-        final Consumer<Set<DefinicaoDto>> actionExit
+        final Set<DefinicaoDto> definicaoDtos
     ) {
 
         try {
@@ -114,10 +98,8 @@ public class DtoQueryViewController  {
             stage.setResizable( false );
             stage.setMaximized( false );
             stage.setUserData( definicaoDtos );
-            stage.setOnCloseRequest(ev -> {
-                actionExit.accept( definicaoDtos );
-            });
             stage.showAndWait();
+            return new HashSet<>((ObservableList<DefinicaoDto>) stage.getUserData());
         } catch ( final IOException e ) {
             throw new UncheckedIOException(e);
         }
