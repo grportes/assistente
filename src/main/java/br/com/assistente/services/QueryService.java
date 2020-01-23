@@ -19,9 +19,13 @@ import static br.com.assistente.infra.util.UtilString.convCamelCase;
 import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static br.com.assistente.infra.util.UtilVelocity.exec;
 import static br.com.assistente.models.DefinicaoDto.buscarImports;
+import static br.com.assistente.models.DefinicaoDto.buscarImportsSerializer;
 import static br.com.assistente.models.DefinicaoDto.buscarImportsTupleConverter;
+import static br.com.assistente.models.DefinicaoDto.buscarTodosAtributoId;
 import static br.com.assistente.models.DefinicaoDto.orderByPosicao;
 import static java.lang.String.format;
+import static java.time.LocalDate.now;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
@@ -63,7 +67,7 @@ public class QueryService {
         results.add(
             new ResultMapeamento.Builder()
                 .comNomeEntidade( "Frag. Codigo" )
-                .comConteudoEntidade( gerarMapeamento( campos ) )
+                .comConteudoEntidade( gerarTuple( campos ) )
                 .build()
         );
 
@@ -77,7 +81,7 @@ public class QueryService {
         return results;
     }
 
-    private String gerarMapeamento( final Set<DefinicaoDto> campos ) {
+    private String gerarTuple( final Set<DefinicaoDto> campos ) {
 
         final VelocityContext context = new VelocityContext();
         context.put( "campos", orderByPosicao( campos ) );
@@ -117,9 +121,11 @@ public class QueryService {
 
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
 
-        results.addAll(
-            new DefinicaoDtoService()
-            .convTexto( nomeClasse, dtosComIdentity, gerarJsonAnnotations, gerarClasseBuilder )
+        results.add(
+            new ResultMapeamento.Builder()
+            .comNomeEntidade( nomeClasse )
+            .comConteudoEntidade( gerarDto( nomeClasse, dtosComIdentity, gerarJsonAnnotations, gerarClasseBuilder ) )
+            .build()
         );
 
         results.add(
@@ -131,4 +137,31 @@ public class QueryService {
 
         return results;
     }
+
+    private String gerarDto(
+        final String nomeClasse,
+        final Set<DefinicaoDto> definicoes,
+        boolean gerarJsonAnnotations,
+        boolean gerarClasseBuilder
+    ) {
+
+        final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
+
+        final VelocityContext context = new VelocityContext();
+        context.put( "nomeAutor", nomeAutor );
+        context.put( "nomeClasse", nomeClasse );
+        context.put( "definicoes", orderByPosicao( definicoes ) );
+        context.put( "gerarJsonAnnotations", gerarJsonAnnotations );
+        context.put( "gerarClasseBuilder", gerarClasseBuilder );
+        context.put( "importsNecessarios", buscarImports( definicoes ) );
+        context.put( "importsNecessariosSerializer", buscarImportsSerializer( definicoes ) );
+        context.put( "identificadores", buscarTodosAtributoId( definicoes ) );
+        context.put( "StringUtils", StringUtils.class );
+        context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
+
+        return exec( context, "/templates/query_dto.vm" );
+    }
+
+
+
 }

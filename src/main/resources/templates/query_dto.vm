@@ -1,189 +1,181 @@
 package models.commons.dtos;
 
+#if ( $gerarJsonAnnotations )
+import com.fasterxml.jackson.annotation.JsonProperty;
+#end
+
+import java.io.Serializable;
+    #foreach ( $import in $importsNecessarios )
+import $import;
+    #end
+import java.util.Objects;
+
+#if ( $gerarJsonAnnotations )
+    #foreach ( $import in $importsNecessariosSerializer )
+import $import;
+    #end
+#end
+
+
 /**
  * Classe que representa informações...
  *
- * <p>Autor: </p>
+ * <p>Autor: $nomeAutor</p>
  *
- * @since
+ * @since $dataHora
  */
-public class BaixaPedidoECommerceV2Dto implements Serializable {
+public class $nomeClasse implements Serializable {
 
-    private final Long idBaixaECommerce;
-    private final BigDecimal vlrBruto;
-    private final LocalDateTime dataDownloadViagem;
+    #macroDeclaracaoVariaves
+    #macroConstructor
+    #if ( $gerarClasseBuilder )
+    #macroConstructorBuilder
+    #end
+    #macroGetters
+    #macroEqualsHashcode
+    #if ( $gerarClasseBuilder )
+    #macroBuilder
+    #end
+}
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#macro( macroComentario $texto )
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // CONSTRUCTOR
+    // $texto
     //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#end
 
-    public BaixaPedidoECommerceDto(
-        final Long idBaixaECommerce,
-        final BigDecimal vlrBruto,
-        final java.util.Date dataDownloadViagem
+#macro( macroDeclaracaoVariaves )
+    #foreach( $definicao in $definicoes )
+    private final $StringUtils.join( $definicao.Tipo, ' ', $definicao.NomeAtributo, ';' )
+    #end
+
+#end
+
+#macro( macroConstructor )
+
+    #macroComentario( "CONSTRUCTOR" )
+
+    public $nomeClasse(
+        #foreach ( $definicao in $definicoes )
+        final $definicao.Tipo $definicao.NomeAtributo#if( $foreach.hasNext ),#end
+        #end
     ) {
 
-        this.idBaixaECommerce = idBaixaECommerce;
-        this.vlrBruto = vlrBruto;
-        this.dataDownloadViage = toLocalDateTime( dataDownloadViagem );
+        #foreach ( $definicao in $definicoes )
+        this.$definicao.NomeAtributo = $definicao.NomeAtributo;
+        #end
     }
 
+#end
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // GETTERS
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#macro( macroConstructorBuilder )
 
-    @JsonProperty( "idBaixaECommerce" )
-    public Long getIdBaixaECommerce() {
+    private $nomeClasse( final Builder builder ) {
 
-        return this.idBaixaECommerce;
+        #foreach ( $definicao in $definicoes )
+        this.$definicao.NomeAtributo = builder.$definicao.NomeAtributo;
+        #end
     }
 
-    @JsonProperty( "vlrBruto" )
-    public BigDecimal getVlrBruto() {
+#end
 
-        return this.vlrBruto;
+
+#macro( macroGetters )
+
+    #macroComentario( "GETTERS" )
+
+    #foreach ( $definicao in $definicoes )
+    #if ( $gerarJsonAnnotations )
+    @JsonProperty( "$definicao.NomeAtributo" )
+        #if ( $StringUtils.isNotBlank( $definicao.Tipo.JsonSerialize ) )
+            #set ( $tipo = $StringUtils.substringAfterLast( $definicao.Tipo.JsonSerialize, "." ) )
+    $StringUtils.join( '@JsonSerialize( using = ', $tipo, '.class )' )
+        #end
+    #end
+    #set ( $nomeMetodo = $StringUtils.capitalize( $definicao.NomeAtributo ) )
+    public $definicao.Tipo $StringUtils.join( 'get', $nomeMetodo, '() {' )
+
+        return this.$definicao.NomeAtributo;
     }
 
-    @JsonProperty( "vlrLiquido" )
-    public BigDecimal getVlrLiquido() {
+    #end
+#end
 
-        return this.vlrLiquido;
-    }
+#macro( macroEqualsHashcode )
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // EQUALS & HASHCODE
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #set( $varObj = $StringUtils.join( $StringUtils.lowerCase($StringUtils.substring($nomeClasse,0,1) ), $StringUtils.substring($nomeClasse,1) ) )
+    #macroComentario( "EQUALS && HASHCODE" )
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BaixaPedidoECommerceV2Dto that = (BaixaPedidoECommerceV2Dto) o;
-        return Objects.equals(getIdBaixaECommerce(), that.getIdBaixaECommerce());
+    public boolean equals( final Object obj ) {
+
+        if ( this == obj ) return true;
+        if ( isNull( obj ) || getClass() != o.getClass() ) return false;
+        final $nomeClasse $varObj = ($nomeClasse) obj;
+        #macroExpressoesEquals( $varObj )
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdBaixaECommerce());
+
+        return Objects.hash(
+            #foreach ( $definicao in $identificadores )
+                #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $definicao.NomeAtributo ) ,"()" ) )
+            $metodo#if( $foreach.hasNext ),#end
+            #end
+        );
     }
 
+#end
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // BUILDER
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#macro( macroExpressoesEquals $varObj )
+    #set ( $primeiraLinha = true )
+    #foreach ( $campo in $identificadores )
+        #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.NomeAtributo ), "()" ) )
+        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.NomeAtributo , " )" ) )
+        #if ( $primeiraLinha  )
+            #set ( $primeiraLinha = false )
+        return $expressao
+        #else
+            && $expressao #if( !$foreach.hasNext );#end
+        #end
+    #end
+#end
+
+
+#macro( macroBuilder )
+
+    #macroComentario( "BUILDER" )
 
     public static class Builder {
 
-        private Long idBaixaECommerce;
-        private BigDecimal vlrBruto;
-        private BigDecimal vlrLiquido;
-        private BigDecimal vlrTaxa;
-        private BigDecimal vlrAbsorcao;
-        private BigDecimal vlrRendimento;
-        private String pedidoOrigem;
-        private Long idPedidoEcommerce;
-        private Short origem;
-        private BigDecimal vlrPedido;
-        private Long idCliente;
-        private String razaoSocial;
+    #foreach ( $definicao in $definicoes )
+        private $definicao.Tipo $definicao.NomeAtributo;
+    #end
 
-        public Builder( final Long idBaixaECommerce ) {
+        public Builder() {
 
-            this.idBaixaECommerce = idBaixaECommerce;
-            this.vlrBruto = null;
-            this.vlrLiquido = null;
-            this.vlrTaxa = null;
-            this.vlrAbsorcao = null;
-            this.vlrRendimento = null;
-            this.pedidoOrigem = null;
-            this.idPedidoEcommerce = null;
-            this.origem = null;
-            this.vlrPedido = null;
-            this.idCliente = null;
-            this.razaoSocial = null;
+    #foreach ( $definicao in $definicoes )
+            this.$definicao.NomeAtributo = null;
+    #end
         }
 
-        public Builder comVlrBruto( final BigDecimal value ) {
+    #foreach ( $definicao in $definicoes )
+        #set ( $nomeMetodo = $StringUtils.capitalize( $definicao.NomeAtributo ) )
+        public Builder $StringUtils.join( 'com', $nomeMetodo, '(' ) final $definicao.Tipo value ) {
 
-            this.vlrBruto = value;
+            this.$definicao.NomeAtributo = value;
             return this;
         }
 
-        public Builder comVlrLiquido( final BigDecimal value ) {
+    #end
+        public $nomeClasse build() {
 
-            this.vlrLiquido = value;
-            return this;
+            return new $nomeClasse( this );
         }
 
-        public Builder comVlrTaxa( final BigDecimal value ) {
+     }
 
-            this.vlrTaxa = value;
-            return this;
-        }
-
-        public Builder comVlrAbsorcao( final BigDecimal value ) {
-
-            this.vlrAbsorcao = value;
-            return this;
-        }
-
-        public Builder comVlrRendimento( final BigDecimal value ) {
-
-            this.vlrRendimento = value;
-            return this;
-        }
-
-        public Builder comPedidoOrigem( final String value ) {
-
-            this.pedidoOrigem = value;
-            return this;
-        }
-
-        public Builder comIdPedidoECommerce( final Long value ) {
-
-            this.idPedidoEcommerce = value;
-            return this;
-        }
-
-        public Builder comOrigem( final Short value ) {
-
-            this.origem = value;
-            return this;
-        }
-
-        public Builder comVlrPedido( final BigDecimal value ) {
-
-            this.vlrPedido = value;
-            return this;
-        }
-
-        public Builder comIdCliente( final Long value ) {
-
-            this.idCliente = value;
-            return this;
-        }
-
-        public Builder comRazaoSocial( final String value ) {
-
-            this.razaoSocial = value;
-            return this;
-        }
-
-        public BaixaPedidoECommerceV2Dto build() {
-
-            return new BaixaPedidoECommerceV2Dto( this );
-        }
-    }
-}
-
+#end
