@@ -24,7 +24,7 @@ import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static javafx.stage.Modality.WINDOW_MODAL;
 
-public class DtoQueryViewController  {
+public class DtoIdentityController {
 
     @FXML private AnchorPane rootContainer;
     @FXML private TableView<DefinicaoDto> tbvDto;
@@ -88,7 +88,7 @@ public class DtoQueryViewController  {
     ) {
 
         try {
-            final URL resource = getResource("/fxml/DtoQueryView.fxml");
+            final URL resource = getResource( "/fxml/DtoIdentityView.fxml" );
 
             final Stage stage = new Stage();
             stage.setScene( new Scene(FXMLLoader.load(resource)) );
