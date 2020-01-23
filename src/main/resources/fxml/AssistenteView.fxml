@@ -329,7 +329,7 @@
                         </AnchorPane>
                         <VBox alignment="CENTER" layoutX="14.0" layoutY="59.0" prefHeight="435.0" prefWidth="794.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
                            <children>
-                              <TextArea fx:id="txtResult" prefHeight="311.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
+                              <TextArea fx:id="txaResult" prefHeight="311.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                  <font>
                                     <Font name="Courier New" size="14.0" />
                                  </font>

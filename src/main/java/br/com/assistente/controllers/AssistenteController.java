@@ -26,6 +26,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 
@@ -117,7 +119,7 @@ public class AssistenteController {
 
     // Result:
     @FXML private Tab tabResult;
-    @FXML private TextArea txtResult;
+    @FXML private TextArea txaResult;
     @FXML private ComboBox<ResultMapeamento> cbxResultArquivos;
 
     // Services:
@@ -139,7 +141,6 @@ public class AssistenteController {
         initializeMapeamento();
         initializeConstantes();
         initializeDto();
-        initializeQuery();
     }
 
     public void onActionConfiguracoes() {
@@ -200,7 +201,7 @@ public class AssistenteController {
 
         results.stream().findFirst().ifPresent( rm -> {
             cbxResultArquivos.setValue( rm );
-            txtResult.setText( rm.getConteudoEntidade() );
+            txaResult.setText( rm.getConteudoEntidade() );
         });
     }
 
@@ -271,12 +272,15 @@ public class AssistenteController {
 
         switch ( source.getId() ) {
             case "btnResultCopiar":
+                final ClipboardContent content = new ClipboardContent();
+                content.putString( txaResult.getText() );
+                Clipboard.getSystemClipboard().setContent( content );
                 break;
             case "btnResultGravar":
                 break;
             case "cbxResultArquivos":
                 if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) )
-                    txtResult.setText( cbxResultArquivos.getValue().getConteudoEntidade() );
+                    txaResult.setText( cbxResultArquivos.getValue().getConteudoEntidade() );
                 break;
             case "btnResultAtualizar":
                 if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) ) {
@@ -285,7 +289,7 @@ public class AssistenteController {
                         .getItems()
                         .stream()
                         .map( rs -> Objects.equals( rs.getNomeEntidade(), nomeEntidade )
-                            ? new ResultMapeamento.Builder().comNomeEntidade( nomeEntidade ).comConteudoEntidade( txtResult.getText() ).build()
+                            ? new ResultMapeamento.Builder().comNomeEntidade( nomeEntidade ).comConteudoEntidade( txaResult.getText() ).build()
                             : rs
                         ).collect( toList() );
                     cbxResultArquivos.setItems( observableArrayList( novaLista ) );
@@ -563,11 +567,6 @@ public class AssistenteController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void initializeQuery() {
-
-
-    }
-
     private void resetQuery() {
 
         txfQueryNomeClasse.setText( "" );
@@ -618,7 +617,7 @@ public class AssistenteController {
 
         results.stream().findFirst().ifPresent( rm -> {
             cbxResultArquivos.setValue( rm );
-            txtResult.setText( rm.getConteudoEntidade() );
+            txaResult.setText( rm.getConteudoEntidade() );
         });
     }
 
