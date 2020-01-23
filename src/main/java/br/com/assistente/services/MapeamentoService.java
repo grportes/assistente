@@ -8,10 +8,13 @@ import br.com.assistente.models.SetupUsuario;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 
+import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
 import static br.com.assistente.infra.util.UtilVelocity.exec;
@@ -19,6 +22,7 @@ import static br.com.assistente.models.ModeloCampo.buscarImports;
 import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
 import static java.lang.String.format;
+import static java.nio.file.Files.exists;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toSet;
@@ -58,12 +62,14 @@ public class MapeamentoService {
             campos.removeAll( camposPk );
             results.add(
                 new ResultMapeamento.Builder()
+                    .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
                     .build()
             );
             results.add(
                 new ResultMapeamento.Builder()
+                    .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() + "Id" )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, camposPk,"/templates/entidadeId.vm"))
                     .build()
@@ -71,6 +77,7 @@ public class MapeamentoService {
         } else
             results.add(
                 new ResultMapeamento.Builder()
+                    .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
                     .build()
@@ -94,6 +101,33 @@ public class MapeamentoService {
         context.put( "StringUtils", StringUtils.class );
 
         return exec( context, arquivoTemplate );
+    }
+
+    public void gravarArquivos(
+        final Set<ResultMapeamento> mapeamentos,
+        final Function<String, Boolean> callback
+    ) {
+
+        final Optional<ResultMapeamento> possivelTipo = mapeamentos.stream().findFirst();
+        if ( !possivelTipo.isPresent() ) return;
+
+        final Path localProjeto = SetupUsuario
+            .buscarLocalProjeto()
+            .orElseThrow( () -> new IllegalArgumentException( "Favor informar o local do projeto!" ) );
+
+        if ( !exists(localProjeto) )
+            throw new IllegalArgumentException( format( "Não foi possível localizar [%s]", localProjeto ) );
+
+        final Path pathApp = localProjeto.resolve( "app" ).resolve( "models" );
+        if ( !exists(pathApp) )
+            throw new IllegalArgumentException( format( "Não foi possível localizar [%s]", localProjeto ) );
+
+        final Path pathDomain = pathApp.resolve( "domains" ).resolve( );
+        final Path pathRepository = pathApp.resolve( "repository" );
+
+        final Boolean confirma = callback.apply("");
+
+
     }
 
 }
