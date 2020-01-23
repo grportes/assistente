@@ -14,19 +14,23 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.substringAfterLast;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 public class DefinicaoDto {
 
@@ -177,11 +181,19 @@ public class DefinicaoDto {
                 .collect( toSet() );
     }
 
+    private static Pattern REGEX = Pattern.compile( "(.*)(dto)$", CASE_INSENSITIVE );
+
     public static String convPadraoNomeClasse( final String nomeClasse ) {
 
-        if ( isBlank( nomeClasse ) ) throw new IllegalArgumentException( "Favor informar o nome da classe" );
-        String tmp = convCamelCase( nomeClasse, true );
-        return ( lastIndexOfIgnoreCase( tmp, "dto" ) == -1 ) ? tmp.concat( "Dto" ) : tmp;
+        requireNotBlank( nomeClasse, "Favor informar o nome da classe" );
+
+        final String tmp = convCamelCase( nomeClasse, true );
+
+        final Matcher matcher = REGEX.matcher( tmp );
+        if ( matcher.find() && matcher.groupCount() > 1 )
+            return trim( matcher.group( 1 ) ) + "Dto";
+
+        return trim(tmp) + "Dto";
     }
 
 
