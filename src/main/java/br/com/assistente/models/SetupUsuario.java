@@ -3,6 +3,7 @@ package br.com.assistente.models;
 import br.com.assistente.infra.util.UtilYaml;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -151,8 +152,12 @@ public class SetupUsuario {
 
     public static Optional<SetupCnxBanco> buscarCnxAtivaDoUsuario() {
 
-        return SetupUsuario.find()
-                .flatMap( su -> SetupCnxBanco.findById(su.getIdCnxAtual()) );
+        return SetupUsuario.find().flatMap( su -> SetupCnxBanco.findById(su.getIdCnxAtual()) );
+    }
+
+    public static Optional<Path> buscarLocalProjeto() {
+
+        return find().map( SetupUsuario::getLocalProjeto ).map( Paths::get );
     }
 
     public static void save( final SetupUsuario novoSetup ) {

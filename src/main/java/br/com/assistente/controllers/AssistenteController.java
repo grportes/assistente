@@ -128,6 +128,7 @@ public class AssistenteController {
     private final DefinicaoDtoService definicaoDtoService = new DefinicaoDtoService();
     private final QueryService queryService = new QueryService();
 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // EVENTOS
@@ -277,6 +278,7 @@ public class AssistenteController {
                 Clipboard.getSystemClipboard().setContent( content );
                 break;
             case "btnResultGravar":
+                SetupUsuario.buscarCnxAtivaDoUsuario();
                 break;
             case "cbxResultArquivos":
                 if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) )
