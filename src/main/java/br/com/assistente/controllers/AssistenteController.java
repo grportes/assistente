@@ -273,29 +273,16 @@ public class AssistenteController {
 
         switch ( source.getId() ) {
             case "btnResultCopiar":
-                final ClipboardContent content = new ClipboardContent();
-                content.putString( txaResult.getText() );
-                Clipboard.getSystemClipboard().setContent( content );
+                copiarResultadoParaAreaTransferencia();
                 break;
             case "btnResultGravar":
-                SetupUsuario.buscarCnxAtivaDoUsuario();
+                gravarResultadoNaPastaDoProjeto();
                 break;
             case "cbxResultArquivos":
-                if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) )
-                    txaResult.setText( cbxResultArquivos.getValue().getConteudoEntidade() );
+                selecionarClasse();
                 break;
             case "btnResultAtualizar":
-                if ( nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() ) ) {
-                    final String nomeEntidade = cbxResultArquivos.getValue().getNomeEntidade();
-                    final List<ResultMapeamento> novaLista = cbxResultArquivos
-                        .getItems()
-                        .stream()
-                        .map( rs -> Objects.equals( rs.getNomeEntidade(), nomeEntidade )
-                            ? new ResultMapeamento.Builder().comNomeEntidade( nomeEntidade ).comConteudoEntidade( txaResult.getText() ).build()
-                            : rs
-                        ).collect( toList() );
-                    cbxResultArquivos.setItems( observableArrayList( novaLista ) );
-                }
+                atualizarResult();
                 break;
         }
     }
@@ -621,6 +608,56 @@ public class AssistenteController {
             cbxResultArquivos.setValue( rm );
             txaResult.setText( rm.getConteudoEntidade() );
         });
+    }
+
+    private boolean gerouResult() {
+
+        return nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() );
+    }
+
+    private void selecionarClasse() {
+
+        if ( !gerouResult() ) return;
+        txaResult.setText( cbxResultArquivos.getValue().getConteudoEntidade() );
+    }
+
+    private void copiarResultadoParaAreaTransferencia() {
+
+        final ClipboardContent content = new ClipboardContent();
+        content.putString( txaResult.getText() );
+        Clipboard.getSystemClipboard().setContent( content );
+    }
+
+    private void atualizarResult() {
+
+        if ( !gerouResult() ) return;
+        final String nomeEntidade = cbxResultArquivos.getValue().getNomeEntidade();
+        final List<ResultMapeamento> novaLista = cbxResultArquivos
+            .getItems()
+            .stream()
+            .map( rs -> Objects.equals( rs.getNomeEntidade(), nomeEntidade )
+                ? new ResultMapeamento.Builder().comNomeEntidade( nomeEntidade ).comConteudoEntidade( txaResult.getText() ).build()
+                : rs
+            ).collect( toList() );
+        cbxResultArquivos.setItems( observableArrayList( novaLista ) );
+    }
+
+    private void gravarResultadoNaPastaDoProjeto() {
+
+        if ( !gerouResult() ) return;
+
+        final ResultMapeamento value = cbxResultArquivos.getValue();
+        switch ( requireNonNull( value.getTipoResult(), "Favor selecionar Arquivo!" ) ) {
+            case MAPEAMENTO:
+                mapeamentoService.gravarArquivos(
+                    new HashSet<>(cbxResultArquivos.getItems()),
+                    (msg) -> {
+                        return true;
+                    });
+                break;
+            case DTO:
+                break;
+        }
     }
 
 }

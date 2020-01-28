@@ -104,7 +104,7 @@ public class MapeamentoService {
 
     public void gravarArquivos(
         final Set<ResultMapeamento> mapeamentos,
-        final Function<String, Boolean> callback
+        final Function<String, Boolean> callbackConfirmacao
     ) {
 
         final String nomePacote = mapeamentos
@@ -127,7 +127,7 @@ public class MapeamentoService {
         final Path pathDomain = pathApp.resolve( "domains" ).resolve( nomePacote );
         final Path pathRepository = pathApp.resolve( "repository" );
 
-        final Boolean confirma = callback.apply("");
+        final Boolean confirma = callbackConfirmacao.apply("");
 
 
     }
