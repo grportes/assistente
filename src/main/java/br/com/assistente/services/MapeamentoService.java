@@ -13,6 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Function;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
@@ -20,12 +21,14 @@ import static br.com.assistente.infra.util.UtilVelocity.exec;
 import static br.com.assistente.models.ModeloCampo.buscarImports;
 import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
+import static br.com.assistente.models.TipoResult.MAPEAMENTO;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class MapeamentoService {
 
@@ -61,6 +64,7 @@ public class MapeamentoService {
             campos.removeAll( camposPk );
             results.add(
                 new ResultMapeamento.Builder()
+                    .comTipoResult( MAPEAMENTO )
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
@@ -68,6 +72,7 @@ public class MapeamentoService {
             );
             results.add(
                 new ResultMapeamento.Builder()
+                    .comTipoResult( MAPEAMENTO )
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() + "Id" )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, camposPk,"/templates/entidadeId.vm"))
@@ -76,6 +81,7 @@ public class MapeamentoService {
         } else
             results.add(
                 new ResultMapeamento.Builder()
+                    .comTipoResult( MAPEAMENTO )
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
@@ -107,27 +113,42 @@ public class MapeamentoService {
         final Function<String, Boolean> callbackConfirmacao
     ) {
 
-        final String nomePacote = mapeamentos
+        final ResultMapeamento resultado = mapeamentos
             .stream()
-            .map( ResultMapeamento::getNomePacote )
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Não localizou nome pacote"));
+            .orElseThrow(() -> new IllegalArgumentException("Não localizou resultado"));
+
+        if ( isBlank( resultado.getNomePacote() ) )
+            throw new IllegalArgumentException("Não localizou nome do pacote");
 
         final Path localProjeto = SetupUsuario
             .buscarLocalProjeto()
-            .orElseThrow( () -> new IllegalArgumentException( "Favor informar o local do projeto!" ) );
+            .orElseThrow( () -> new IllegalArgumentException(
+                "Favor informar o local do projeto no menu configurações!"
+            ));
 
         if ( !exists(localProjeto) )
-            throw new IllegalArgumentException( format( "Não foi possível localizar [%s]", localProjeto ) );
+            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", localProjeto ) );
 
         final Path pathApp = localProjeto.resolve( "app" ).resolve( "models" );
         if ( !exists(pathApp) )
-            throw new IllegalArgumentException( format( "Não foi possível localizar [%s]", localProjeto ) );
+            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", pathApp ) );
 
-        final Path pathDomain = pathApp.resolve( "domains" ).resolve( nomePacote );
-        final Path pathRepository = pathApp.resolve( "repository" );
+        final Path pathDomain = pathApp
+            .resolve( "domains" )
+            .resolve( resultado.getNomePacote() )
+            .resolve( resultado.getNomeEntidade() );
+        if ( exists(pathDomain) )
+            throw new IllegalArgumentException( "Já existe classe mapeada no projeto" );
 
-        final Boolean confirma = callbackConfirmacao.apply("");
+        final Path pathRepository = pathApp.resolve( "repository" ).resolve( resultado.getNomePacote() );
+
+        final StringJoiner avisoConfirmacao = new StringJoiner("\n");
+        avisoConfirmacao.add( format( "Criar %s", pathApp ) );
+        if ( !exists( pathRepository ) )
+            avisoConfirmacao.add( format( "Criar %s", pathRepository  ) );
+
+        final Boolean confirma = callbackConfirmacao.apply( avisoConfirmacao.toString() );
 
 
     }

@@ -1,6 +1,7 @@
 package br.com.assistente.models;
 
 import br.com.assistente.infra.util.UtilYaml;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -157,7 +158,7 @@ public class SetupUsuario {
 
     public static Optional<Path> buscarLocalProjeto() {
 
-        return find().map( SetupUsuario::getLocalProjeto ).map( Paths::get );
+        return find().map( SetupUsuario::getLocalProjeto ).filter( StringUtils::isNotBlank ).map( Paths::get );
     }
 
     public static void save( final SetupUsuario novoSetup ) {

@@ -647,7 +647,7 @@ public class AssistenteController {
         if ( !gerouResult() ) return;
 
         final ResultMapeamento value = cbxResultArquivos.getValue();
-        switch ( requireNonNull( value.getTipoResult(), "Favor selecionar Arquivo!" ) ) {
+        switch ( requireNonNull( value.getTipoResult(), "Tipo de Result não localizado!" ) ) {
             case MAPEAMENTO:
                 mapeamentoService.gravarArquivos(
                     new HashSet<>(cbxResultArquivos.getItems()),

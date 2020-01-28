@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static br.com.assistente.models.TipoResult.CONSTANTE;
 import static java.lang.String.format;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -39,6 +40,7 @@ public class ConstanteService {
 
         results.add(
             new ResultMapeamento.Builder()
+                .comTipoResult( CONSTANTE )
                 .comNomeEntidade( nomeEnum )
                 .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/constante.vm") )
                 .build()
@@ -47,6 +49,7 @@ public class ConstanteService {
         if ( gerarConverter )
             results.add(
                 new ResultMapeamento.Builder()
+                    .comTipoResult( CONSTANTE )
                     .comNomeEntidade( nomeEnum + "Converter" )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/converter.vm") )
                     .build()

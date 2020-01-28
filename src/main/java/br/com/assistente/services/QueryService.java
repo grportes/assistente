@@ -161,7 +161,4 @@ public class QueryService {
 
         return exec( context, "/templates/query_dto.vm" );
     }
-
-
-
 }
