@@ -148,7 +148,11 @@ public class MapeamentoService {
         if ( !exists( pathRepository ) )
             avisoConfirmacao.add( format( "Criar %s", pathRepository  ) );
 
-        final Boolean confirma = callbackConfirmacao.apply( avisoConfirmacao.toString() );
+        final Boolean gravaArquivos = callbackConfirmacao.apply( avisoConfirmacao.toString() );
+
+        if ( !gravaArquivos ) return;
+
+
 
 
     }
