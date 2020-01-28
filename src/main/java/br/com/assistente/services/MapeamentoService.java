@@ -5,6 +5,7 @@ import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
+import io.vavr.Tuple2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 
@@ -13,7 +14,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.StringJoiner;
 import java.util.function.Function;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
@@ -28,7 +28,7 @@ import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class MapeamentoService {
 
@@ -110,49 +110,45 @@ public class MapeamentoService {
 
     public void gravarArquivos(
         final Set<ResultMapeamento> mapeamentos,
-        final Function<String, Boolean> callbackConfirmacao
+        final Function<Tuple2<String,String>, Boolean> callbackConfirmacao
     ) {
-
-        final ResultMapeamento resultado = mapeamentos
-            .stream()
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Não localizou resultado"));
-
-        if ( isBlank( resultado.getNomePacote() ) )
-            throw new IllegalArgumentException("Não localizou nome do pacote");
 
         final Path localProjeto = SetupUsuario
             .buscarLocalProjeto()
             .orElseThrow( () -> new IllegalArgumentException(
-                "Favor informar o local do projeto no menu configurações!"
+                    "Favor informar o local do projeto no menu configurações!"
             ));
 
         if ( !exists(localProjeto) )
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", localProjeto ) );
 
-        final Path pathApp = localProjeto.resolve( "app" ).resolve( "models" );
-        if ( !exists(pathApp) )
-            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", pathApp ) );
+        final Path pathModels = localProjeto.resolve( "app" ).resolve( "models" );
+        if ( !exists(pathModels) )
+            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", pathModels ) );
 
-        final Path pathDomain = pathApp
-            .resolve( "domains" )
-            .resolve( resultado.getNomePacote() )
-            .resolve( resultado.getNomeEntidade() );
-        if ( exists(pathDomain) )
-            throw new IllegalArgumentException( "Já existe classe mapeada no projeto" );
+        final ResultMapeamento resultado = mapeamentos
+            .stream()
+            .findFirst()
+            .orElseThrow( () -> new IllegalArgumentException( "Não localizou resultado" ) );
 
-        final Path pathRepository = pathApp.resolve( "repository" ).resolve( resultado.getNomePacote() );
+        final boolean existeModulo = isNotBlank( resultado.getNomePacote() );
 
-        final StringJoiner avisoConfirmacao = new StringJoiner("\n");
-        avisoConfirmacao.add( format( "Criar %s", pathApp ) );
-        if ( !exists( pathRepository ) )
-            avisoConfirmacao.add( format( "Criar %s", pathRepository  ) );
+        // Domain:
+        Path pathDomain = pathModels.resolve( "domains" );
+        if ( existeModulo ) pathDomain = pathDomain.resolve( resultado.getNomePacote() );
+        pathDomain = pathDomain.resolve( resultado.getNomeEntidade() );
+        if ( exists(pathDomain) ) throw new IllegalArgumentException( "Classe já mapeada no projeto" );
 
-        final Boolean gravaArquivos = callbackConfirmacao.apply( avisoConfirmacao.toString() );
+        // Repository:
+        Path pathRepository = pathModels.resolve( "repository" );
+        if ( existeModulo ) pathRepository = pathRepository.resolve( resultado.getNomePacote() );
+        final String msgCriarRepository = exists(pathDomain) ? "" : pathRepository.toString();
+
+        final Boolean gravaArquivos = callbackConfirmacao.apply(
+            new Tuple2<>( pathDomain.toString(), msgCriarRepository )
+        );
 
         if ( !gravaArquivos ) return;
-
-
 
 
     }

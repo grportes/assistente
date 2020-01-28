@@ -39,6 +39,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static br.com.assistente.controllers.DtoIdentityController.openViewDtoIdentity;
+import static br.com.assistente.controllers.MapeamentoConfirmaGravacaoController.openViewConfirmarGravacao;
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.infra.javafx.Dialog.msgInfo;
@@ -651,9 +652,7 @@ public class AssistenteController {
             case MAPEAMENTO:
                 mapeamentoService.gravarArquivos(
                     new HashSet<>(cbxResultArquivos.getItems()),
-                    (msg) -> {
-                        return true;
-                    });
+                    msg -> openViewConfirmarGravacao( getParent(), msg ) );
                 break;
             case DTO:
                 break;
