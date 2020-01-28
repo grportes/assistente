@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -108,8 +107,11 @@ public class MapeamentoService {
         final Function<String, Boolean> callback
     ) {
 
-        final Optional<ResultMapeamento> possivelTipo = mapeamentos.stream().findFirst();
-        if ( !possivelTipo.isPresent() ) return;
+        final String nomePacote = mapeamentos
+            .stream()
+            .map( ResultMapeamento::getNomePacote )
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Não localizou nome pacote"));
 
         final Path localProjeto = SetupUsuario
             .buscarLocalProjeto()
@@ -122,7 +124,7 @@ public class MapeamentoService {
         if ( !exists(pathApp) )
             throw new IllegalArgumentException( format( "Não foi possível localizar [%s]", localProjeto ) );
 
-        final Path pathDomain = pathApp.resolve( "domains" ).resolve( );
+        final Path pathDomain = pathApp.resolve( "domains" ).resolve( nomePacote );
         final Path pathRepository = pathApp.resolve( "repository" );
 
         final Boolean confirma = callback.apply("");

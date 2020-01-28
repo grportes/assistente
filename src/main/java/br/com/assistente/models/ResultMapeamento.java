@@ -14,6 +14,7 @@ public final class ResultMapeamento {
     private final String nomeEntidade;
     private final String conteudoEntidade;
     private final TipoResult tipoResult;
+    private String nomePacote;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +28,7 @@ public final class ResultMapeamento {
         this.nomeEntidade = builder.nomeEntidade;
         this.conteudoEntidade = builder.conteudoEntidade;
         this.tipoResult = builder.tipoResult;
+        this.nomePacote = builder.nomePacote;
     }
 
 
@@ -49,6 +51,11 @@ public final class ResultMapeamento {
     public TipoResult getTipoResult() {
 
         return tipoResult;
+    }
+
+    public String getNomePacote() {
+
+        return nomePacote;
     }
 
     @Override
@@ -127,6 +134,7 @@ public final class ResultMapeamento {
         private String nomeEntidade;
         private String conteudoEntidade;
         private TipoResult tipoResult;
+        private String nomePacote;
 
         public Builder() {
 
@@ -149,7 +157,13 @@ public final class ResultMapeamento {
 
         public Builder comTipoResult( final TipoResult value ) {
 
-            this.tipoResult = tipoResult;
+            this.tipoResult = value;
+            return this;
+        }
+
+        public Builder comNomePacote( final String value ) {
+
+            this.nomePacote = value;
             return this;
         }
 
