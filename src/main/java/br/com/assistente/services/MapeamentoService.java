@@ -151,12 +151,13 @@ public class MapeamentoService {
             .add( pathRep.resolve( format( "%sRepository.java", resultado.getNomeEntidade() ) ).toString() )
             .add( pathRep.resolve( "impl" ).resolve( format( "JPA%sRepository.java", resultado.getNomeEntidade() ) ).toString() );
 
-        final Boolean gravaArquivos = callbackConfirmacao.apply(
+        final Boolean criarRepository = callbackConfirmacao.apply(
             new Tuple2<>( pathDomain.toString(), pathRepositories.toString() )
         );
 
-        if ( !gravaArquivos ) return;
+        System.out.println(criarRepository);
 
+        if ( isNull( criarRepository ) ) return;
 
     }
 

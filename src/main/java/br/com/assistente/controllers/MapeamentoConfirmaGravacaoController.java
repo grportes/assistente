@@ -68,8 +68,6 @@ public class MapeamentoConfirmaGravacaoController {
 
         final Control source = (Control) event.getSource();
 
-        final Tuple2<Boolean, Boolean> userData = (Tuple2<Boolean, Boolean>) getStage().getUserData();
-
         switch ( source.getId() ) {
             case "cbxRepository":
                 break;
