@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -27,8 +28,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class MapeamentoConfirmaGravacaoController {
 
     @FXML private AnchorPane rootContainer;
-    @FXML private Label lblDomain;
+    @FXML private TextArea txaClasse;
     @FXML private CheckBox cbxRepository;
+    @FXML private TextArea txaRepository;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,12 +49,12 @@ public class MapeamentoConfirmaGravacaoController {
 
             final Tuple2<String, String> msgConfirmacao = (Tuple2<String, String>) stage.getUserData();
 
-            lblDomain.setText( msgConfirmacao._1() );
+            txaClasse.setText( msgConfirmacao._1() );
 
             final String msgRepository = msgConfirmacao._2();
             if ( isNotBlank( msgRepository ) ) {
                 cbxRepository.setDisable( false );
-                cbxRepository.setText( msgRepository );
+                txaRepository.setText( msgRepository );
             }
 
             stage.setUserData( false );
