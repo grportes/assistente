@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
+import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -86,9 +87,9 @@ public class DtoIdentityController {
         final Set<DefinicaoDto> definicaoDtos
     ) {
 
+        final String view = "/fxml/DtoIdentityView.fxml";
         try {
-            final URL resource = getResource( "/fxml/DtoIdentityView.fxml" );
-
+            final URL resource = getResource( view );
             final Stage stage = new Stage();
             stage.setScene( new Scene(FXMLLoader.load(resource)) );
             stage.initOwner( windowPai );
@@ -100,7 +101,7 @@ public class DtoIdentityController {
             stage.showAndWait();
             return new HashSet<>((ObservableList<DefinicaoDto>) stage.getUserData());
         } catch ( final IOException e ) {
-            throw new UncheckedIOException(e);
+            throw new UncheckedIOException( format( "View: %s ", view ), e );
         }
     }
 

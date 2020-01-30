@@ -17,6 +17,7 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
+import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static javafx.application.Platform.runLater;
@@ -107,9 +108,9 @@ public class MapeamentoConfirmaGravacaoController {
         final Tuple2<String,String> msgConfirmacao
     ) {
 
+        final String view = "/fxml/MapeamentoConfirmaGravacaoView.fxml";
         try {
-            final URL resource = getResource( "/fxml/MapeamentoConfirmaGravacaoView.fxml" );
-
+            final URL resource = getResource( view );
             final Stage stage = new Stage();
             stage.setScene( new Scene( FXMLLoader.load(resource)) );
             stage.initOwner( windowPai );
@@ -121,7 +122,8 @@ public class MapeamentoConfirmaGravacaoController {
             stage.showAndWait();
             return (Boolean) stage.getUserData();
         } catch ( final IOException e ) {
-            throw new UncheckedIOException(e);
+            e.printStackTrace();
+            throw new UncheckedIOException( format( "View: %s ", view ), e );
         }
     }
 
