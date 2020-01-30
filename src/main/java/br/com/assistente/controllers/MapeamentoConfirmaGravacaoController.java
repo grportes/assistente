@@ -46,17 +46,18 @@ public class MapeamentoConfirmaGravacaoController {
             final Stage stage = getStage();
             if ( isNull( stage ) ) return;
 
-            final Tuple2<String, String> msgConfirmacao = (Tuple2<String, String>) stage.getUserData();
+            @SuppressWarnings( "unchecked" )
+            final Tuple2<String, String> pathModels = (Tuple2<String, String>) stage.getUserData();
 
-            txaClasse.setText( msgConfirmacao._1() );
+            txaClasse.setText( pathModels._1() );
 
-            final String msgRepository = msgConfirmacao._2();
+            final String msgRepository = pathModels._2();
             if ( isNotBlank( msgRepository ) ) {
                 cbxRepository.setDisable( false );
                 txaRepository.setText( msgRepository );
             }
 
-            stage.setUserData( false );
+            stage.setUserData( null );
         });
 
     }
@@ -66,11 +67,7 @@ public class MapeamentoConfirmaGravacaoController {
 
         if ( isNull(event) || isNull(event.getSource()) ) return;
 
-        final Control source = (Control) event.getSource();
-
-        switch ( source.getId() ) {
-            case "cbxRepository":
-                break;
+        switch ( ((Control) event.getSource()).getId() ) {
             case "btnConfirmar":
                 close( true );
                 break;
@@ -78,7 +75,6 @@ public class MapeamentoConfirmaGravacaoController {
                 close( false );
                 break;
         }
-
     }
 
 
@@ -104,7 +100,7 @@ public class MapeamentoConfirmaGravacaoController {
 
     public static Boolean openViewConfirmarGravacao(
         final Window windowPai,
-        final Tuple2<String,String> msgConfirmacao
+        final Tuple2<String,String> pathModels
     ) {
 
         final String view = "/fxml/MapeamentoConfirmaGravacaoView.fxml";
@@ -117,7 +113,7 @@ public class MapeamentoConfirmaGravacaoController {
             stage.initModality( WINDOW_MODAL );
             stage.setResizable( false );
             stage.setMaximized( false );
-            stage.setUserData( msgConfirmacao );
+            stage.setUserData( pathModels );
             stage.setOnCloseRequest( ev -> stage.setUserData( null ) );
             stage.showAndWait();
             return (Boolean) stage.getUserData();
@@ -126,5 +122,4 @@ public class MapeamentoConfirmaGravacaoController {
             throw new UncheckedIOException( format( "View: %s ", view ), e );
         }
     }
-
 }
