@@ -1,7 +1,5 @@
 package br.com.assistente.infra.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -12,10 +10,12 @@ import static java.lang.String.join;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.isAllUpperCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.text.CaseUtils.toCamelCase;
 
 public final class UtilString {
@@ -97,18 +97,26 @@ public final class UtilString {
 
         if ( isEmpty( str ) ) return str;
         String newStr = str.trim();
+
         if ( newStr.contains( " " ) ) newStr = newStr.replaceAll( " ", "_" );
+
         if ( newStr.contains( "_" ) ) {
+
             newStr = Arrays.stream( newStr.split( "_" ) )
                 .map( String::toLowerCase )
                 .map( UtilString::convPluralToSingular )
                 .collect( joining( "_" ) );
+
         } else if ( Objects.equals( newStr, str.trim() ) && !isAllUpperCase( newStr ) ) {
+
             char firstLetter = newStr.charAt( 0 );
-            return ( !capitalizeFirst && isUpperCase( firstLetter ) )
-                ? StringUtils.join( toLowerCase( firstLetter ), newStr.substring( 1 ) )
-                : StringUtils.capitalize( newStr );
+            newStr = ( !capitalizeFirst && isUpperCase( firstLetter ) )
+                ? join( toLowerCase( firstLetter ), newStr.substring( 1 ) )
+                : capitalize( newStr );
+            return convPluralToSingular( newStr );
+
         }
+
         return toCamelCase( newStr, capitalizeFirst, '_' );
     }
 
