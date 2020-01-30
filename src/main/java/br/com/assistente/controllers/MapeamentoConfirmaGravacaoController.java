@@ -118,6 +118,7 @@ public class MapeamentoConfirmaGravacaoController {
             stage.setResizable( false );
             stage.setMaximized( false );
             stage.setUserData( msgConfirmacao );
+            stage.setOnCloseRequest( ev -> stage.setUserData( null ) );
             stage.showAndWait();
             return (Boolean) stage.getUserData();
         } catch ( final IOException e ) {
