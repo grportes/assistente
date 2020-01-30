@@ -14,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Function;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
@@ -122,9 +123,9 @@ public class MapeamentoService {
         if ( !exists(localProjeto) )
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", localProjeto ) );
 
-        final Path pathModels = localProjeto.resolve( "app" ).resolve( "models" );
-        if ( !exists(pathModels) )
-            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", pathModels ) );
+        final Path rootPath = localProjeto.resolve( "app" ).resolve( "models" );
+        if ( !exists(rootPath) )
+            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
 
         final ResultMapeamento resultado = mapeamentos
             .stream()
@@ -134,18 +135,24 @@ public class MapeamentoService {
         final boolean existeModulo = isNotBlank( resultado.getNomePacote() );
 
         // Domain:
-        Path pathDomain = pathModels.resolve( "domains" );
-        if ( existeModulo ) pathDomain = pathDomain.resolve( resultado.getNomePacote() );
-        pathDomain = pathDomain.resolve( resultado.getNomeEntidade() );
-        if ( exists(pathDomain) ) throw new IllegalArgumentException( "Classe já mapeada no projeto" );
+        final Path pathDomain = rootPath
+            .resolve( "domains" )
+            .resolve( existeModulo ? resultado.getNomePacote() : "" )
+            .resolve( format( "%s.java", resultado.getNomeEntidade() ) );
+
+        if ( exists( pathDomain ) ) throw new IllegalArgumentException( "Classe já mapeada no projeto" );
 
         // Repository:
-        Path pathRepository = pathModels.resolve( "repository" );
-        if ( existeModulo ) pathRepository = pathRepository.resolve( resultado.getNomePacote() );
-        final String msgCriarRepository = exists(pathDomain) ? "" : pathRepository.toString();
+        final Path pathRep = rootPath
+            .resolve( "repository" )
+            .resolve( existeModulo ? resultado.getNomePacote() : "" );
+
+        final StringJoiner pathRepositories = new StringJoiner( "\n" )
+            .add( pathRep.resolve( format( "%sRepository.java", resultado.getNomeEntidade() ) ).toString() )
+            .add( pathRep.resolve( "impl" ).resolve( format( "JPA%sRepository.java", resultado.getNomeEntidade() ) ).toString() );
 
         final Boolean gravaArquivos = callbackConfirmacao.apply(
-            new Tuple2<>( pathDomain.toString(), msgCriarRepository )
+            new Tuple2<>( pathDomain.toString(), pathRepositories.toString() )
         );
 
         if ( !gravaArquivos ) return;
