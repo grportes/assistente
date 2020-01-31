@@ -1,0 +1,13 @@
+
+/**
+ * Implementação Repository do domain @link
+ *
+ * <p>Autor: $nomeAutor</p>
+ */
+public class $nomeRepository
+    extends JPA$nomeRepository
+    implements $nomeInterface
+{
+
+
+}

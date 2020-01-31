@@ -1,0 +1,10 @@
+
+/**
+ * Interace Repository do domain @link
+ *
+ * <p>Autor: $nomeAutor</p>
+ */
+public interface $nomeRepository extends Repository<$nomeEntidade, $nomeEntidadeId> {
+
+
+}

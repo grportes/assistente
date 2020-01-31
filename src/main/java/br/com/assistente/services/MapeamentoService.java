@@ -9,6 +9,7 @@ import io.vavr.Tuple2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -136,20 +137,44 @@ public class MapeamentoService {
             .collect( joining( "\n" ) );
 
         // Repository:
-        final Path pathRep = rootPath.resolve( "repository" ).resolve( existeModulo ? nomeEntidadePacote._2() : "" );
+        final Path rootPathRep = rootPath.resolve( "repository" ).resolve( existeModulo ? nomeEntidadePacote._2() : "" );
+        final Path pathRep = rootPathRep.resolve( format( "%sRepository.java", nomeEntidadePacote._1() ) );
+        final Path pathRepImpl = rootPathRep.resolve( "impl" ).resolve( format( "JPA%sRepository.java", nomeEntidadePacote._1() ) );
 
         final StringJoiner pathRepositories = new StringJoiner( "\n" )
-            .add( pathRep.resolve( format( "%sRepository.java", nomeEntidadePacote._1() ) ).toString() )
-            .add( pathRep.resolve( "impl" ).resolve( format( "JPA%sRepository.java", nomeEntidadePacote._1() ) ).toString() );
+            .add( pathRep.toString() )
+            .add( pathRepImpl.toString() );
 
         final Boolean criarRepository = callbackConfirmacao.apply(
             new Tuple2<>( pathDomains, pathRepositories.toString() )
         );
 
-        System.out.println(criarRepository);
-
         if ( isNull( criarRepository ) ) return;
 
+        if ( criarRepository ) {
+            if ( !Files.exists( pathRep ) ) {
+                final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
+                gerarRepository(  nomeAutor, "/templates/entidadeId.vm") )
+            }
+        }
+
+    }
+
+    private String gerarRepository(
+        final String nomeAutor,
+        final String arquivoTemplate
+    ) {
+
+        final VelocityContext context = new VelocityContext();
+        context.put( "nomeAutor", nomeAutor );
+        context.put( "nomeRepository", nomeAutor );
+        context.put( "nomeEntidade", nomeAutor );
+        context.put( "nomeEntidadeId", nomeAutor );
+
+
+        context.put( "StringUtils", StringUtils.class );
+
+        return exec( context, arquivoTemplate );
     }
 
 }

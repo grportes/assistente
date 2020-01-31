@@ -25,7 +25,7 @@ public final class UtilVelocity {
 
         final Template template = engine.getTemplate( arquivoTemplate );
 
-        try ( final StringWriter writer = new StringWriter() ){
+        try ( final StringWriter writer = new StringWriter() ) {
             template.merge( context, writer );
             return writer.toString();
         } catch ( IOException e) {
