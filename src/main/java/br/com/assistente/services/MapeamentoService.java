@@ -116,16 +116,7 @@ public class MapeamentoService {
         final Function<Tuple2<String,String>, Boolean> callbackConfirmacao
     ) {
 
-        final Path localProjeto = SetupUsuario
-            .buscarLocalProjeto()
-            .orElseThrow( () -> new IllegalArgumentException(
-                    "Favor informar o local do projeto no menu configurações!"
-            ));
-
-        if ( !exists(localProjeto) )
-            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", localProjeto ) );
-
-        final Path rootPath = localProjeto.resolve( "app" ).resolve( "models" );
+        final Path rootPath = SetupUsuario.buscarLocalProjeto().resolve( "app" ).resolve( "models" );
         if ( !exists(rootPath) )
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
 

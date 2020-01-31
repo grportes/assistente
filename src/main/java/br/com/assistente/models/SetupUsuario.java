@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 import static br.com.assistente.infra.util.UtilYaml.getArquivoYaml;
+import static java.lang.String.format;
+import static java.nio.file.Files.exists;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -156,9 +158,18 @@ public class SetupUsuario {
         return SetupUsuario.find().flatMap( su -> SetupCnxBanco.findById(su.getIdCnxAtual()) );
     }
 
-    public static Optional<Path> buscarLocalProjeto() {
+    public static Path buscarLocalProjeto() {
 
-        return find().map( SetupUsuario::getLocalProjeto ).filter( StringUtils::isNotBlank ).map( Paths::get );
+        final Path localProjeto = find()
+            .map( SetupUsuario::getLocalProjeto )
+            .filter( StringUtils::isNotBlank )
+            .map( Paths::get )
+            .orElseThrow( () -> new RuntimeException("Favor informar o local do projeto no menu configurações!") );
+
+        if ( !exists(localProjeto) )
+            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", localProjeto ) );
+
+        return localProjeto;
     }
 
     public static void save( final SetupUsuario novoSetup ) {
