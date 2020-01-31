@@ -9,11 +9,13 @@ import java.util.StringJoiner;
 import java.util.function.Supplier;
 
 import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.infra.util.UtilString.removerAcentosECaracteresEspeciais;
+import static br.com.assistente.infra.util.UtilString.replaceAll;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.replace;
+import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 import static org.apache.commons.lang3.StringUtils.trim;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
@@ -228,7 +230,10 @@ public final class Constante {
 
         public Builder comNome( final String value ) {
 
-            this.nome = replace( upperCase( trim( value ) ), " ", "_" );
+            this.nome = replaceAll(
+                removerAcentosECaracteresEspeciais( normalizeSpace( upperCase( trim( value ) ) ) ),
+                "_"," ", ".", "-"
+            );
             return this;
         }
 

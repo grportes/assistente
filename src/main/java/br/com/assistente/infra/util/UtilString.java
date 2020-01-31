@@ -1,5 +1,7 @@
 package br.com.assistente.infra.util;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -7,6 +9,8 @@ import java.util.Set;
 import static java.lang.Character.isUpperCase;
 import static java.lang.Character.toLowerCase;
 import static java.lang.String.join;
+import static java.text.Normalizer.Form.NFD;
+import static java.text.Normalizer.normalize;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
@@ -16,7 +20,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.join;
+import static org.apache.commons.lang3.StringUtils.replaceIgnoreCase;
 import static org.apache.commons.text.CaseUtils.toCamelCase;
+
 
 public final class UtilString {
 
@@ -38,6 +44,27 @@ public final class UtilString {
     public static String removerEspacosEntre( final String str ) {
 
         return isNotBlank( str ) ? str.replaceAll("\\s+","") : str;
+    }
+
+    public static String removerAcentosECaracteresEspeciais( final String str ) {
+
+        return isNotBlank( str )
+            ? normalize( str, NFD ).replaceAll("[^\\p{ASCII}]", "" )
+            : str;
+    }
+
+    public static String replaceAll(
+        final String str,
+        final String replacement,
+        final String... searchString
+    ) {
+
+        if ( isBlank(str) || ArrayUtils.isEmpty( searchString ) ) return str;
+
+        String tmp = str;
+        for ( final String search : searchString ) tmp = replaceIgnoreCase( tmp, search, replacement );
+
+        return tmp;
     }
 
     public static String convPluralToSingular( final String substantivo ) {
