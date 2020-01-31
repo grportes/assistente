@@ -142,6 +142,17 @@ public class MapeamentoService {
 
         if ( exists( pathDomain ) ) throw new IllegalArgumentException( "Classe já mapeada no projeto" );
 
+        final StringJoiner pathDomains = new StringJoiner( "\n" );
+        pathDomains.add( pathDomain.toString() );
+        if ( mapeamentos.size() > 1 )
+            pathDomains.add(
+                rootPath
+                .resolve( "domains" )
+                .resolve( existeModulo ? resultado.getNomePacote() : "" )
+                .resolve( format( "%sId.java", resultado.getNomeEntidade() ) )
+                .toString()
+            );
+
         // Repository:
         final Path pathRep = rootPath
             .resolve( "repository" )
@@ -152,7 +163,7 @@ public class MapeamentoService {
             .add( pathRep.resolve( "impl" ).resolve( format( "JPA%sRepository.java", resultado.getNomeEntidade() ) ).toString() );
 
         final Boolean criarRepository = callbackConfirmacao.apply(
-            new Tuple2<>( pathDomain.toString(), pathRepositories.toString() )
+            new Tuple2<>( pathDomains.toString(), pathRepositories.toString() )
         );
 
         System.out.println(criarRepository);
