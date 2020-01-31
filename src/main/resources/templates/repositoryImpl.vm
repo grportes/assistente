@@ -1,12 +1,15 @@
+package $StringUtils.join( $nomePacote, ".impl;" ) )
+
+import infra.model.impl.JPARepository;
 
 /**
- * Implementação Repository do domain @link
+ * Implementação Repository para domain: {@link $nomeDomain}
  *
  * <p>Autor: $nomeAutor</p>
  */
-public class $nomeRepository
-    extends JPA$nomeRepository
-    implements $nomeInterface
+public class $StringUtils.join( "JPA", $nomeDomain, "Repository" ) )
+    extends JPARepository<$nomeDomain, $domainId>
+    implements $StringUtils.join( $nomeDomain, "Repository" )
 {
 
 

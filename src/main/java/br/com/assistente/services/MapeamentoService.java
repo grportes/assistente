@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 import static br.com.assistente.infra.db.ConnectionFactory.getMetaData;
 import static br.com.assistente.infra.util.UtilVelocity.exec;
+import static br.com.assistente.infra.util.UtilVelocity.gerarArquivo;
 import static br.com.assistente.models.ModeloCampo.buscarImports;
 import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
@@ -66,11 +67,13 @@ public class MapeamentoService {
 
         if ( modelo.isChaveComposta() ) {
             campos.removeAll( camposPk );
+            final String embeddableEntity = modelo.getEntidade() + "Id";
             results.add(
                 new ResultMapeamento.Builder()
                     .comTipoResult( MAPEAMENTO )
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
+                    .comTipoDadosId( embeddableEntity )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
                     .build()
             );
@@ -78,19 +81,22 @@ public class MapeamentoService {
                 new ResultMapeamento.Builder()
                     .comTipoResult( MAPEAMENTO )
                     .comNomePacote( modelo.getCatalogo() )
-                    .comNomeEntidade( modelo.getEntidade() + "Id" )
+                    .comNomeEntidade( embeddableEntity )
+                    .comTipoDadosId( embeddableEntity )
                     .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, camposPk,"/templates/entidadeId.vm"))
                     .build()
             );
-        } else
+        } else {
             results.add(
                 new ResultMapeamento.Builder()
                     .comTipoResult( MAPEAMENTO )
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
-                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
+                    .comTipoDadosId( camposPk.stream().map(ModeloCampo::getTipoJava).findFirst().orElse( "??") )
+                    .comConteudoEntidade(gerarMapeamento(nomeAutor, modelo, campos, "/templates/entidade.vm"))
                     .build()
             );
+        }
 
         return results;
     }
@@ -108,7 +114,6 @@ public class MapeamentoService {
         context.put( "campos", orderByPosicao( campos ) );
         context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "StringUtils", StringUtils.class );
-
         return exec( context, arquivoTemplate );
     }
 
@@ -152,29 +157,31 @@ public class MapeamentoService {
         if ( isNull( criarRepository ) ) return;
 
         if ( criarRepository ) {
-            if ( !Files.exists( pathRep ) ) {
+            if ( exists( pathRep ) ) {
+                // Msg aviso
+            } else {
                 final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
-                gerarRepository(  nomeAutor, "/templates/entidadeId.vm") )
+                final String domainId = mapeamentos.stream().map(ResultMapeamento::getTipoDadosId).findFirst().orElse("??");
+                final String nomePacote = "";
+
+                VelocityContext context = new VelocityContext();
+                context.put( "nomeAutor", nomeAutor );
+                context.put( "nomeDomain", nomeEntidadePacote._1() );
+                context.put( "domainId", domainId );
+                context.put( "nomePacote", nomePacote );
+                context.put( "StringUtils", StringUtils.class );
+                gerarArquivo( context, "/templates/repository.vm", pathRep );
+
+                context = new VelocityContext();
+                context.put( "nomeAutor", nomeAutor );
+                context.put( "nomeDomain", nomeEntidadePacote._1() );
+                context.put( "domainId", domainId );
+                context.put( "nomePacote", nomePacote );
+                context.put( "StringUtils", StringUtils.class );
+                gerarArquivo( context, "/templates/repository.vm", pathRep );
             }
         }
-
     }
 
-    private String gerarRepository(
-        final String nomeAutor,
-        final String arquivoTemplate
-    ) {
-
-        final VelocityContext context = new VelocityContext();
-        context.put( "nomeAutor", nomeAutor );
-        context.put( "nomeRepository", nomeAutor );
-        context.put( "nomeEntidade", nomeAutor );
-        context.put( "nomeEntidadeId", nomeAutor );
-
-
-        context.put( "StringUtils", StringUtils.class );
-
-        return exec( context, arquivoTemplate );
-    }
 
 }

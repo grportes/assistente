@@ -1,10 +1,14 @@
+package $nomePacote;
+
+import infra.model.api.Repository;
 
 /**
- * Interace Repository do domain @link
+ * Interface Repository para domain: {@link $nomeDomain}
  *
  * <p>Autor: $nomeAutor</p>
  */
-public interface $nomeRepository extends Repository<$nomeEntidade, $nomeEntidadeId> {
+#set ( $nomeClasse = $StringUtils.join( $nomeDomain, "Repository" ) )
+public interface $nomeClasse extends Repository<$nomeDomain, $domainId> {
 
 
 }
