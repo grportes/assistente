@@ -184,6 +184,7 @@ public class AssistenteController {
 
         desabilitarAcoesMapeamento(false);
         observableModelo.clear();
+        cbxMapeamentoBanco.requestFocus();
     }
 
     public void onActionBtnMapeamento() {
@@ -206,6 +207,15 @@ public class AssistenteController {
             txaResult.setText( rm.getConteudoEntidade() );
         });
     }
+
+
+    public void onActionMapeamento( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+        final Control source = (Control) event.getSource();
+    }
+
+
 
     public void onActionConstante( final ActionEvent event ) {
 
@@ -291,7 +301,7 @@ public class AssistenteController {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // METODOS AUXILIARES
+    // MAPEAMENTO
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
