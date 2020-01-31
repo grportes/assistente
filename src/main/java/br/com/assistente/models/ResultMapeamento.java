@@ -1,12 +1,14 @@
 package br.com.assistente.models;
 
-import java.nio.file.Path;
+import io.vavr.Tuple2;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.lang.String.format;
-import static java.nio.file.Files.exists;
+import static java.util.Optional.empty;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.trim;
 
 public final class ResultMapeamento {
@@ -93,34 +95,15 @@ public final class ResultMapeamento {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static void gravarArquivo( final Set<ResultMapeamento> results ) {
+    public static Optional<Tuple2<String, String>> buscarNomeEntidadePacote( final Set<ResultMapeamento> mapeamentos ) {
 
-        final Optional<ResultMapeamento> possivelTipo = results
-            .stream()
-            .filter( r -> Objects.nonNull( r.getTipoResult() ) )
-            .findFirst();
-
-        if ( !possivelTipo.isPresent() ) return;
-
-        final Path localProjeto = SetupUsuario
-            .buscarLocalProjeto()
-            .orElseThrow( () -> new IllegalArgumentException( "Favor informar o local do projeto!" ) );
-
-        if ( !exists(localProjeto) )
-            throw new IllegalArgumentException( format( "Não foi possível localizar [%s]", localProjeto ) );
-
-        switch ( possivelTipo.get().getTipoResult() ) {
-            case MAPEAMENTO:
-                break;
-            case DTO:
-                break;
-            case CONSTANTE:
-                break;
-        }
-
-
+        return isEmpty( mapeamentos )
+            ? empty()
+            : mapeamentos.stream()
+                .filter( m -> lastIndexOfIgnoreCase( m.getNomeEntidade(), "Id" ) == -1  )
+                .findFirst()
+                .map( m -> new Tuple2<>( m.getNomeEntidade(), m.getNomePacote() ) );
     }
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -22,11 +22,13 @@ import static br.com.assistente.infra.util.UtilVelocity.exec;
 import static br.com.assistente.models.ModeloCampo.buscarImports;
 import static br.com.assistente.models.ModeloCampo.buscarPks;
 import static br.com.assistente.models.ModeloCampo.orderByPosicao;
+import static br.com.assistente.models.ResultMapeamento.buscarNomeEntidadePacote;
 import static br.com.assistente.models.TipoResult.MAPEAMENTO;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -127,43 +129,30 @@ public class MapeamentoService {
         if ( !exists(rootPath) )
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
 
-        final ResultMapeamento resultado = mapeamentos
-            .stream()
-            .findFirst()
+        final Tuple2<String,String> nomeEntidadePacote =
+            buscarNomeEntidadePacote( mapeamentos )
             .orElseThrow( () -> new IllegalArgumentException( "Não localizou resultado" ) );
 
-        final boolean existeModulo = isNotBlank( resultado.getNomePacote() );
+        final boolean existeModulo = isNotBlank( nomeEntidadePacote._2() );
 
         // Domain:
-        final Path pathDomain = rootPath
-            .resolve( "domains" )
-            .resolve( existeModulo ? resultado.getNomePacote() : "" )
-            .resolve( format( "%s.java", resultado.getNomeEntidade() ) );
+        final Path pathDomain = rootPath.resolve( "domains" ).resolve( existeModulo ? nomeEntidadePacote._2() : "" );
 
-        if ( exists( pathDomain ) ) throw new IllegalArgumentException( "Classe já mapeada no projeto" );
-
-        final StringJoiner pathDomains = new StringJoiner( "\n" );
-        pathDomains.add( pathDomain.toString() );
-        if ( mapeamentos.size() > 1 )
-            pathDomains.add(
-                rootPath
-                .resolve( "domains" )
-                .resolve( existeModulo ? resultado.getNomePacote() : "" )
-                .resolve( format( "%sId.java", resultado.getNomeEntidade() ) )
-                .toString()
-            );
+        final String pathDomains = mapeamentos.stream()
+            .map( mapeamento -> format( "%s.java", mapeamento.getNomeEntidade() ) )
+            .map( pathDomain::resolve )
+            .map( Path::toString )
+            .collect( joining( "\n" ) );
 
         // Repository:
-        final Path pathRep = rootPath
-            .resolve( "repository" )
-            .resolve( existeModulo ? resultado.getNomePacote() : "" );
+        final Path pathRep = rootPath.resolve( "repository" ).resolve( existeModulo ? nomeEntidadePacote._2() : "" );
 
         final StringJoiner pathRepositories = new StringJoiner( "\n" )
-            .add( pathRep.resolve( format( "%sRepository.java", resultado.getNomeEntidade() ) ).toString() )
-            .add( pathRep.resolve( "impl" ).resolve( format( "JPA%sRepository.java", resultado.getNomeEntidade() ) ).toString() );
+            .add( pathRep.resolve( format( "%sRepository.java", nomeEntidadePacote._1() ) ).toString() )
+            .add( pathRep.resolve( "impl" ).resolve( format( "JPA%sRepository.java", nomeEntidadePacote._1() ) ).toString() );
 
         final Boolean criarRepository = callbackConfirmacao.apply(
-            new Tuple2<>( pathDomains.toString(), pathRepositories.toString() )
+            new Tuple2<>( pathDomains, pathRepositories.toString() )
         );
 
         System.out.println(criarRepository);
