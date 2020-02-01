@@ -132,10 +132,12 @@ public class MapeamentoService {
             buscarNomeEntidadePacote( mapeamentos )
             .orElseThrow( () -> new IllegalArgumentException( "Não localizou resultado" ) );
 
-        final boolean existeModulo = isNotBlank( nomeEntidadePacote._2() );
+        final String nomeModulo = isNotBlank( nomeEntidadePacote._2() )
+                ? nomeEntidadePacote._1()
+                : "";
 
         // Domain:
-        final Path pathDomain = rootPath.resolve( "domains" ).resolve( existeModulo ? nomeEntidadePacote._2() : "" );
+        final Path pathDomain = rootPath.resolve( "domains" ).resolve( nomeModulo );
 
         final String pathDomains = mapeamentos.stream()
             .map( mapeamento -> format( "%s.java", mapeamento.getNomeEntidade() ) )
@@ -144,7 +146,7 @@ public class MapeamentoService {
             .collect( joining( "\n" ) );
 
         // Repository:
-        final Path rootPathRep = rootPath.resolve( "repository" ).resolve( existeModulo ? nomeEntidadePacote._2() : "" );
+        final Path rootPathRep = rootPath.resolve( "repository" ).resolve( nomeModulo );
         final Path pathRep = rootPathRep.resolve( format( "%sRepository.java", nomeEntidadePacote._1() ) );
         final Path pathRepImpl = rootPathRep.resolve( "impl" ).resolve( format( "JPA%sRepository.java", nomeEntidadePacote._1() ) );
 
@@ -160,8 +162,11 @@ public class MapeamentoService {
 
         mapeamentos.forEach( m -> {
             final Path p = pathDomain.resolve( format( "%s.java", m.getNomeEntidade() ) );
+            final StringJoiner texto = new StringJoiner( "\n" );
+            texto.add( format( "package models.domains%s;\n", isNotBlank( nomeModulo ) ? ".".concat( nomeModulo ) : "" ) );
+            texto.add( m.getConteudoEntidade() );
             try {
-                Files.write( p, m.getConteudoEntidade().getBytes() );
+                Files.write( p, texto.toString().getBytes() );
             } catch ( IOException e ) {
                 throw new UncheckedIOException( format( "Falhou gravação de %s", p.toString()), e );
             }
@@ -173,7 +178,7 @@ public class MapeamentoService {
 
             final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
             final String domainId = mapeamentos.stream().map(ResultMapeamento::getTipoDadosId).findFirst().orElse("??");
-            final String nomePacote = "";
+            final String nomePacote = "models.repository" + nomeModulo;
 
             VelocityContext context = new VelocityContext();
             context.put( "nomeAutor", nomeAutor );
@@ -187,7 +192,7 @@ public class MapeamentoService {
             context.put( "nomeAutor", nomeAutor );
             context.put( "nomeDomain", nomeEntidadePacote._1() );
             context.put( "domainId", domainId );
-            context.put( "nomePacote", nomePacote );
+            context.put( "nomePacote", nomePacote  );
             context.put( "StringUtils", StringUtils.class );
             gerarArquivo( context, "/templates/repositoryImpl.vm", pathRepImpl );
         }
