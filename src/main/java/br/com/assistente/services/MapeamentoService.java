@@ -9,6 +9,8 @@ import io.vavr.Tuple2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
@@ -156,6 +158,15 @@ public class MapeamentoService {
 
         if ( isNull( criarRepository ) ) return;
 
+        mapeamentos.forEach( m -> {
+            final Path p = pathDomain.resolve( format( "%s.java", m.getNomeEntidade() ) );
+            try {
+                Files.write( p, m.getConteudoEntidade().getBytes() );
+            } catch ( IOException e ) {
+                throw new UncheckedIOException( format( "Falhou gravação de %s", p.toString()), e );
+            }
+        });
+
         if ( criarRepository ) {
             if ( exists( pathRep ) ) {
                 // Msg aviso
@@ -178,7 +189,7 @@ public class MapeamentoService {
                 context.put( "domainId", domainId );
                 context.put( "nomePacote", nomePacote );
                 context.put( "StringUtils", StringUtils.class );
-                gerarArquivo( context, "/templates/repository.vm", pathRep );
+                gerarArquivo( context, "/templates/repositoryImpl.vm", pathRepImpl );
             }
         }
     }

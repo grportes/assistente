@@ -1,4 +1,4 @@
-package $StringUtils.join( $nomePacote, ".impl;" ) )
+package $StringUtils.join( $nomePacote, ".impl;" )
 
 import infra.model.impl.JPARepository;
 
@@ -7,7 +7,7 @@ import infra.model.impl.JPARepository;
  *
  * <p>Autor: $nomeAutor</p>
  */
-public class $StringUtils.join( "JPA", $nomeDomain, "Repository" ) )
+public class $StringUtils.join( "JPA", $nomeDomain, "Repository" )
     extends JPARepository<$nomeDomain, $domainId>
     implements $StringUtils.join( $nomeDomain, "Repository" )
 {
