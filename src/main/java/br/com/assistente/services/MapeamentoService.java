@@ -168,29 +168,28 @@ public class MapeamentoService {
         });
 
         if ( criarRepository ) {
-            if ( exists( pathRep ) ) {
-                // Msg aviso
-            } else {
-                final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
-                final String domainId = mapeamentos.stream().map(ResultMapeamento::getTipoDadosId).findFirst().orElse("??");
-                final String nomePacote = "";
+            if ( exists( pathRep ) )
+                throw new RuntimeException( "Classe(s) domain criada(s) porém não foi possível criar classe(s) Repository, pois já existem!" );
 
-                VelocityContext context = new VelocityContext();
-                context.put( "nomeAutor", nomeAutor );
-                context.put( "nomeDomain", nomeEntidadePacote._1() );
-                context.put( "domainId", domainId );
-                context.put( "nomePacote", nomePacote );
-                context.put( "StringUtils", StringUtils.class );
-                gerarArquivo( context, "/templates/repository.vm", pathRep );
+            final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
+            final String domainId = mapeamentos.stream().map(ResultMapeamento::getTipoDadosId).findFirst().orElse("??");
+            final String nomePacote = "";
 
-                context = new VelocityContext();
-                context.put( "nomeAutor", nomeAutor );
-                context.put( "nomeDomain", nomeEntidadePacote._1() );
-                context.put( "domainId", domainId );
-                context.put( "nomePacote", nomePacote );
-                context.put( "StringUtils", StringUtils.class );
-                gerarArquivo( context, "/templates/repositoryImpl.vm", pathRepImpl );
-            }
+            VelocityContext context = new VelocityContext();
+            context.put( "nomeAutor", nomeAutor );
+            context.put( "nomeDomain", nomeEntidadePacote._1() );
+            context.put( "domainId", domainId );
+            context.put( "nomePacote", nomePacote );
+            context.put( "StringUtils", StringUtils.class );
+            gerarArquivo( context, "/templates/repository.vm", pathRep );
+
+            context = new VelocityContext();
+            context.put( "nomeAutor", nomeAutor );
+            context.put( "nomeDomain", nomeEntidadePacote._1() );
+            context.put( "domainId", domainId );
+            context.put( "nomePacote", nomePacote );
+            context.put( "StringUtils", StringUtils.class );
+            gerarArquivo( context, "/templates/repositoryImpl.vm", pathRepImpl );
         }
     }
 

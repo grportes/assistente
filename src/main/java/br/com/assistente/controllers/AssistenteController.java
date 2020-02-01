@@ -663,6 +663,7 @@ public class AssistenteController {
                 mapeamentoService.gravarArquivos(
                     new HashSet<>(cbxResultArquivos.getItems()),
                     msg -> openViewConfirmarGravacao( getParent(), msg ) );
+                msgInfo( "Operação concluída" );
                 break;
             case DTO:
                 break;
