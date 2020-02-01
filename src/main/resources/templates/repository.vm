@@ -2,9 +2,13 @@ package $nomePacote;
 
 import infra.model.api.Repository;
 #if ( $StringUtils.isNotBlank( $importJavaId ) )
+    #if ( $StringUtils.startsWith( $tipoJavaId, $nomeDomain ) )
+$StringUtils.join( "import ", $importJavaId, ".", $nomeDomain, ";" )
+$StringUtils.join( "import ", $importJavaId, ".", $tipoJavaId, ";" )
+    #else
 $StringUtils.join( "import ", $importJavaId, ";" )
+    #end
 #end
-
 
 /**
  * Interface Repository para domain: {@link $nomeDomain}

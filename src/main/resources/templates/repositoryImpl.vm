@@ -2,7 +2,12 @@ package $StringUtils.join( $nomePacote, ".impl;" )
 
 import infra.model.impl.JPARepository;
 #if ( $StringUtils.isNotBlank( $importJavaId ) )
+    #if ( $StringUtils.startsWith( $tipoJavaId, $nomeDomain ) )
+$StringUtils.join( "import ", $importJavaId, ".", $nomeDomain, ";" )
+$StringUtils.join( "import ", $importJavaId, ".", $tipoJavaId, ";" )
+    #else
 $StringUtils.join( "import ", $importJavaId, ";" )
+    #end
 #end
 
 /**

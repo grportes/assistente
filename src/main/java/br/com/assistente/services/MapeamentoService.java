@@ -217,8 +217,8 @@ public class MapeamentoService {
                     final String tipoJava =  lastIndexOfIgnoreCase( rs.getNomeEntidade(), "Id" ) == -1
                         ? rs.getNomeEntidade().concat( "Id" ) : rs.getNomeEntidade();
                     final String importJava = isNotBlank( nomeModulo )
-                        ? "models.domains.".concat( nomeModulo ).concat( tipoJava )
-                        : "models.domains.".concat( tipoJava );
+                        ? "models.domains.".concat( nomeModulo )
+                        : "models.domains";
                     return new Tuple2<>( tipoJava, importJava);
                 })
                 .orElseThrow( () -> new RuntimeException( "Falhou extração dos imports" ) );
