@@ -1,6 +1,10 @@
 package $nomePacote;
 
 import infra.model.api.Repository;
+#if ( $StringUtils.isNotBlank( $importJavaId ) )
+$StringUtils.join( "import ", $importJavaId, ";" )
+#end
+
 
 /**
  * Interface Repository para domain: {@link $nomeDomain}
@@ -8,7 +12,7 @@ import infra.model.api.Repository;
  * <p>Autor: $nomeAutor</p>
  */
 #set ( $nomeClasse = $StringUtils.join( $nomeDomain, "Repository" ) )
-public interface $nomeClasse extends Repository<$nomeDomain, $domainId> {
+public interface $nomeClasse extends Repository<$nomeDomain, $tipoJavaId> {
 
 
 }

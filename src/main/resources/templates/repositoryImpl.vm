@@ -1,6 +1,9 @@
 package $StringUtils.join( $nomePacote, ".impl;" )
 
 import infra.model.impl.JPARepository;
+#if ( $StringUtils.isNotBlank( $importJavaId ) )
+$StringUtils.join( "import ", $importJavaId, ";" )
+#end
 
 /**
  * Implementação Repository para domain: {@link $nomeDomain}
@@ -8,7 +11,7 @@ import infra.model.impl.JPARepository;
  * <p>Autor: $nomeAutor</p>
  */
 public class $StringUtils.join( "JPA", $nomeDomain, "Repository" )
-    extends JPARepository<$nomeDomain, $domainId>
+    extends JPARepository<$nomeDomain, $tipoJavaId>
     implements $StringUtils.join( $nomeDomain, "Repository" )
 {
 

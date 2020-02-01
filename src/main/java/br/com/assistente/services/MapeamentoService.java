@@ -36,6 +36,11 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.removeEnd;
+import static org.apache.commons.lang3.StringUtils.startsWith;
+import static org.apache.commons.lang3.StringUtils.substringAfter;
+import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 
 public class MapeamentoService {
 
@@ -120,7 +125,7 @@ public class MapeamentoService {
     }
 
     public void gravarArquivos(
-        final Set<ResultMapeamento> mapeamentos,
+        final Set<ResultMapeamento> rsMapeamentos,
         final Function<Tuple2<String,String>, Boolean> callbackConfirmacao
     ) {
 
@@ -129,7 +134,7 @@ public class MapeamentoService {
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
 
         final Tuple2<String,String> nomeEntidadePacote =
-            buscarNomeEntidadePacote( mapeamentos )
+            buscarNomeEntidadePacote( rsMapeamentos )
             .orElseThrow( () -> new IllegalArgumentException( "Não localizou resultado" ) );
 
         final String nomeModulo = isNotBlank( nomeEntidadePacote._2() )
@@ -139,7 +144,7 @@ public class MapeamentoService {
         // Domain:
         final Path pathDomain = rootPath.resolve( "domains" ).resolve( nomeModulo );
 
-        final String pathDomains = mapeamentos.stream()
+        final String pathDomains = rsMapeamentos.stream()
             .map( mapeamento -> format( "%s.java", mapeamento.getNomeEntidade() ) )
             .map( pathDomain::resolve )
             .map( Path::toString )
@@ -160,7 +165,7 @@ public class MapeamentoService {
 
         if ( isNull( criarRepository ) ) return;
 
-        mapeamentos.forEach( m -> {
+        rsMapeamentos.forEach( m -> {
             final Path p = pathDomain.resolve( format( "%s.java", m.getNomeEntidade() ) );
             final StringJoiner texto = new StringJoiner( "\n" );
             texto.add( format( "package models.domains%s;\n", isNotBlank( nomeModulo ) ? ".".concat( nomeModulo ) : "" ) );
@@ -177,25 +182,58 @@ public class MapeamentoService {
                 throw new RuntimeException( "Classe(s) domain criada(s) porém não foi possível criar classe(s) Repository, pois já existem!" );
 
             final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
-            final String domainId = mapeamentos.stream().map(ResultMapeamento::getTipoDadosId).findFirst().orElse("??");
             final String nomePacote = "models.repository" + nomeModulo;
+            final Tuple2<String, String> tuple = extrarImport( rsMapeamentos, nomeModulo );
 
             VelocityContext context = new VelocityContext();
+            context.put( "nomePacote", nomePacote );
             context.put( "nomeAutor", nomeAutor );
             context.put( "nomeDomain", nomeEntidadePacote._1() );
-            context.put( "domainId", domainId );
-            context.put( "nomePacote", nomePacote );
+            context.put( "tipoJavaId", tuple._1() );
+            context.put( "importJavaId", tuple._2() );
             context.put( "StringUtils", StringUtils.class );
             gerarArquivo( context, "/templates/repository.vm", pathRep );
 
             context = new VelocityContext();
+            context.put( "nomePacote", nomePacote );
             context.put( "nomeAutor", nomeAutor );
             context.put( "nomeDomain", nomeEntidadePacote._1() );
-            context.put( "domainId", domainId );
-            context.put( "nomePacote", nomePacote  );
+            context.put( "tipoJavaId", tuple._1() );
+            context.put( "importJavaId", tuple._2() );
             context.put( "StringUtils", StringUtils.class );
             gerarArquivo( context, "/templates/repositoryImpl.vm", pathRepImpl );
         }
+    }
+
+    private Tuple2<String,String> extrarImport(
+        final Set<ResultMapeamento> rsMapeamentos,
+        final String nomeModulo
+    ) {
+
+        if ( rsMapeamentos.size() == 2 )
+            return rsMapeamentos.stream()
+                .findFirst()
+                .map( rs -> {
+                    final String tipoJava =  lastIndexOfIgnoreCase( rs.getNomeEntidade(), "Id" ) == -1
+                        ? rs.getNomeEntidade().concat( "Id" ) : rs.getNomeEntidade();
+                    final String importJava = isNotBlank( nomeModulo )
+                        ? "models.domains.".concat( nomeModulo ).concat( tipoJava )
+                        : "models.domains.".concat( tipoJava );
+                    return new Tuple2<>( tipoJava, importJava);
+                })
+                .orElseThrow( () -> new RuntimeException( "Falhou extração dos imports" ) );
+
+        final String tipo = rsMapeamentos.stream()
+            .map( ResultMapeamento::getTipoDadosId )
+            .findFirst()
+            .orElseThrow( () -> new RuntimeException( "Não localizou ID da classe" ) );
+
+        if ( startsWith( tipo, "java.lang" ) )
+            return new Tuple2<>( substringAfter( tipo, "java.lang." ), "" );
+
+        final String tipoBase = substringAfterLast( tipo, "." );
+        final String importPacote = removeEnd( tipo, "." + tipoBase );
+        return new Tuple2<>( tipoBase, importPacote );
     }
 
 
