@@ -670,7 +670,10 @@ public class AssistenteController {
                 msgInfo( "Operação concluída" );
                 break;
             case DTO:
+                definicaoDtoService.gravarArquivos( new HashSet<>(cbxResultArquivos.getItems()) );
+                msgInfo( "Operação concluída" );
                 break;
+
         }
     }
 
