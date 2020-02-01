@@ -12,7 +12,9 @@ import java.util.Objects;
 import static br.com.assistente.infra.util.UtilOS.OSType.WINDOWS;
 import static br.com.assistente.infra.util.UtilOS.SO_CORRENTE;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.createDirectory;
 import static java.nio.file.Files.deleteIfExists;
+import static java.nio.file.Files.exists;
 import static java.nio.file.Files.notExists;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -82,6 +84,15 @@ public final class UtilArquivo {
             throw new RuntimeException( "Não foi possivel localizar pasta do aplicativo" );
 
         return pasta;
+    }
+
+    public static void createDirectoryIfNotExists( final Path path ) {
+
+        try {
+            if ( !exists( path )) createDirectory( path );
+        } catch ( IOException e ) {
+            throw new UncheckedIOException( "Falhou criar pasta" + path.toString(), e );
+        }
     }
 
 }

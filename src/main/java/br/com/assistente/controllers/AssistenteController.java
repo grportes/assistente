@@ -665,6 +665,10 @@ public class AssistenteController {
                     msg -> openViewConfirmarGravacao( getParent(), msg ) );
                 msgInfo( "Operação concluída" );
                 break;
+            case CONSTANTE:
+                constanteService.gravarArquivos( new HashSet<>(cbxResultArquivos.getItems()) );
+                msgInfo( "Operação concluída" );
+                break;
             case DTO:
                 break;
         }

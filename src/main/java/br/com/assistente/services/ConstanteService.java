@@ -13,18 +13,23 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static br.com.assistente.infra.util.UtilArquivo.createDirectoryIfNotExists;
 import static br.com.assistente.models.TipoResult.CONSTANTE;
 import static java.lang.String.format;
+import static java.nio.file.Files.exists;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
 
 public class ConstanteService {
 
@@ -108,4 +113,44 @@ public class ConstanteService {
             throw new RuntimeException( e );
         }
     }
+
+    public void gravarArquivos( final Set<ResultMapeamento> rsMapeamentos ) {
+
+        final Path rootPath = SetupUsuario.buscarLocalProjeto().resolve( "app" ).resolve( "models" );
+        if ( !exists( rootPath ) )
+            throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
+
+        final Path commonsPath = rootPath.resolve( "commons" );
+        createDirectoryIfNotExists( commonsPath );
+
+        final StringJoiner existeArquivo = new StringJoiner( "\n" );
+
+        for ( final ResultMapeamento rsMapeamento : rsMapeamentos ) {
+
+            final String pastaBase = lastIndexOfIgnoreCase( rsMapeamento.getNomeEntidade(), "Converter" ) == -1
+                ? "constantes"
+                : "converters";
+
+            final Path pathBase = commonsPath.resolve( pastaBase );
+            createDirectoryIfNotExists( pathBase );
+
+            final Path pathArquivo = pathBase.resolve( rsMapeamento.getNomeEntidade().concat( ".java" ) );
+            if ( exists( pathArquivo ) ) {
+                existeArquivo.add( pathArquivo.toString() );
+                continue;
+            }
+
+            try {
+                Files.write( pathArquivo, rsMapeamento.getConteudoEntidade().getBytes() );
+            } catch ( final IOException e ) {
+                throw new UncheckedIOException( format( "Falhou gravação de %s", pathArquivo.toString()), e );
+            }
+
+            if ( existeArquivo.length() > 0 )
+                throw new RuntimeException( "Não foi possível criar classe(s) pois já existem!\n" + existeArquivo );
+
+        }
+    }
+
+
 }
