@@ -116,13 +116,8 @@
                                     </VBox>
                                     <VBox alignment="BOTTOM_LEFT" prefHeight="49.0" prefWidth="242.0">
                                        <children>
-                                          <Label text="Tipo:" />
+                                          <Label text="DataType - Valor:" />
                                           <ComboBox fx:id="cbxConstanteTipos" prefHeight="26.0" prefWidth="233.0" VBox.vgrow="ALWAYS" />
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <Button fx:id="btnConstanteLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConstante" prefHeight="26.0" prefWidth="83.0" text="Limpar" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -161,14 +156,15 @@
                                   <TableColumn fx:id="tcConstanteDescricao" prefWidth="447.0" text="DESCRIÇÃO" />
                                 </columns>
                               </TableView>
-                              <AnchorPane prefHeight="17.0" prefWidth="784.0">
+                              <AnchorPane prefHeight="16.0" prefWidth="784.0">
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="338.0" spacing="30.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="21.0" prefWidth="338.0" spacing="30.0" AnchorPane.bottomAnchor="0.0">
                                        <children>
+                                          <Button fx:id="btnConstanteLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConstante" prefHeight="26.0" prefWidth="107.0" text="Limpar" />
                                           <Button fx:id="btnConstanteImportar" alignment="CENTER" mnemonicParsing="false" onAction="#onActionConstante" text="Importar CSV" textAlignment="CENTER" />
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_RIGHT" layoutX="446.0" prefHeight="33.0" prefWidth="338.0" spacing="30.0" AnchorPane.rightAnchor="0.0">
+                                    <HBox alignment="CENTER_RIGHT" layoutX="446.0" prefHeight="9.0" prefWidth="338.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                        <children>
                                           <CheckBox fx:id="cbxConstanteConverter" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Converter" />
                                           <Button fx:id="btnConstanteGerar" alignment="CENTER" mnemonicParsing="false" onAction="#onActionConstante" text="Gerar Constante" />
