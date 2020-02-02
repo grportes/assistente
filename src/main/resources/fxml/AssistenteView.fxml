@@ -185,7 +185,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <VBox layoutX="25.0" layoutY="31.0" prefHeight="393.0" prefWidth="784.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                        <VBox alignment="CENTER" layoutX="25.0" layoutY="31.0" prefHeight="393.0" prefWidth="784.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
                               <HBox prefHeight="32.0" prefWidth="784.0" spacing="10.0">
                                  <children>
@@ -193,11 +193,6 @@
                                        <children>
                                           <Label text="Nome do DTO:" />
                                           <TextField fx:id="txfDtoNomeClasse" maxWidth="-Infinity" prefHeight="26.0" prefWidth="546.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="BOTTOM_LEFT" prefHeight="28.0" prefWidth="495.0">
-                                       <children>
-                                          <Button fx:id="btnDtoLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDto" text="Limpar" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -209,17 +204,17 @@
                                  <children>
                                     <VBox alignment="BOTTOM_LEFT" prefHeight="43.0" prefWidth="270.0">
                                        <children>
-                                          <Label text="Tipo:" />
+                                          <Label text="Atributo - Tipo:" />
                                           <ComboBox fx:id="cbxDtoTipo" prefHeight="26.0" prefWidth="265.0" VBox.vgrow="ALWAYS" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="BOTTOM_LEFT" prefHeight="43.0" prefWidth="330.0">
                                        <children>
-                                          <Label text="Nome Atributo:" />
+                                          <Label text="Atributo - Nome:" />
                                           <TextField fx:id="txfDtoNomeAtributo" />
                                        </children>
                                     </VBox>
-                                    <VBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="43.0">
+                                    <VBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="43.0">
                                        <children>
                                           <Label text="ID:" />
                                           <CheckBox fx:id="cbxAtributoId" mnemonicParsing="false" />
@@ -235,7 +230,7 @@
                                     <Insets />
                                  </VBox.margin>
                               </HBox>
-                              <TableView fx:id="tbvDto" editable="true" prefHeight="270.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
+                              <TableView fx:id="tbvDto" editable="true" prefHeight="235.0" prefWidth="784.0" VBox.vgrow="ALWAYS">
                                 <columns>
                                   <TableColumn fx:id="tcDtoTipo" prefWidth="225.0" text="Tipo" />
                                   <TableColumn fx:id="tcDtoNomeAtributo" prefWidth="309.0" text="Nome Atributo" />
@@ -243,13 +238,22 @@
                                     <TableColumn fx:id="tcDtoPosicao" prefWidth="75.0" visible="false" />
                                 </columns>
                               </TableView>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="14.0" prefWidth="784.0" spacing="15.0">
+                              <AnchorPane prefHeight="23.0" prefWidth="784.0">
                                  <children>
-                                    <CheckBox fx:id="cbxDtoJsonAnnotation" mnemonicParsing="false" text="Json Annotations" />
-                                    <CheckBox fx:id="cbxDtoAplicarBuilder" mnemonicParsing="false" text="Pattern Builder" />
-                                    <Button fx:id="btnDtoGerar" mnemonicParsing="false" onAction="#onActionDto" text="Gerar" />
+                                    <HBox alignment="CENTER_LEFT" layoutY="62.0" prefHeight="38.0" prefWidth="385.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Button fx:id="btnDtoLimpar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDto" text="Limpar" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" layoutY="55.0" prefHeight="45.0" prefWidth="409.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <CheckBox fx:id="cbxDtoJsonAnnotation" mnemonicParsing="false" text="Json Annotations" />
+                                          <CheckBox fx:id="cbxDtoAplicarBuilder" mnemonicParsing="false" text="Pattern Builder" />
+                                          <Button fx:id="btnDtoGerar" mnemonicParsing="false" onAction="#onActionDto" text="Gerar" />
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
+                              </AnchorPane>
                            </children>
                         </VBox>
                      </children>
