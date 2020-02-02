@@ -23,6 +23,7 @@ import static br.com.assistente.models.DefinicaoDto.buscarImportsSerializer;
 import static br.com.assistente.models.DefinicaoDto.buscarImportsTupleConverter;
 import static br.com.assistente.models.DefinicaoDto.buscarTodosAtributoId;
 import static br.com.assistente.models.DefinicaoDto.orderByPosicao;
+import static br.com.assistente.models.TipoResult.DTO;
 import static java.lang.String.format;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -68,6 +69,7 @@ public class QueryService {
             new ResultMapeamento.Builder()
                 .comNomeEntidade( "Frag. Codigo" )
                 .comConteudoEntidade( gerarTuple( campos ) )
+                .comTipoResult( DTO )
                 .build()
         );
 
@@ -75,6 +77,7 @@ public class QueryService {
             new ResultMapeamento.Builder()
                 .comNomeEntidade( "XML Query" )
                 .comConteudoEntidade( gerarXMLQuery( query, false ) )
+                .comTipoResult( DTO )
                 .build()
         );
 
@@ -125,6 +128,7 @@ public class QueryService {
             new ResultMapeamento.Builder()
             .comNomeEntidade( nomeClasse )
             .comConteudoEntidade( gerarDto( nomeClasse, dtosComIdentity, gerarJsonAnnotations, gerarClasseBuilder ) )
+            .comTipoResult( DTO )
             .build()
         );
 
@@ -132,6 +136,7 @@ public class QueryService {
             new ResultMapeamento.Builder()
             .comNomeEntidade( "XML Query" )
             .comConteudoEntidade( gerarXMLQuery( query, false ) )
+            .comTipoResult( DTO )
             .build()
         );
 

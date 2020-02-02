@@ -1,25 +1,12 @@
 package br.com.assistente;
 
 import br.com.assistente.infra.javafx.Dialog;
-import br.com.assistente.infra.util.UtilString;
-import br.com.assistente.models.Constante;
-import br.com.assistente.models.DefinicaoDto;
-import br.com.assistente.models.ResultMapeamento;
-import br.com.assistente.services.ConstanteService;
-import br.com.assistente.services.DefinicaoDtoService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static br.com.assistente.infra.db.ConnectionFactory.closeConnection;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;

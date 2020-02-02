@@ -66,7 +66,7 @@ public class DefinicaoDtoService {
         final Path commonsPath = rootPath.resolve( "commons" );
         createDirectoryIfNotExists( commonsPath );
 
-        final Path dtoPath = rootPath.resolve( "dtos" );
+        final Path dtoPath = commonsPath.resolve( "dtos" );
         createDirectoryIfNotExists( dtoPath );
 
         final ResultMapeamento mapeamento = rsMapeamentos
