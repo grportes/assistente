@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.infra.util.UtilString.normalizeJava;
 import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static br.com.assistente.infra.util.UtilVelocity.exec;
 import static br.com.assistente.models.DefinicaoDto.buscarImports;
@@ -53,7 +53,7 @@ public class QueryService {
 
             return new DefinicaoDto.Builder()
                     .comPosicao( m.getPosicao() )
-                    .comNomeAtributo( convCamelCase( m.getColunaJava(), false ) )
+                    .comNomeAtributo( normalizeJava( m.getColunaJava(), false ) )
                     .comTipo( dataType )
                     .build();
         } ).collect( toSet() );

@@ -2,26 +2,22 @@ package br.com.assistente.infra.util;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.Set;
 
-import static java.lang.Character.isUpperCase;
-import static java.lang.Character.toLowerCase;
 import static java.lang.String.join;
 import static java.text.Normalizer.Form.NFD;
 import static java.text.Normalizer.normalize;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.joining;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.isAllUpperCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.join;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 import static org.apache.commons.lang3.StringUtils.replaceIgnoreCase;
-import static org.apache.commons.text.CaseUtils.toCamelCase;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 
 public final class UtilString {
@@ -117,35 +113,25 @@ public final class UtilString {
         return substantivo;
     }
 
-    public static String convCamelCase(
+    public static String normalizeJava(
         final String str,
         final boolean capitalizeFirst
     ) {
 
-        if ( isEmpty( str ) ) return str;
-        String newStr = str.trim();
+        String newStr = removerAcentosECaracteresEspeciais( normalizeSpace( trim( str ) ) );
 
-        if ( newStr.contains( " " ) ) newStr = newStr.replaceAll( " ", "_" );
-
-        if ( newStr.contains( "_" ) ) {
-
-            newStr = Arrays.stream( newStr.split( "_" ) )
-                .map( String::toLowerCase )
-                .map( UtilString::convPluralToSingular )
-                .collect( joining( "_" ) );
-
-        } else if ( Objects.equals( newStr, str.trim() ) && !isAllUpperCase( newStr ) ) {
-
-            char firstLetter = newStr.charAt( 0 );
-            newStr = ( !capitalizeFirst && isUpperCase( firstLetter ) )
-                ? join( toLowerCase( firstLetter ), newStr.substring( 1 ) )
-                : capitalize( newStr );
-            return convPluralToSingular( newStr );
-
+        final String[] sArray = newStr.split( " " );
+        newStr = isAllUpperCase( sArray[0] ) ? lowerCase( sArray[0] ) : sArray[0];
+        for ( int index = 1; index < sArray.length; index++ ) {
+            final String tmp = isAllUpperCase( sArray[index] ) ? lowerCase( sArray[index] ) : sArray[index];
+            newStr = newStr.concat( capitalize( tmp ) );
         }
 
-        return toCamelCase( newStr, capitalizeFirst, '_' );
+        newStr = convPluralToSingular( newStr );
+
+        return capitalizeFirst ? capitalize( newStr ) : newStr;
     }
+
 
     public static String requireNotBlank( final String str ) {
 
@@ -162,7 +148,5 @@ public final class UtilString {
 
         return str;
     }
-
-
 
 }

@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Supplier;
 
-import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.infra.util.UtilString.normalizeJava;
 import static br.com.assistente.infra.util.UtilString.removerAcentosECaracteresEspeciais;
 import static br.com.assistente.infra.util.UtilString.replaceAll;
 import static java.lang.String.format;
@@ -108,7 +108,7 @@ public final class Constante {
     public static String convPadraoNomeEnum( final String nomeClasse ) {
 
         if ( isBlank( nomeClasse ) ) throw new IllegalArgumentException( "Favor informar o nome do Enum" );
-        return convCamelCase( nomeClasse, true );
+        return normalizeJava( nomeClasse, true );
     }
 
 

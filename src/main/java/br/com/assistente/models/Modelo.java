@@ -3,7 +3,7 @@ package br.com.assistente.models;
 import java.util.Objects;
 import java.util.Set;
 
-import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.infra.util.UtilString.normalizeJava;
 import static br.com.assistente.models.ModeloCampo.atributoVersion;
 import static br.com.assistente.models.ModeloCampo.chaveComposta;
 import static java.lang.String.format;
@@ -132,7 +132,7 @@ public final class Modelo {
         public Builder comTabela( final String value ) {
 
             this.tabela = value;
-            this.entidade = convCamelCase( value, true );
+            this.entidade = normalizeJava( value, true );
             return this;
         }
 

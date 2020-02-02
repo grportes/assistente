@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static br.com.assistente.infra.util.UtilString.convCamelCase;
+import static br.com.assistente.infra.util.UtilString.normalizeJava;
 import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
@@ -187,7 +187,7 @@ public class DefinicaoDto {
 
         requireNotBlank( nomeClasse, "Favor informar o nome da classe" );
 
-        final String tmp = convCamelCase( nomeClasse, true );
+        final String tmp = normalizeJava( nomeClasse, true );
 
         final Matcher matcher = REGEX.matcher( tmp );
         if ( matcher.find() && matcher.groupCount() > 1 )
@@ -460,7 +460,7 @@ public class DefinicaoDto {
         public Builder comNomeAtributo( final String value ) {
 
             if ( isBlank( value ) ) throw new IllegalArgumentException( "Obrigatório informar o nome do atributo" );
-            this.nomeAtributo = convCamelCase( value, false );
+            this.nomeAtributo = normalizeJava( value, false );
             return this;
         }
 
