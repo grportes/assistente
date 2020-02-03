@@ -7,10 +7,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
-import static br.com.assistente.infra.util.UtilOS.OSType.WINDOWS;
-import static br.com.assistente.infra.util.UtilOS.SO_CORRENTE;
+import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createDirectory;
 import static java.nio.file.Files.deleteIfExists;
@@ -18,25 +16,23 @@ import static java.nio.file.Files.exists;
 import static java.nio.file.Files.notExists;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.removeStart;
 
 public final class UtilArquivo {
 
     public static URL getResource( final String recurso ) {
 
-        if ( isNotBlank( recurso ) )
-            return UtilArquivo.class.getResource( recurso.startsWith("/") ? recurso : "/".concat( recurso ) );
-
-        throw new IllegalArgumentException( "Argumento inválido para UtilArquivo.getResource" );
+        requireNotBlank( recurso, "Argumento inválido para UtilArquivo.getResource" );
+        return UtilArquivo.class.getResource( recurso.startsWith("/") ? recurso : "/".concat( recurso ) );
     }
 
     public static Path getResourceFolder( final String folder ) {
 
-        final String path = getResource( folder ).getPath();
-        if ( Objects.equals( SO_CORRENTE, WINDOWS ) ) {
-            final String substring = path.substring(1);
-            return Paths.get( substring );
-        }
-        return Paths.get( path );
+        requireNotBlank( folder, "Argumento inválido para UtilArquivo.getResourceFolder" );
+        final URL resource = UtilArquivo.class.getResource( folder );
+        final String file = resource.getFile();
+        final String novoFile = removeStart(file, "file:").replaceFirst("^/(.:/)", "$1");
+        return Paths.get(novoFile);
     }
 
     public static Path buscarPastaAplicacao() {

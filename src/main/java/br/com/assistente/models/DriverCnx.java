@@ -1,18 +1,22 @@
 package br.com.assistente.models;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static br.com.assistente.infra.util.UtilArquivo.getResourceFolder;
 import static br.com.assistente.infra.util.UtilYaml.load;
-import static java.util.Collections.emptyList;
+import static java.lang.String.format;
+import static java.nio.file.Files.notExists;
 import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 public final class DriverCnx {
 
@@ -160,17 +164,19 @@ public final class DriverCnx {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private static void loadCache() {
+    public static void loadCache() {
 
-        if ( isNull(cache) )
+        if ( isEmpty( cache ) ) {
+            final Path pathDrivers = Paths.get( "E:\\assistente\\assistente-1.0.1.jar\\drivers");
             try {
-                cache = Files.list( getResourceFolder( "drivers" ) )
+                cache = Files.list(pathDrivers)
                     .map( path -> load(DriverCnx.class, path) )
                     .map( Optional::get )
                     .collect( toList() );
             } catch ( final IOException e ) {
-                cache = emptyList();
+                throw new UncheckedIOException( format( "Falhou leitura em: %s", pathDrivers.toString() ), e );
             }
+        }
     }
 
     public static List<String> buscarIds() {
@@ -186,16 +192,4 @@ public final class DriverCnx {
             ? empty()
             : cache.stream().filter( driver -> Objects.equals( driver.getId(), id ) ).findFirst();
     }
-
-    public static String getQuerySelectTop1(
-        final DriverCnx driverCnx,
-        final Modelo modelo
-    ) {
-
-        requireNonNull( driverCnx, "DriveCnx - Argumento obritatório: driverCnx" );
-        requireNonNull( modelo, "DriveCnx - Argumento obritatório: modelo" );
-
-        return driverCnx.getSelectTop().replaceAll( "%TABLE%", modelo.getNomeCompletoTabela() );
-    }
-
 }
