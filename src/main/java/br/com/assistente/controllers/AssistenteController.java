@@ -217,45 +217,9 @@ public class AssistenteController {
 
 
 
-    public void onActionConstante( final ActionEvent event ) {
 
-        if ( isNull(event) || isNull(event.getSource()) ) return;
-        final Control source = (Control) event.getSource();
 
-        switch ( source.getId() ) {
-            case "btnConstanteLimpar":
-                resetConstante();
-                break;
-            case "btnConstanteAdd":
-                adicionarConstante();
-                break;
-            case "btnConstanteImportar":
-                importarConstante();
-                break;
-            case "btnConstanteGerar":
-                gerarResultConstante();
-                break;
-        }
 
-    }
-
-    public void onActionDto( final ActionEvent event ) {
-
-        if ( isNull(event) || isNull(event.getSource()) ) return;
-        final Control source = (Control) event.getSource();
-
-        switch ( source.getId() ) {
-            case "btnDtoLimpar":
-                resetDto();
-                break;
-            case "btnDtoAdd":
-                adicionarItemDto();
-                break;
-            case "btnDtoGerar":
-                gerarResultDto();
-                break;
-        }
-    }
 
     public void onActionQuery( final ActionEvent event ) {
 
@@ -375,6 +339,28 @@ public class AssistenteController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public void onActionConstante( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnConstanteLimpar":
+                resetConstante();
+                break;
+            case "btnConstanteAdd":
+                adicionarConstante();
+                break;
+            case "btnConstanteImportar":
+                importarConstante();
+                break;
+            case "btnConstanteGerar":
+                gerarResultConstante();
+                break;
+        }
+
+    }
+
     private void initializeConstantes() {
 
         cbxConstanteTipos.setItems( observableArrayList( Constante.Tipo.buscarTipos() ) );
@@ -485,6 +471,24 @@ public class AssistenteController {
     // DTO
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void onActionDto( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnDtoLimpar":
+                resetDto();
+                break;
+            case "btnDtoAdd":
+                adicionarItemDto();
+                break;
+            case "btnDtoGerar":
+                gerarResultDto();
+                break;
+        }
+    }
 
     private void initializeDto() {
 

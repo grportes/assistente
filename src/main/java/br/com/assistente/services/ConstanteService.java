@@ -24,6 +24,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static br.com.assistente.infra.util.UtilArquivo.createDirectoryIfNotExists;
+import static br.com.assistente.infra.util.UtilCollections.requireNotEmpty;
+import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static br.com.assistente.models.TipoResult.CONSTANTE;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
@@ -39,6 +41,9 @@ public class ConstanteService {
         final Set<Constante> constantes,
         final boolean gerarConverter
     ) {
+
+        requireNotBlank( nomeEnum, "É necessário informar o nome do Enum" );
+        requireNotEmpty( constantes, "É necessário informar os atributos do Enum" );
 
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );

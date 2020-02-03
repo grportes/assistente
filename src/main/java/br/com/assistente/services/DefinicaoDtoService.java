@@ -13,6 +13,8 @@ import java.nio.file.Path;
 import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilArquivo.createDirectoryIfNotExists;
+import static br.com.assistente.infra.util.UtilCollections.requireNotEmpty;
+import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static br.com.assistente.infra.util.UtilVelocity.exec;
 import static br.com.assistente.models.DefinicaoDto.buscarImports;
 import static br.com.assistente.models.DefinicaoDto.buscarImportsSerializer;
@@ -34,6 +36,9 @@ public class DefinicaoDtoService {
         boolean gerarJsonAnnotations,
         boolean gerarClasseBuilder
     ) {
+
+        requireNotBlank( nomeClasse, "É necessário informar o nome do DTO!");
+        requireNotEmpty( definicoes, "É necessário informar os atributos do DTO" );
 
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
 

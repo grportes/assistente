@@ -33,6 +33,31 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 public class QueryService {
 
+    public Set<ResultMapeamento> convTexto( final String query ) {
+
+        requireNotBlank( query, "É necessário informar a query!" );
+        final Set<DefinicaoDto> campos = extrairColunas( query );
+        final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
+
+        results.add(
+            new ResultMapeamento.Builder()
+                .comNomeEntidade( "Frag. Codigo" )
+                .comConteudoEntidade( gerarTuple( campos ) )
+                .comTipoResult( DTO )
+                .build()
+        );
+
+        results.add(
+            new ResultMapeamento.Builder()
+                .comNomeEntidade( "XML Query" )
+                .comConteudoEntidade( gerarXMLQuery( query, false ) )
+                .comTipoResult( DTO )
+                .build()
+        );
+
+        return results;
+    }
+
     private Set<DefinicaoDto> extrairColunas( final String query ) {
 
         final List<DataType> dataTypes = SetupUsuario.buscarDataTypes();
@@ -58,30 +83,6 @@ public class QueryService {
                     .comTipo( dataType )
                     .build();
         } ).collect( toSet() );
-    }
-
-    public Set<ResultMapeamento> convTexto( final String query ) {
-
-        final Set<DefinicaoDto> campos = extrairColunas( query );
-        final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
-
-        results.add(
-            new ResultMapeamento.Builder()
-                .comNomeEntidade( "Frag. Codigo" )
-                .comConteudoEntidade( gerarTuple( campos ) )
-                .comTipoResult( DTO )
-                .build()
-        );
-
-        results.add(
-            new ResultMapeamento.Builder()
-                .comNomeEntidade( "XML Query" )
-                .comConteudoEntidade( gerarXMLQuery( query, false ) )
-                .comTipoResult( DTO )
-                .build()
-        );
-
-        return results;
     }
 
     private String gerarTuple( final Set<DefinicaoDto> campos ) {
