@@ -81,7 +81,6 @@ public class AssistenteController {
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoTipoJava;
     @FXML private TableColumn<ModeloCampo, Boolean> tcMapeamentoConverter;
     @FXML private TableColumn<ModeloCampo, String> tcMapeamentoNomeEnum;
-    @FXML private Button btnMapeamento;
     private ObservableList<ModeloCampo> observableModelo = observableArrayList();
 
     // Constante:
@@ -145,6 +144,11 @@ public class AssistenteController {
         initializeDto();
     }
 
+    private Window getParent() {
+
+        return vboxContainer.getScene().getWindow();
+    }
+
     public void onActionConfiguracoes() {
 
         openViewConfiguracoes(
@@ -156,112 +160,6 @@ public class AssistenteController {
             });
     }
 
-    public void onActionMapeamentoBtnLerTabela() {
-
-        txtMapeamentoOwner.setText( lowerCase( trim( txtMapeamentoOwner.getText() ) ) );
-        txfMapeamentoNomeTabela.setText( lowerCase( trim( txfMapeamentoNomeTabela.getText() ) ) );
-
-        final Set<ModeloCampo> campos = mapeamentoService.extrair(
-            new Modelo.Builder()
-                .comBanco( cbxMapeamentoBanco.getValue() )
-                .comOwner( txtMapeamentoOwner.getText() )
-                .comTabela( txfMapeamentoNomeTabela.getText() )
-                .build()
-        );
-
-        if ( isEmpty( campos ) ) {
-            msgAviso( "Não foi possivel ler dados" );
-            return;
-        }
-
-        observableModelo.clear();
-        observableModelo.addAll( campos );
-        tbvMapeamento.getSortOrder().add( tcMapeamentoPosicao );
-        desabilitarAcoesMapeamento(true);
-    }
-
-    public void onActionMapeamentoBtnLimpar() {
-
-        desabilitarAcoesMapeamento(false);
-        observableModelo.clear();
-        cbxMapeamentoBanco.requestFocus();
-    }
-
-    public void onActionBtnMapeamento() {
-
-        final Modelo modelo = new Modelo.Builder()
-            .comBanco( cbxMapeamentoBanco.getValue() )
-            .comOwner( txtMapeamentoOwner.getText() )
-            .comTabela( txfMapeamentoNomeTabela.getText() )
-            .comCampos( new HashSet<>(observableModelo) )
-            .build();
-
-        final Set<ResultMapeamento> results = mapeamentoService.executar( modelo );
-        if ( isEmpty( results ) ) return;
-
-        cbxResultArquivos.setItems( observableArrayList( results ) );
-        setarTab( tabResult );
-
-        results.stream().findFirst().ifPresent( rm -> {
-            cbxResultArquivos.setValue( rm );
-            txaResult.setText( rm.getConteudoEntidade() );
-        });
-    }
-
-
-    public void onActionMapeamento( final ActionEvent event ) {
-
-        if ( isNull(event) || isNull(event.getSource()) ) return;
-        final Control source = (Control) event.getSource();
-    }
-
-
-
-
-
-
-
-    public void onActionQuery( final ActionEvent event ) {
-
-        if ( isNull(event) || isNull(event.getSource()) ) return;
-
-        final Control source = (Control) event.getSource();
-
-        switch ( source.getId() ) {
-            case "btnQueryLimpar":
-                resetQuery();
-                break;
-            case "cbxQueryTuple":
-                desabilitarAcoesQuery( cbxQueryTuple.isSelected() );
-                break;
-            case "btnQueryGerar":
-                gerarResultQuery();
-                break;
-        }
-    }
-
-    public void onActionResult( final ActionEvent event ) {
-
-        if ( isNull(event) || isNull(event.getSource()) ) return;
-
-        final Control source = (Control) event.getSource();
-
-        switch ( source.getId() ) {
-            case "btnResultCopiar":
-                copiarResultadoParaAreaTransferencia();
-                break;
-            case "btnResultGravar":
-                gravarResultadoNaPastaDoProjeto();
-                break;
-            case "cbxResultArquivos":
-                selecionarClasse();
-                break;
-            case "btnResultAtualizar":
-                atualizarResult();
-                break;
-        }
-    }
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -269,9 +167,22 @@ public class AssistenteController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private Window getParent() {
+    public void onActionMapeamento( final ActionEvent event ) {
 
-        return vboxContainer.getScene().getWindow();
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnLer":
+                lerTabelaMapeamento();
+                break;
+            case "btnLimpar":
+                limparMapeamento();
+                break;
+            case "btnGerarMapeamento":
+                gerarMapeamento();
+                break;
+        }
     }
 
     private void initializeMapeamento() {
@@ -313,19 +224,56 @@ public class AssistenteController {
         cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
     }
 
-    private void desabilitarAcoesMapeamento( final boolean disable ) {
+    private void lerTabelaMapeamento() {
 
-        cbxMapeamentoBanco.setDisable(disable);
-        txtMapeamentoOwner.setDisable(disable);
-        txfMapeamentoNomeTabela.setDisable(disable);
-        if ( disable ) {
-            btnMapeamento.setDisable(false);
-        } else {
-            cbxMapeamentoBanco.setValue("");
-            txtMapeamentoOwner.setText("");
-            txfMapeamentoNomeTabela.setText("");
-            btnMapeamento.setDisable(true);
+        txtMapeamentoOwner.setText( lowerCase( trim( txtMapeamentoOwner.getText() ) ) );
+        txfMapeamentoNomeTabela.setText( lowerCase( trim( txfMapeamentoNomeTabela.getText() ) ) );
+
+        final Set<ModeloCampo> campos = mapeamentoService.extrair(
+                new Modelo.Builder()
+                        .comBanco( cbxMapeamentoBanco.getValue() )
+                        .comOwner( txtMapeamentoOwner.getText() )
+                        .comTabela( txfMapeamentoNomeTabela.getText() )
+                        .build()
+        );
+
+        if ( isEmpty( campos ) ) {
+            msgAviso( "Não foi possivel ler dados" );
+            return;
         }
+
+        observableModelo.clear();
+        observableModelo.addAll( campos );
+        tbvMapeamento.getSortOrder().add( tcMapeamentoPosicao );
+    }
+
+    private void limparMapeamento() {
+
+        observableModelo.clear();
+        txfMapeamentoNomeTabela.setText( "" );
+        txtMapeamentoOwner.setText( "" );
+        cbxMapeamentoBanco.requestFocus();
+    }
+
+    private void gerarMapeamento() {
+
+        final Modelo modelo = new Modelo.Builder()
+            .comBanco( cbxMapeamentoBanco.getValue() )
+            .comOwner( txtMapeamentoOwner.getText() )
+            .comTabela( txfMapeamentoNomeTabela.getText() )
+            .comCampos( new HashSet<>(observableModelo) )
+            .build();
+
+        final Set<ResultMapeamento> results = mapeamentoService.executar( modelo );
+        if ( isEmpty( results ) ) return;
+
+        cbxResultArquivos.setItems( observableArrayList( results ) );
+        setarTab( tabResult );
+
+        results.stream().findFirst().ifPresent( rm -> {
+            cbxResultArquivos.setValue( rm );
+            txaResult.setText( rm.getConteudoEntidade() );
+        });
     }
 
     private void setarTab( final Tab tab ) {
@@ -358,7 +306,6 @@ public class AssistenteController {
                 gerarResultConstante();
                 break;
         }
-
     }
 
     private void initializeConstantes() {
@@ -571,6 +518,25 @@ public class AssistenteController {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public void onActionQuery( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnQueryLimpar":
+                resetQuery();
+                break;
+            case "cbxQueryTuple":
+                desabilitarAcoesQuery( cbxQueryTuple.isSelected() );
+                break;
+            case "btnQueryGerar":
+                gerarResultQuery();
+                break;
+        }
+    }
+
     private void resetQuery() {
 
         txfQueryNomeClasse.setText( "" );
@@ -578,6 +544,8 @@ public class AssistenteController {
         cbxQueryTuple.setSelected( false );
         cbxQueryJsonAnnotation.setSelected( false );
         cbxQueryAplicarBuilder.setSelected( false );
+        desabilitarAcoesQuery( false );
+        txfQueryNomeClasse.requestFocus();
     }
 
     private void desabilitarAcoesQuery( final boolean desabilitar ) {
@@ -611,6 +579,28 @@ public class AssistenteController {
     // RESULTADO.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void onActionResult( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+
+        final Control source = (Control) event.getSource();
+
+        switch ( source.getId() ) {
+            case "btnResultCopiar":
+                copiarResultadoParaAreaTransferencia();
+                break;
+            case "btnResultGravar":
+                gravarResultadoNaPastaDoProjeto();
+                break;
+            case "cbxResultArquivos":
+                selecionarClasse();
+                break;
+            case "btnResultAtualizar":
+                atualizarResult();
+                break;
+        }
+    }
 
     private void setarResultado( final Set<ResultMapeamento> results ) {
 

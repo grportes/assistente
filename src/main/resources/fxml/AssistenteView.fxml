@@ -61,8 +61,8 @@
                               </VBox>
                               <HBox alignment="CENTER" prefHeight="47.0" prefWidth="184.0" spacing="5.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#onActionMapeamentoBtnLerTabela" prefHeight="26.0" prefWidth="88.0" text="Ler..." />
-                                    <Button mnemonicParsing="false" onAction="#onActionMapeamentoBtnLimpar" prefHeight="26.0" prefWidth="83.0" text="Limpar" />
+                                    <Button fx:id="btnLer" mnemonicParsing="false" onAction="#onActionMapeamento" prefHeight="26.0" prefWidth="88.0" text="Ler..." />
+                                    <Button fx:id="btnLimpar" mnemonicParsing="false" onAction="#onActionMapeamento" prefHeight="26.0" prefWidth="83.0" text="Limpar" />
                                  </children>
                                  <padding>
                                     <Insets top="8.0" />
@@ -90,7 +90,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" layoutX="5.0" layoutY="381.0" prefHeight="29.0" prefWidth="794.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                            <children>
-                              <Button fx:id="btnMapeamento" mnemonicParsing="false" onAction="#onActionBtnMapeamento" text="Gerar Mapeamento" />
+                              <Button fx:id="btnGerarMapeamento" mnemonicParsing="false" onAction="#onActionMapeamento" text="Gerar Mapeamento" />
                            </children>
                         </HBox>
                      </children></AnchorPane>

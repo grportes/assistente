@@ -65,7 +65,8 @@ public class MapeamentoService {
 
     public Set<ResultMapeamento> executar( final Modelo modelo ) {
 
-        if ( isNull( modelo ) || isEmpty( modelo.getCampos() ) ) return emptySet();
+        if ( isNull( modelo ) || isEmpty( modelo.getCampos() ) )
+            throw new IllegalArgumentException( "É necessário informar a tabela!!" );
 
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
         final Set<ModeloCampo> camposPk = buscarPks( modelo.getCampos() );
