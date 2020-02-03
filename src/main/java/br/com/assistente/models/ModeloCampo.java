@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static br.com.assistente.infra.util.UtilString.normalizeJava;
+import static br.com.assistente.infra.util.UtilString.convDbToJava;
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptySet;
 import static java.util.Comparator.comparing;
@@ -349,7 +349,7 @@ public final class ModeloCampo {
         public Builder comColunaDB( final String value ) {
 
             this.colunaDB = lowerCase( value );
-            this.colunaJava = ColunaId.getNomeAtributo( value ).orElse( normalizeJava( value, false ) );
+            this.colunaJava = ColunaId.getNomeAtributo( value ).orElse( convDbToJava( value ) );
             return this;
         }
 

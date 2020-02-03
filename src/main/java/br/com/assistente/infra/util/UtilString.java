@@ -117,6 +117,7 @@ public final class UtilString {
         final String str,
         final boolean capitalizeFirst
     ) {
+        if ( isBlank( str ) ) return str;
 
         String newStr = removerAcentosECaracteresEspeciais( normalizeSpace( trim( str ) ) );
 
@@ -132,6 +133,16 @@ public final class UtilString {
         return capitalizeFirst ? capitalize( newStr ) : newStr;
     }
 
+    public static String convDbToJava( final String str ) {
+
+        if ( isBlank( str ) ) return str;
+
+        final String[] tmp = normalizeJava( str.toLowerCase(), false ).split( "_" );
+        String newStr = tmp[0];
+        for ( int index = 1; index < tmp.length; index++ )
+            newStr = newStr.concat( capitalize( tmp[index] ) );
+        return newStr;
+    }
 
     public static String requireNotBlank( final String str ) {
 
