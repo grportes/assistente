@@ -1,22 +1,33 @@
 package br.com.assistente.models;
 
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
-import static br.com.assistente.infra.util.UtilArquivo.getResourceFolder;
+import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static br.com.assistente.infra.util.UtilYaml.load;
 import static java.lang.String.format;
-import static java.nio.file.Files.notExists;
 import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 public final class DriverCnx {
 
@@ -167,15 +178,49 @@ public final class DriverCnx {
     public static void loadCache() {
 
         if ( isEmpty( cache ) ) {
-            final Path pathDrivers = Paths.get( "E:\\assistente\\assistente-1.0.1.jar\\drivers");
-            try {
-                cache = Files.list(pathDrivers)
-                    .map( path -> load(DriverCnx.class, path) )
-                    .map( Optional::get )
-                    .collect( toList() );
-            } catch ( final IOException e ) {
-                throw new UncheckedIOException( format( "Falhou leitura em: %s", pathDrivers.toString() ), e );
+            final URL resource = DriverCnx.class.getResource( "/drivers" );
+            cache = equalsIgnoreCase( resource.getProtocol(), "jar" )
+                ? loadCacheFromJar( resource )
+                : loadCacheFromFile( resource );
+        }
+    }
+
+    private static List<DriverCnx> loadCacheFromJar( final URL resource ) {
+
+        final String jarFile = requireNotBlank(
+            substringBetween( resource.getFile(), "file:", ".jar!" ),
+            "Arquivo jar não localizado!"
+        ).concat( ".jar" );
+
+        try ( final ZipFile zipFile = new ZipFile( jarFile ) ) {
+            final Enumeration<? extends ZipEntry> e = zipFile.entries();
+            final List<DriverCnx> buffer = new ArrayList<>(  );
+            while (e.hasMoreElements()) {
+                final ZipEntry entry = e.nextElement();
+                if ( startsWithIgnoreCase( entry.getName(), "drivers/" ) ) {
+                    if ( lastIndexOfIgnoreCase( entry.getName(), ".yml" ) > 0 ) {
+                        try ( BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry)) ) {
+                            final Yaml yaml = new Yaml( new Constructor( DriverCnx.class ) );
+                            buffer.add(  yaml.load( bis ) );
+                        }
+                    }
+                }
             }
+            return buffer;
+        } catch ( IOException e) {
+            throw new UncheckedIOException( format( "Falha ao ler arquivo %s", jarFile ), e );
+        }
+    }
+
+    private static List<DriverCnx> loadCacheFromFile( final URL resource ) {
+
+        try {
+            return Files.list( Paths.get( resource.getFile() ) )
+                .map( path -> load(DriverCnx.class, path) )
+                .map( Optional::get )
+                .collect( toList() );
+        } catch ( final IOException e ) {
+            throw new UncheckedIOException( format( "Falhou leitura em: %s", resource.getFile() ), e );
         }
     }
 
