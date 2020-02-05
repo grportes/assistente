@@ -30,7 +30,6 @@ import static br.com.assistente.models.ResultMapeamento.buscarNomeEntidadePacote
 import static br.com.assistente.models.TipoResult.MAPEAMENTO;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
-import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;

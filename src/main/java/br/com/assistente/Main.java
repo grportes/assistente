@@ -43,6 +43,7 @@ public class Main extends Application {
         final Throwable e
     ) {
 
+        e.printStackTrace();
         Throwable rootCause = ExceptionUtils.getRootCause(e);
         String message = rootCause.getMessage();
         Dialog.msgErro( message );
