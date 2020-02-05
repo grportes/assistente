@@ -16,6 +16,7 @@ import $import;
     #end
 #end
 
+import static java.util.Objects.isNull;
 
 /**
  * Classe que representa informações...
@@ -120,7 +121,7 @@ public class $nomeClasse implements Serializable {
     public boolean equals( final Object obj ) {
 
         if ( this == obj ) return true;
-        if ( isNull( obj ) || getClass() != o.getClass() ) return false;
+        if ( isNull( obj ) || getClass() != obj.getClass() ) return false;
         final $nomeClasse $varObj = ($nomeClasse) obj;
         #macroExpressoesEquals( $varObj )
     }
@@ -142,16 +143,15 @@ public class $nomeClasse implements Serializable {
     #set ( $primeiraLinha = true )
     #foreach ( $campo in $identificadores )
         #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.NomeAtributo ), "()" ) )
-        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.NomeAtributo , " )" ) )
+        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", that.", $metodo , " )" ) )
         #if ( $primeiraLinha  )
             #set ( $primeiraLinha = false )
-        return $expressao
+        return $expressao;
         #else
             && $expressao #if( !$foreach.hasNext );#end
         #end
     #end
 #end
-
 
 #macro( macroBuilder )
 

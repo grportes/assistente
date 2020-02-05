@@ -284,7 +284,7 @@ public class DefinicaoDto {
             @Override
             public String getImportNecessario() {
 
-                return "java.util.LocalDate";
+                return "java.time.LocalDate";
             }
 
             @Override
@@ -304,7 +304,7 @@ public class DefinicaoDto {
             @Override
             public String getImportNecessario() {
 
-                return "java.util.LocalDateTime";
+                return "java.time.LocalDateTime";
             }
 
             @Override
@@ -324,7 +324,7 @@ public class DefinicaoDto {
             @Override
             public String getImportNecessario() {
 
-                return "java.util.LocalTime";
+                return "java.time.LocalTime";
             }
 
             @Override
