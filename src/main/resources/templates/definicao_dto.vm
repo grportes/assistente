@@ -122,8 +122,8 @@ public class $nomeClasse implements Serializable {
 
         if ( this == obj ) return true;
         if ( isNull( obj ) || getClass() != obj.getClass() ) return false;
-        final $nomeClasse $varObj = ($nomeClasse) obj;
-        #macroExpressoesEquals( $varObj )
+        final $nomeClasse that = ($nomeClasse) obj;
+        #macroExpressoesEquals( )
     }
 
     @Override
@@ -139,7 +139,7 @@ public class $nomeClasse implements Serializable {
 
 #end
 
-#macro( macroExpressoesEquals $varObj )
+#macro( macroExpressoesEquals )
     #set ( $primeiraLinha = true )
     #foreach ( $campo in $identificadores )
         #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.NomeAtributo ), "()" ) )
