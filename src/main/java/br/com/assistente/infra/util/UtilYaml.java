@@ -10,12 +10,13 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import static br.com.assistente.infra.util.UtilArquivo.*;
+import static br.com.assistente.infra.util.UtilArquivo.excluir;
+import static br.com.assistente.infra.util.UtilArquivo.getPathSetup;
+import static br.com.assistente.infra.util.UtilArquivo.gravar;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newInputStream;
 import static java.util.Objects.requireNonNull;

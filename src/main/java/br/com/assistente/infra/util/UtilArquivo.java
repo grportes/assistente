@@ -15,7 +15,6 @@ import static java.nio.file.Files.deleteIfExists;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.notExists;
 import static java.util.Objects.requireNonNull;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
 public final class UtilArquivo {
