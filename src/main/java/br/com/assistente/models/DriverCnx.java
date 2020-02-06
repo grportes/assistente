@@ -199,7 +199,7 @@ public final class DriverCnx {
                 final ZipEntry entry = e.nextElement();
                 if ( startsWithIgnoreCase( entry.getName(), "drivers/" ) ) {
                     if ( lastIndexOfIgnoreCase( entry.getName(), ".yml" ) > 0 ) {
-                        try ( BufferedInputStream bis = new BufferedInputStream(zipFile.getInputStream(entry)) ) {
+                        try ( final BufferedInputStream bis = new BufferedInputStream( zipFile.getInputStream(entry) ) ) {
                             final Yaml yaml = new Yaml( new Constructor( DriverCnx.class ) );
                             buffer.add(  yaml.load( bis ) );
                         }
