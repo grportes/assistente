@@ -132,9 +132,9 @@ import static java.util.Objects.isNull;
     public boolean equals( final Object obj ) {
 
         if ( this == obj ) return true;
-        if ( isNull( obj ) || getClass() != o.getClass() ) return false;
-        final $nomeEntidade $varObj = ($nomeEntidade) obj;
-        #macroExpressoesEquals( $varObj )
+        if ( isNull( obj ) || getClass() != obj.getClass() ) return false;
+        final $nomeEntidade that = ($nomeEntidade) obj;
+        #macroExpressoesEquals( )
     }
 
     @Override
@@ -150,11 +150,11 @@ import static java.util.Objects.isNull;
 
 #end
 
-#macro( macroExpressoesEquals $varObj )
+#macro( macroExpressoesEquals )
     #set ( $primeiraLinha = true )
     #foreach ( $campo in $campos )
         #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $campo.ColunaJava ), "()" ) )
-        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", ", $campo.ColunaJava , " )" ) )
+        #set ( $expressao = $StringUtils.join( "Objects.equals( ", $metodo, ", that.", $metodo , " )" ) )
         #if ( $primeiraLinha  )
             #set ( $primeiraLinha = false )
         return $expressao
