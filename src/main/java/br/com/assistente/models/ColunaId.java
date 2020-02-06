@@ -1,6 +1,5 @@
 package br.com.assistente.models;
 
-import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.BufferedInputStream;
@@ -17,14 +16,13 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static br.com.assistente.infra.util.UtilString.requireNotBlank;
+import static br.com.assistente.infra.util.UtilArquivo.buscarNomeArquivoAplicacaoJar;
 import static java.lang.String.format;
 import static java.nio.file.Files.newInputStream;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.collections4.MapUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
-import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 public final class ColunaId {
 
@@ -60,20 +58,17 @@ public final class ColunaId {
 
         final URL resource = ColunaId.class.getResource( "/templates" );
 
-        cache = StringUtils.equalsIgnoreCase( resource.getProtocol(), "jar" )
-            ? loadCacheFromJar( resource )
+        cache = equalsIgnoreCase( resource.getProtocol(), "jar" )
+            ? loadCacheFromJar( )
             : loadCacheFromFile( resource );
 
         return cache;
     }
 
 
-    private static Map<String, String> loadCacheFromJar( final URL resource ) {
+    private static Map<String, String> loadCacheFromJar( ) {
 
-        final String jarFile = requireNotBlank(
-            substringBetween( resource.getFile(), "file:", ".jar!" ),
-            "Arquivo jar não localizado!"
-        ).concat( ".jar" );
+        final String jarFile = buscarNomeArquivoAplicacaoJar();
 
         try ( final ZipFile zipFile = new ZipFile( jarFile ) ) {
             final Enumeration<? extends ZipEntry> e = zipFile.entries();

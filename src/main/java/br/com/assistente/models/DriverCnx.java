@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static br.com.assistente.infra.util.UtilString.requireNotBlank;
+import static br.com.assistente.infra.util.UtilArquivo.buscarNomeArquivoAplicacaoJar;
 import static br.com.assistente.infra.util.UtilYaml.load;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
@@ -27,7 +27,6 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 public final class DriverCnx {
 
@@ -180,17 +179,14 @@ public final class DriverCnx {
         if ( isEmpty( cache ) ) {
             final URL resource = DriverCnx.class.getResource( "/drivers" );
             cache = equalsIgnoreCase( resource.getProtocol(), "jar" )
-                ? loadCacheFromJar( resource )
+                ? loadCacheFromJar( )
                 : loadCacheFromFile( resource );
         }
     }
 
-    private static List<DriverCnx> loadCacheFromJar( final URL resource ) {
+    private static List<DriverCnx> loadCacheFromJar( ) {
 
-        final String jarFile = requireNotBlank(
-            substringBetween( resource.getFile(), "file:", ".jar!" ),
-            "Arquivo jar não localizado!"
-        ).concat( ".jar" );
+        final String jarFile = buscarNomeArquivoAplicacaoJar();
 
         try ( final ZipFile zipFile = new ZipFile( jarFile ) ) {
             final Enumeration<? extends ZipEntry> e = zipFile.entries();

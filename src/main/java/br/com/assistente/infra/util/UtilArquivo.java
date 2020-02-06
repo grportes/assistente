@@ -15,7 +15,7 @@ import static java.nio.file.Files.deleteIfExists;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.notExists;
 import static java.util.Objects.requireNonNull;
-import static org.apache.commons.lang3.StringUtils.removeStart;
+import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 public final class UtilArquivo {
 
@@ -23,15 +23,6 @@ public final class UtilArquivo {
 
         requireNotBlank( recurso, "Argumento inválido para UtilArquivo.getResource" );
         return UtilArquivo.class.getResource( recurso.startsWith("/") ? recurso : "/".concat( recurso ) );
-    }
-
-    public static Path getResourceFolder( final String folder ) {
-
-        requireNotBlank( folder, "Argumento inválido para UtilArquivo.getResourceFolder" );
-        final URL resource = UtilArquivo.class.getResource( folder );
-        final String file = resource.getFile();
-        final String novoFile = removeStart(file, "file:").replaceFirst("^/(.:/)", "$1");
-        return Paths.get(novoFile);
     }
 
     public static Path buscarPastaAplicacao() {
@@ -88,6 +79,17 @@ public final class UtilArquivo {
         } catch ( IOException e ) {
             throw new UncheckedIOException( "Falhou criar pasta" + path.toString(), e );
         }
+    }
+
+    public static String buscarNomeArquivoAplicacaoJar() {
+
+        final URL resource = UtilArquivo.class.getResource( "" );
+
+        return requireNotBlank(
+                substringBetween( resource.getFile(), "file:", ".jar!" ),
+                "Arquivo jar não localizado!"
+        ).concat( ".jar" );
+
     }
 
 }
