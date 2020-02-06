@@ -25,6 +25,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
     #if ( $modelo.ChaveComposta )
 import javax.persistence.EmbeddedId;
+    #else
+import javax.persistence.Id;
     #end
     #if ( $modelo.AtributoVersion )
 import javax.persistence.Version;
@@ -40,6 +42,8 @@ $StringUtils.join( "import models.commons.constantes.", $campo.NomeEnum, ";" )
 $StringUtils.join( "import models.commons.converters.", $campo.NomeEnum, "Converter;" )
         #end
     #end
+
+import static java.lang.String.format;
 #end
 
 #macro( macroEntidade )
@@ -104,7 +108,7 @@ $StringUtils.join( "import models.commons.converters.", $campo.NomeEnum, "Conver
 
     #macroComentario( "CONSTRUCTOR" )
 
-    public $modelo.Entidade {
+    public $StringUtils.join( $modelo.Entidade, '()' ) {
 
         super();
     }
@@ -187,7 +191,7 @@ $StringUtils.join( "import models.commons.converters.", $campo.NomeEnum, "Conver
     @Override
     public String toString() {
 
-        return String.format( "$modelo.Entidade { id = %s }", this.getId() );
+        return format( "$modelo.Entidade { id = %s }", this.getId() );
     }
 
 
