@@ -137,9 +137,7 @@ public class MapeamentoService {
             buscarNomeEntidadePacote( rsMapeamentos )
             .orElseThrow( () -> new IllegalArgumentException( "Não localizou resultado" ) );
 
-        final String nomeModulo = isNotBlank( nomeEntidadePacote._2() )
-                ? nomeEntidadePacote._1()
-                : "";
+        final String nomeModulo = isNotBlank( nomeEntidadePacote._2() ) ? nomeEntidadePacote._2() : "";
 
         // Domain:
         final Path pathDomain = rootPath.resolve( "domains" ).resolve( nomeModulo );
@@ -182,7 +180,7 @@ public class MapeamentoService {
                 throw new RuntimeException( "Classe(s) domain criada(s) porém não foi possível criar classe(s) Repository, pois já existem!" );
 
             final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
-            final String nomePacote = "models.repository" + nomeModulo;
+            final String nomePacote = "models.repository." + nomeModulo;
             final Tuple2<String, String> tuple = extrarImport( rsMapeamentos, nomeModulo );
 
             VelocityContext context = new VelocityContext();
