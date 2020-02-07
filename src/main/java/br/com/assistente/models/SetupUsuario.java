@@ -222,13 +222,25 @@ public class SetupUsuario {
             .collect( LinkedHashSet::new, Set::addAll, Set::addAll );
     }
 
-    public static List<DataType> buscarDataTypes() {
+    public static List<DataType> buscarDataTypesCnxSelecionada() {
 
-        return buscarCnxAtivaDoUsuario()
-            .map( SetupCnxBanco::getIdDriver )
-            .flatMap( DriverCnx::findById )
+        if ( isNull( cache ) )
+            throw new RuntimeException( "Falha ao carregar arquivo assistente.yml" );
+
+        final Integer idCnxAtual = cache.getIdCnxAtual();
+        if ( isNull( idCnxAtual ) )
+            throw new RuntimeException( "Favor selecionar conexão atual, no menu configurações!!" );
+
+        final String idDriver = cache.getConexoesDisponiveis()
+            .stream()
+            .filter(cnx -> Objects.equals(cnx.getId(), idCnxAtual))
+            .findFirst()
+            .map(SetupCnxBanco::getIdDriver)
+            .orElseThrow( () -> new RuntimeException("Não foi possivel localizar Driver de conexão") );
+
+        return DriverCnx.findById(idDriver)
             .map( DriverCnx::getDataTypes )
-            .orElseThrow( () -> new RuntimeException( "Não foi possivel localizar driver de conexão!!" ) );
+            .orElseThrow(() -> new RuntimeException("Driver de conexão não localizado"));
     }
 
 }

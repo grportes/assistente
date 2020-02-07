@@ -45,7 +45,7 @@ public class MapeamentoService {
 
     public Set<ModeloCampo> extrair( final Modelo modelo )  {
 
-        final List<DataType> dataTypes = SetupUsuario.buscarDataTypes();
+        final List<DataType> dataTypes = SetupUsuario.buscarDataTypesCnxSelecionada();
 
         return getMetaData( modelo )
             .stream()
