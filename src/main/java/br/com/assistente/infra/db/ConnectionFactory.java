@@ -20,7 +20,6 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static br.com.assistente.infra.util.UtilCrypto.descriptografar;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
@@ -48,7 +47,7 @@ public final class ConnectionFactory {
 
             try {
                 connection = isNotBlank( cnxBanco.getUserName() )
-                    ? DriverManager.getConnection( jdbcUrl, cnxBanco.getUserName(), descriptografar(cnxBanco.getPassword()) )
+                    ? DriverManager.getConnection( jdbcUrl, cnxBanco.getUserName(), cnxBanco.getPassword() )
                     : DriverManager.getConnection( jdbcUrl );
             } catch ( final SQLException e ) {
                 e.printStackTrace();
@@ -79,7 +78,7 @@ public final class ConnectionFactory {
             String db = format( "%s%s", driverCnx.getProtocolo(), cnxBanco.getHost() );
             if ( nonNull( cnxBanco.getPorta() ) ) db = format( "%s:%s", db, cnxBanco.getPorta() );
             connectionTemp = isNotBlank( cnxBanco.getUserName() )
-                ? DriverManager.getConnection( db, cnxBanco.getUserName(), descriptografar(cnxBanco.getPassword()) )
+                ? DriverManager.getConnection( db, cnxBanco.getUserName(), cnxBanco.getPassword() )
                 : DriverManager.getConnection( db );
             QueryRunner runner = new QueryRunner();
             ScalarHandler<Object> resultSet = new ScalarHandler<>();

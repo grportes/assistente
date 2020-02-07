@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import static br.com.assistente.infra.util.UtilCrypto.descriptografar;
 import static br.com.assistente.infra.util.UtilYaml.getArquivoYaml;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
@@ -119,6 +120,12 @@ public class SetupUsuario {
     }
 
     public static void setCache( final SetupUsuario value ) {
+
+        if ( nonNull( value ) ) {
+            final List<SetupCnxBanco> cnxs = value.getConexoesDisponiveis();
+            for ( final SetupCnxBanco cnx : cnxs )
+                cnx.setPassword( descriptografar( cnx.getPassword() ) );
+        }
 
         cache = value;
     }
