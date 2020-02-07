@@ -223,7 +223,7 @@ public final class DriverCnx {
 
         try {
             return Files.list( Paths.get( nomeArquivo ) )
-                .map( path -> load(DriverCnx.class, path) )
+                .map( path -> load( DriverCnx.class, path ) )
                 .map( Optional::get )
                 .collect( toList() );
         } catch ( final IOException e ) {
