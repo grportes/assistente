@@ -51,7 +51,7 @@ public final class ConnectionFactory {
             } catch ( final SQLException e ) {
                 e.printStackTrace();
                 throw new RuntimeException( format(
-                    "Falhou conexão com %s em %s \n%s %s", cnxBanco.getIdDriver(), jdbcUrl, cnxBanco.getUserName(), cnxBanco.getPassword()
+                    "Falhou conexão com %s em %s", cnxBanco.getIdDriver(), jdbcUrl
                 ));
             }
         }
