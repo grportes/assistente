@@ -37,11 +37,6 @@ public final class UtilString {
                 : "";
     }
 
-    public static String removerEspacosEntre( final String str ) {
-
-        return isNotBlank( str ) ? str.replaceAll("\\s+","") : str;
-    }
-
     public static String removerAcentosECaracteresEspeciais( final String str ) {
 
         return isNotBlank( str )

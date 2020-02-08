@@ -8,7 +8,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -21,18 +27,22 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static br.com.assistente.infra.javafx.Dialog.*;
+import static br.com.assistente.infra.javafx.Dialog.msgErro;
+import static br.com.assistente.infra.javafx.Dialog.msgInfo;
+import static br.com.assistente.infra.javafx.Dialog.selecionarArquivo;
+import static br.com.assistente.infra.javafx.Dialog.selecionarPasta;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static br.com.assistente.infra.util.UtilCollections.createSet;
 import static br.com.assistente.infra.util.UtilNumber.toInteger;
 import static br.com.assistente.infra.util.UtilString.createString;
-import static br.com.assistente.infra.util.UtilString.removerEspacosEntre;
 import static java.lang.Integer.parseInt;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.stage.Modality.WINDOW_MODAL;
+import static org.apache.commons.lang3.StringUtils.deleteWhitespace;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 public class SetupController {
 
@@ -187,6 +197,11 @@ public class SetupController {
 
     private SetupCnxBanco getCnxBanco() {
 
+        txfCnxBancoHost.setText( trim( txfCnxBancoHost.getText() ) );
+        txfCnxBancoUserName.setText( trim( txfCnxBancoUserName.getText() ) );
+        psCnxBancoSenha.setText( trim( psCnxBancoSenha.getText() ) );
+        txaCnxBancoCatalogos.setText( deleteWhitespace( txaCnxBancoCatalogos.getText() ) );
+
         final SetupCnxBanco cnx = new SetupCnxBanco();
         cnx.setId( toInteger( txfCnxBancoId.getText() ) );
         cnx.setDescricao( txfCnxBancoDescricao.getText() );
@@ -195,7 +210,7 @@ public class SetupController {
         cnx.setPorta( toInteger( txfCnxBancoPorta.getText() ) );
         cnx.setUserName( txfCnxBancoUserName.getText() );
         cnx.setPassword( psCnxBancoSenha.getText() );
-        cnx.setCatalogos( createSet( removerEspacosEntre( txaCnxBancoCatalogos.getText() ), ',' ) );
+        cnx.setCatalogos( createSet( txaCnxBancoCatalogos.getText(), ',' ) );
         return cnx;
     }
 
