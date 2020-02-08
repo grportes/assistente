@@ -1,4 +1,4 @@
-package $StringUtils.join( $nomePacote, ".impl;" )
+$StringUtils.join( "package ", $nomePacote, ".impl;" )
 
 import infra.model.impl.JPARepository;
 #if ( $StringUtils.isNotBlank( $importJavaId ) )
@@ -9,6 +9,7 @@ $StringUtils.join( "import ", $importJavaId, ".", $tipoJavaId, ";" )
 $StringUtils.join( "import ", $importJavaId, ";" )
     #end
 #end
+$StringUtils.join( "import ", $nomePacote, ".", $nomeDomain, "Repository;" )
 
 /**
  * Implementação Repository para domain: {@link $nomeDomain}

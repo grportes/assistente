@@ -14,6 +14,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -22,6 +24,8 @@ import static br.com.assistente.infra.util.UtilYaml.load;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Optional.empty;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
@@ -210,13 +214,20 @@ public final class DriverCnx {
 
     private static List<DriverCnx> loadCacheFromFile( final URL resource ) {
 
+        // Tratamento para paths do Windows:
+        final Pattern regex = compile( "(/\\w:)(.*)$", CASE_INSENSITIVE );
+        final Matcher matcher = regex.matcher( resource.getFile() );
+        final String nomeArquivo =  ( matcher.find() && matcher.groupCount() > 1 )
+            ? resource.getFile().substring( 1 )
+            : resource.getFile();
+
         try {
-            return Files.list( Paths.get( resource.getFile() ) )
-                .map( path -> load(DriverCnx.class, path) )
+            return Files.list( Paths.get( nomeArquivo ) )
+                .map( path -> load( DriverCnx.class, path ) )
                 .map( Optional::get )
                 .collect( toList() );
         } catch ( final IOException e ) {
-            throw new UncheckedIOException( format( "Falhou leitura em: %s", resource.getFile() ), e );
+            throw new UncheckedIOException( format( "Falhou leitura em: %s", nomeArquivo ), e );
         }
     }
 

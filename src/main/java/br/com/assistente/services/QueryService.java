@@ -60,7 +60,7 @@ public class QueryService {
 
     private Set<DefinicaoDto> extrairColunas( final String query ) {
 
-        final List<DataType> dataTypes = SetupUsuario.buscarDataTypes();
+        final List<DataType> dataTypes = SetupUsuario.buscarDataTypesCnxSelecionada();
 
         final Set<ModeloCampo> dados = ConnectionFactory.execQuery( query );
         if ( isEmpty( dados ) )

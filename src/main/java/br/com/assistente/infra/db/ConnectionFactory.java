@@ -36,8 +36,7 @@ public final class ConnectionFactory {
     public static Tuple2<Connection, DriverCnx> getConnection() {
 
         if ( isNull( connection ) ) {
-            final SetupCnxBanco cnxBanco = SetupUsuario.buscarCnxAtivaDoUsuario()
-                    .orElseThrow( () -> new RuntimeException("Não localizou conexão ativa") );
+            final SetupCnxBanco cnxBanco = SetupUsuario.buscarCnxSelecionada();
 
             driverCnx = DriverCnx.findById( cnxBanco.getIdDriver() )
                     .orElseThrow(() -> new RuntimeException( "Não localizou driver de conexão") );
@@ -52,7 +51,7 @@ public final class ConnectionFactory {
             } catch ( final SQLException e ) {
                 e.printStackTrace();
                 throw new RuntimeException( format(
-                    "Falhou conexão com %s \n%s", cnxBanco.getIdDriver(), e.getMessage()
+                    "Falhou conexão com %s em %s", cnxBanco.getIdDriver(), jdbcUrl
                 ));
             }
         }

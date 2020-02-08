@@ -138,7 +138,6 @@ public class SetupUsuario {
         return UtilYaml.load( SetupUsuario.class, arquivoYaml );
     }
 
-
     public static void validarObjeto( final SetupUsuario setupUsuario ) {
 
         requireNonNull( setupUsuario );
@@ -158,11 +157,6 @@ public class SetupUsuario {
             .stream()
             .filter( cnx -> Objects.equals( cnx.getId(), idCnxBancoSelecionada ) )
             .findFirst();
-    }
-
-    public static Optional<SetupCnxBanco> buscarCnxAtivaDoUsuario() {
-
-        return SetupUsuario.find().flatMap( su -> SetupCnxBanco.findById(su.getIdCnxAtual()) );
     }
 
     public static Path buscarLocalProjeto() {
@@ -208,6 +202,22 @@ public class SetupUsuario {
         });
     }
 
+    public static SetupCnxBanco buscarCnxSelecionada() {
+
+        if ( isNull( cache ) )
+            throw new RuntimeException( "Falha ao carregar arquivo assistente.yml" );
+
+        final Integer idCnxAtual = cache.getIdCnxAtual();
+        if ( isNull( idCnxAtual ) )
+            throw new RuntimeException( "Favor selecionar conexão atual, no menu configurações!!" );
+
+        return cache.getConexoesDisponiveis()
+            .stream()
+            .filter( cnx -> Objects.equals(cnx.getId(), idCnxAtual) )
+            .findFirst()
+            .orElseThrow( () -> new RuntimeException( "Não foi possivel localizar Driver de conexão" ) );
+    }
+
     public static Set<String> getCatalogosCnxSelecionada() {
 
         if ( isNull( cache ) ) return emptySet();
@@ -222,13 +232,13 @@ public class SetupUsuario {
             .collect( LinkedHashSet::new, Set::addAll, Set::addAll );
     }
 
-    public static List<DataType> buscarDataTypes() {
+    public static List<DataType> buscarDataTypesCnxSelecionada() {
 
-        return buscarCnxAtivaDoUsuario()
-            .map( SetupCnxBanco::getIdDriver )
-            .flatMap( DriverCnx::findById )
+        final String idDriver = buscarCnxSelecionada().getIdDriver();
+
+        return DriverCnx.findById( idDriver )
             .map( DriverCnx::getDataTypes )
-            .orElseThrow( () -> new RuntimeException( "Não foi possivel localizar driver de conexão!!" ) );
+            .orElseThrow(() -> new RuntimeException( "Driver de conexão não localizado" ));
     }
 
 }
