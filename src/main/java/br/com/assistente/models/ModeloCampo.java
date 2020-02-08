@@ -229,8 +229,8 @@ public final class ModeloCampo {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Extrair numero de p.ex: varchar(100)
-    private static final Pattern REGEX_I = Pattern.compile( "(.*)\\((\\d+)\\)" );
-    private static final Pattern REGEX_II = Pattern.compile( "(.*)\\((\\d+,\\d+)\\)" );
+    private static final Pattern REGEX = Pattern.compile( "(.*)\\((\\d+)\\)" );
+    private static final Pattern REGEX_DEC = Pattern.compile( "(.*)\\((\\d+,\\d+)\\)" );
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -367,12 +367,12 @@ public final class ModeloCampo {
 
         public Builder comTipoDB( final String value ) {
 
-            Matcher matcher = REGEX_I.matcher( value );
+            Matcher matcher = REGEX.matcher( value );
             if ( matcher.find() ) {
                 this.tipoDB = matcher.group( 1 );
                 this.tamanho = parseInt( matcher.group( 2 ) );
             } else {
-                matcher = REGEX_II.matcher( value );
+                matcher = REGEX_DEC.matcher( value );
                 if ( matcher.find() ) {
                     this.tipoDB = matcher.group( 1 );
                     final String[] valores = split( matcher.group( 2 ), "," );

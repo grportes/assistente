@@ -88,13 +88,17 @@ import static java.lang.String.format;
     @Version
     #end
     #set ( $name = $StringUtils.join( "name = ", '"', $campo.ColunaDB, '"' ) )
-    #set ( $columnDefinition = $StringUtils.join( "columnDefinition = ", '"', $campo.TipoDB, '"' ) )
+    #set ( $columnDefinition = $StringUtils.join( 'columnDefinition = ', '"', $campo.TipoDB, '"' ) )
+    #if ( $campo.AtributoLength )
+        #set ( $columnDefinition = $StringUtils.join( 'columnDefinition = ', '"', $campo.TipoDB, '(', $campo.Tamanho, ')', '"' ) )
+    #end
     #if ( $campo.BigDecimal )
-        #set ( $decimalAtrib = "" )
         #set ( $decimalAtrib = $StringUtils.join( "precision = ", $campo.Tamanho, ", scale = ", $campo.DigitoDecimal ) )
     @Column( $name, $columnDefinition, $decimalAtrib, nullable = $campo.ColNull )
+    #elseif ( $campo.AtributoLength )
+    @Column( $name, $columnDefinition, length = $campo.Tamanho, nullable = $campo.ColNull )
     #else
-    @Column( $name, $columnDefinition,#if ($campo.AtributoLength) length = $campo.Tamanho,#end nullable = $campo.ColNull )
+    @Column( $name, $columnDefinition, nullable = $campo.ColNull )
     #end
     #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
     #if ( $campo.Converter )
