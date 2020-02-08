@@ -1,14 +1,22 @@
 // imports...
+import javafx.persistence.Tuple;
 #foreach ( $import in $importsTupleConverter )
 import static $import;
 #end
+
+final Tuple row = getEm().createNamedQuery( "named query", Tuple.class ).getSingleResult();
+
+// ou
+
+final Tuple rows = getEm().createNamedQuery( "named query", Tuple.class ).getResultList();
+
 
 // rows...
 #foreach ( $campo in $campos )
 #set ( $nomeColuna = $campo.NomeAtributo )
 #set ( $converter = $StringUtils.substringAfterLast( $campo.Tipo.TupleConverter, '.' ) )
 #if ( $StringUtils.isBlank( $converter ) )
-$StringUtils.join( 'row.get( "', $nomeColuna, '" )' )
+$StringUtils.join( 'row.get( "', $nomeColuna, '", String.class )' )
 #else
 $StringUtils.join( 'row.get( ', $converter, '( "', $nomeColuna, '") ) ' )
 #end
