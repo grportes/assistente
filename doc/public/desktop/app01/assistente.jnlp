@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp 
+	spec="1.0+" 
+	codebase="http://localhost:9000/assets/desktop/app01/" 
+	href="assistente.jnlp"
+>
+ 
+     <information>
+          <title>Assistente Gerador de Código</title>
+          <vendor>Assistente Play</vendor>
+     </information>
+  
+     <resources>
+          <j2se version="1.8+" />
+          <jar href="assistente-1.0.1.jar" main="true" />
+     </resources>
+ 
+     <application-desc main-class="br.com.assistente.Main.class" />
+     
+     <update check="background" />
+     
+</jnlp>
