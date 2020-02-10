@@ -5,7 +5,6 @@ autenticar: true
 porta: true
 selecionarBaseDados: true
 selectDate: "select getdate()"
-selectTop: "select top 1 * from %TABLE%"
 dataTypes:
   - { dbType: "varchar", dbLength: true, javaType: "java.lang.String" }
   - { dbType: "char", dbLength: true, javaType: "java.lang.String" }

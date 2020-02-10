@@ -41,7 +41,6 @@ public final class DriverCnx {
     private Boolean porta;
     private Boolean selecionarBaseDados;
     private String selectDate;
-    private String selectTop;
     private List<DataType> dataTypes;
 
     public String getId() {
@@ -112,16 +111,6 @@ public final class DriverCnx {
     public void setSelectDate( final String selectDate ) {
 
         this.selectDate = selectDate;
-    }
-
-    public String getSelectTop() {
-
-        return selectTop;
-    }
-
-    public void setSelectTop( final String selectTop ) {
-
-        this.selectTop = selectTop;
     }
 
     public List<DataType> getDataTypes() {

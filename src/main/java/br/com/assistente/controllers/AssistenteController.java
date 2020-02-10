@@ -230,11 +230,11 @@ public class AssistenteController {
         txfMapeamentoNomeTabela.setText( lowerCase( trim( txfMapeamentoNomeTabela.getText() ) ) );
 
         final Set<ModeloCampo> campos = mapeamentoService.extrair(
-                new Modelo.Builder()
-                        .comBanco( cbxMapeamentoBanco.getValue() )
-                        .comOwner( txtMapeamentoOwner.getText() )
-                        .comTabela( txfMapeamentoNomeTabela.getText() )
-                        .build()
+            new Modelo.Builder()
+                .comBanco( cbxMapeamentoBanco.getValue() )
+                .comOwner( txtMapeamentoOwner.getText() )
+                .comTabela( txfMapeamentoNomeTabela.getText() )
+                .build()
         );
 
         if ( isEmpty( campos ) ) {

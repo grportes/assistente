@@ -5,7 +5,6 @@ autenticar: false
 porta: false
 selecionarBaseDados: true
 selectDate: "select current_date"
-selectTop: "select * from %TABLE% limit 1"
 dataTypes:
   - { dbType: "INTEGER", dbLength: false, javaType: "java.lang.Long" }
   - { dbType: "VARCHAR", dbLength: true, javaType: "java.lang.String" }
