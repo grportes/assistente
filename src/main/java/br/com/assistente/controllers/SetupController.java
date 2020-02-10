@@ -122,7 +122,6 @@ public class SetupController {
                 }
                 break;
         }
-
     }
 
     @FXML
@@ -149,6 +148,7 @@ public class SetupController {
                 else
                     cbxCnxBanco.getItems().set( index, setupCnxBancoSave );
                 msgInfo( "Conexão salva" );
+                recarregarAplicacao = true;
                 break;
             case "btnCnxBancoDelete":
                 if ( isBlank(txfCnxBancoId.getText()) ) return;
