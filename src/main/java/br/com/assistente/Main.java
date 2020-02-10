@@ -8,28 +8,24 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import java.io.IOException;
+
 import static br.com.assistente.infra.db.ConnectionFactory.closeConnection;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 
 public class Main extends Application {
 
     @Override
-    public void start( final Stage stage ) {
+    public void start( final Stage stage ) throws IOException {
 
-        try {
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
+        Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);
 
-            Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
-            Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);
-
-            final FXMLLoader loader = new FXMLLoader();
-            stage.setTitle( "Assistente" );
-            loader.setLocation( getResource("/fxml/AssistenteView.fxml") );
-            stage.setScene( new Scene(loader.load()) );
-            stage.show();
-
-        } catch ( Throwable e ) {
-            e.printStackTrace();
-        }
+        final FXMLLoader loader = new FXMLLoader();
+        stage.setTitle( "Assistente" );
+        loader.setLocation( getResource("/fxml/AssistenteView.fxml") );
+        stage.setScene( new Scene(loader.load()) );
+        stage.show();
     }
 
     @Override
