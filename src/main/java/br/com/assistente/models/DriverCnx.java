@@ -88,7 +88,7 @@ public final class DriverCnx {
         return porta;
     }
 
-    public void setPorta(final Boolean porta) {
+    public void setPorta( final Boolean porta ) {
 
         this.porta = porta;
     }

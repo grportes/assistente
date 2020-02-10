@@ -34,10 +34,12 @@ import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.removeEnd;
 import static org.apache.commons.lang3.StringUtils.startsWith;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 
@@ -58,6 +60,17 @@ public class MapeamentoService {
                         "Coluna [ %s ] do tipo [ %s ] Não localizou tipo Java correspondente",
                         m.getColunaDB(), m.getTipoDB()
                     )));
+
+                // Tratamento p/ execeções!!
+                if ( equalsIgnoreCase( dataType.getJavaType(), "java.math.BigDecimal" ) ) {
+                    if ( startsWithIgnoreCase( m.getColunaDB(), "cpf" )
+                        || startsWithIgnoreCase( m.getColunaDB(), "cgc" )
+                        || startsWithIgnoreCase( m.getColunaDB(), "cnpj" ) )
+                        return new ModeloCampo.Builder( m )
+                            .comDataType( new DataType.Builder(dataType).comJavaType("java.lang.Long").build() )
+                            .build();
+                }
+
                 return new ModeloCampo.Builder( m ).comDataType( dataType ).build();
             }).collect( toSet() );
     }

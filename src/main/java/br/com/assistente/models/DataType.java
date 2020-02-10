@@ -11,6 +11,23 @@ public class DataType {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    // CONSTRUCTOR
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public DataType() {
+    }
+
+    private DataType( final Builder builder ) {
+
+        this.dbType = builder.dbType;
+        this.dbLength = builder.dbLength;
+        this.javaType = builder.javaType;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     // GETTERS && SETTERS
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,4 +83,38 @@ public class DataType {
 
         return Objects.hash(dbType);
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // BUILDER
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static class Builder {
+
+        private String dbType;
+        private Boolean dbLength;
+        private String javaType;
+
+        public Builder( final DataType dataType ) {
+
+            this.dbType = dataType.dbType;
+            this.dbLength = dataType.dbLength;
+            this.javaType = dataType.javaType;
+        }
+
+        public Builder comJavaType( final String value ) {
+
+            this.javaType = value;
+            return this;
+        }
+
+        public DataType build() {
+
+            return new DataType( this );
+        }
+
+    }
+
 }
