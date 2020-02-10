@@ -115,6 +115,7 @@ public final class UtilString {
         if ( isBlank( str ) ) return str;
 
         String newStr = removerAcentosECaracteresEspeciais( normalizeSpace( trim( str ) ) );
+        if ( newStr.contains("_") ) newStr = newStr.replaceAll( "_", " " );
 
         final String[] sArray = newStr.split( " " );
         newStr = isAllUpperCase( sArray[0] ) ? lowerCase( sArray[0] ) : sArray[0];
