@@ -19,6 +19,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.collections4.CollectionUtils.size;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
@@ -196,7 +197,9 @@ public class SetupCnxBanco {
             && Objects.equals( setupCnxBancoA.getHost(), setupCnxBancoB.getHost() )
             && Objects.equals( setupCnxBancoA.getPorta(), setupCnxBancoB.getPorta() )
             && Objects.equals( setupCnxBancoA.getUserName(), setupCnxBancoB.getUserName() )
-            && Objects.equals( setupCnxBancoA.getPassword(), setupCnxBancoB.getPassword() );
+            && Objects.equals( setupCnxBancoA.getPassword(), setupCnxBancoB.getPassword() )
+            && size( setupCnxBancoA.getCatalogos() ) == size( setupCnxBancoB.getCatalogos() )
+            ;
     }
 
     public static int save( final SetupCnxBanco cnxBanco ) {
