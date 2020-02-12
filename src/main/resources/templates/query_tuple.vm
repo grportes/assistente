@@ -8,7 +8,7 @@ final Tuple row = getEm().createNamedQuery( "named query", Tuple.class ).getSing
 
 // ou
 
-final Tuple rows = getEm().createNamedQuery( "named query", Tuple.class ).getResultList();
+final List<Tuple> rows = getEm().createNamedQuery( "named query", Tuple.class ).getResultList();
 
 
 // rows...
