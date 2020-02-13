@@ -10,14 +10,24 @@ final Tuple row = getEm().createNamedQuery( "named query", Tuple.class ).getSing
 
 final List<Tuple> rows = getEm().createNamedQuery( "named query", Tuple.class ).getResultList();
 
+final Function<Tuple, ?> fnKey = row -> {
+
+};
+
+final Function<Tuple, ?> fnValues = row -> {
+
+};
+
+return rows.stream().collect( groupingBy( fnKey, mapping( fnValues, toSet()) ) );
+
 
 // rows...
 #foreach ( $campo in $campos )
 #set ( $nomeColuna = $campo.NomeAtributo )
 #set ( $converter = $StringUtils.substringAfterLast( $campo.Tipo.TupleConverter, '.' ) )
 #if ( $StringUtils.isBlank( $converter ) )
-$StringUtils.join( 'row.get( "', $nomeColuna, '", String.class )' )
+$StringUtils.join( 'row.get( "', $nomeColuna, '", String.class );' )
 #else
-$StringUtils.join( 'row.get( ', $converter, '( "', $nomeColuna, '") ) ' )
+$StringUtils.join( $converter, '( ', 'row.get( "', $nomeColuna, '") ); ' )
 #end
 #end
