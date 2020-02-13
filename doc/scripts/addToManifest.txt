@@ -1,0 +1,3 @@
+Application-Name: assistente
+Permissions: all-permissions
+Codebase: http://localhost:3000/desktop/assistente
