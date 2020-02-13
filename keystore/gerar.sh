@@ -1,6 +1,6 @@
 #!/bin/bash
 
-arquivo=$(pwd)/keystore/assistente.jks
+arquivo=$(pwd)/assistente.jks
 
 echo $arquivo
 

@@ -1,0 +1,19 @@
+https://docs.oracle.com/javase/8/docs/technotes/guides/javaws/developersguide/faq.html
+
+https://stackoverflow.com/questions/19659134/how-do-i-fix-missing-codebase-permissions-and-application-name-manifest-attri
+
+1) updatemanifst
+2) signjar
+
+
+Warning:
+O armazenamento de chaves JKS usa um formato proprietário. É recomendada a migração para PKCS12, que é um formato de
+ padrão industrial que usa "keytool -importkeystore -srckeystore assistente.jks -destkeystore assistente.jks -deststoretype pkcs12".
+
+ Warning:
+ The signer certificate will expire within six months.
+ No -tsa or -tsacert is provided and this jar is not timestamped. Without a timestamp, users may not be able to validate
+ this jar after the signer certificate's expiration date (2020-05-13) or after any future revocation date.
+
+
+ https://docs.oracle.com/javase/8/docs/jre/api/javaws/jnlp/javax/jnlp/PersistenceService.html
