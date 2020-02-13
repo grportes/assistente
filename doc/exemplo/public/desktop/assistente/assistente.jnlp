@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
-    spec="7.0+"
-    codebase="http://localhost:9000/assets/desktop-apps/assistente/"
-    href="assistente.jnlp"
+        spec="7.0+"
+        codebase="http://localhost:3000/desktop/assistente/"
+        href="assistente.jnlp"
 >
 
     <information>
@@ -21,13 +21,13 @@
         <jar href="lib/commons-dbutils-1.7.jar" />
         <jar href="lib/commons-lang3-3.9.jar" />
         <jar href="lib/commons-text-1.8.jar" />
-        <jar href="lib/javafx-base-13-win.jar" />
+        <jar href="lib/javafx-base-13-linux.jar" />
         <jar href="lib/javafx-base-13.jar" />
-        <jar href="lib/javafx-controls-13-win.jar" />
+        <jar href="lib/javafx-controls-13-linux.jar" />
         <jar href="lib/javafx-controls-13.jar" />
-        <jar href="lib/javafx-fxml-13-win.jar" />
+        <jar href="lib/javafx-fxml-13-linux.jar" />
         <jar href="lib/javafx-fxml-13.jar" />
-        <jar href="lib/javafx-graphics-13-win.jar" />
+        <jar href="lib/javafx-graphics-13-linux.jar" />
         <jar href="lib/javafx-graphics-13.jar" />
         <jar href="lib/org.everit.osgi.bundles.net.sourceforge.jtds-1.3.1.jar" />
         <jar href="lib/slf4j-api-1.7.28.jar" />
