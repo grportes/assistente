@@ -17,3 +17,5 @@ O armazenamento de chaves JKS usa um formato proprietário. É recomendada a mig
 
 
  https://docs.oracle.com/javase/8/docs/jre/api/javaws/jnlp/javax/jnlp/PersistenceService.html
+
+ https://docs.oracle.com/javase/tutorial/deployment/deploymentInDepth/jnlpFileSyntax.html

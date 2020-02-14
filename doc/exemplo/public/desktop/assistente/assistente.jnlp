@@ -39,6 +39,9 @@
         <jar href="lib/velocity-engine-core-2.1.jar" />
     </resources>
 
-    <application-desc main-class="br.com.assistente.Main.class" />
+    <application-desc
+        name="Assistente"
+        main-class="br.com.assistente.Main.class"
+    />
 
 </jnlp>
