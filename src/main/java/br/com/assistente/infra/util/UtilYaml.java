@@ -14,8 +14,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
+import static br.com.assistente.infra.util.UtilArquivo.createDirectoryIfNotExists;
 import static br.com.assistente.infra.util.UtilArquivo.excluir;
-import static br.com.assistente.infra.util.UtilArquivo.getPathSetup;
 import static br.com.assistente.infra.util.UtilArquivo.gravar;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.newInputStream;
@@ -79,7 +79,10 @@ public final class UtilYaml {
 
     public static Path getArquivoYaml()  {
 
-        return getPathSetup().resolve( "assistente.yml" );
+        final String userHomePath = System.getProperty( "user.home" );
+        final Path assistentePath = Paths.get( userHomePath ).resolve( "assistente" );
+        createDirectoryIfNotExists( assistentePath );
+        return assistentePath.resolve( "assistente.yml" );
     }
 
 }

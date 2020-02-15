@@ -6,14 +6,12 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static br.com.assistente.infra.util.UtilString.requireNotBlank;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.createDirectory;
 import static java.nio.file.Files.deleteIfExists;
 import static java.nio.file.Files.exists;
-import static java.nio.file.Files.notExists;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 
@@ -23,12 +21,6 @@ public final class UtilArquivo {
 
         requireNotBlank( recurso, "Argumento inválido para UtilArquivo.getResource" );
         return UtilArquivo.class.getResource( recurso.startsWith("/") ? recurso : "/".concat( recurso ) );
-    }
-
-    public static Path buscarPastaAplicacao() {
-
-        Path currentRelativePath = Paths.get("");
-        return currentRelativePath.toAbsolutePath();
     }
 
     public static void gravar(
@@ -61,15 +53,6 @@ public final class UtilArquivo {
         } catch ( final IOException e ) {
             throw new UncheckedIOException( e );
         }
-    }
-
-    public static Path getPathSetup()  {
-
-        final Path pasta = buscarPastaAplicacao();
-        if ( notExists(pasta) )
-            throw new RuntimeException( "Não foi possivel localizar pasta do aplicativo" );
-
-        return pasta;
     }
 
     public static void createDirectoryIfNotExists( final Path path ) {
