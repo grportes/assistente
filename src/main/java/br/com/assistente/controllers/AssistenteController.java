@@ -152,7 +152,7 @@ public class AssistenteController {
     public void onActionConfiguracoes() {
 
         openViewConfiguracoes(
-            vboxContainer.getScene().getWindow(),
+            getParent(),
             reload -> {
                 if ( reload ) {
                     cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
