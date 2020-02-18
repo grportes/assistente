@@ -33,6 +33,7 @@ import static br.com.assistente.infra.javafx.Dialog.selecionarArquivo;
 import static br.com.assistente.infra.javafx.Dialog.selecionarPasta;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static br.com.assistente.infra.util.UtilCollections.createSet;
+import static br.com.assistente.infra.util.UtilCrypto.descriptografar;
 import static br.com.assistente.infra.util.UtilNumber.toInteger;
 import static br.com.assistente.infra.util.UtilString.createString;
 import static java.lang.Integer.parseInt;
@@ -220,7 +221,7 @@ public class SetupController {
         txfCnxBancoHost.setText( cnx.getHost() );
         txfCnxBancoPorta.setText( createString( cnx.getPorta() ) );
         txfCnxBancoUserName.setText( cnx.getUserName() );
-        psCnxBancoSenha.setText( cnx.getPassword() );
+        psCnxBancoSenha.setText( descriptografar( cnx.getPassword() ) );
         txfCnxBancoDescricao.setText( cnx.getDescricao() );
         txfCnxBancoId.setText( createString( cnx.getId() ) );
         txaCnxBancoCatalogos.setText( createString( cnx.getCatalogos(), ',' ) );

@@ -20,6 +20,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import static br.com.assistente.infra.util.UtilCrypto.descriptografar;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
@@ -45,8 +46,9 @@ public final class ConnectionFactory {
                     .concat( nonNull( cnxBanco.getPorta() ) ? ":" + cnxBanco.getPorta() : ""  );
 
             try {
+                final String password = descriptografar( cnxBanco.getPassword() );
                 connection = isNotBlank( cnxBanco.getUserName() )
-                    ? DriverManager.getConnection( jdbcUrl, cnxBanco.getUserName(), cnxBanco.getPassword() )
+                    ? DriverManager.getConnection( jdbcUrl, cnxBanco.getUserName(), password )
                     : DriverManager.getConnection( jdbcUrl );
             } catch ( final SQLException e ) {
                 e.printStackTrace();
