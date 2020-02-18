@@ -71,7 +71,7 @@
                         </manifest>
                         <manifestEntries>
                             <Class-Path>.</Class-Path>
-                            <ApplicationName>assistente</ApplicationName>
+                            <Application-Name>assistente</Application-Name>
                             <Permissions>all-permissions</Permissions>
                             <Codebase>http://localhost:3000/desktop/assistente</Codebase>
                         </manifestEntries>
