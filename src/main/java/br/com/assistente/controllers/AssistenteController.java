@@ -32,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -151,6 +152,13 @@ public class AssistenteController {
 
     public void onActionConfiguracoes() {
 
+        //////////////////////////////////////////////////////////////////////////////////////
+        final ClassLoader classLoader = this.getClass().getClassLoader();
+        final URL resource = classLoader.getResource( "sybase.yml" );
+        msgAviso( resource.toString() );
+        //////////////////////////////////////////////////////////////////////////////////////
+
+/*
         openViewConfiguracoes(
             getParent(),
             reload -> {
@@ -158,6 +166,7 @@ public class AssistenteController {
                     cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
                 }
             });
+*/
     }
 
 
