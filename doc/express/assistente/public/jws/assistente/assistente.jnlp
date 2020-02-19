@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
-        spec="7.0+"
-        codebase="http://localhost:3000/desktop/assistente/"
-        href="assistente.jnlp"
+    spec="7.0+"
+    codebase="http://localhost:3000/jws/assistente/"
+    href="assistente.jnlp"
 >
 
     <information>
         <title>Assistente Gerador de Código</title>
+        <description>Assistente Play</description>
+        <description kind="short">Assistente Play</description>
         <vendor>Assistente Play</vendor>
+        <offline-allowed/>
+        <shortcut online="true" install="true">
+            <desktop />
+            <menu submenu="Assistente"/>
+        </shortcut>
     </information>
 
     <security>
@@ -43,5 +50,7 @@
         name="Assistente"
         main-class="br.com.assistente.Main.class"
     />
+
+    <update check="background" />
 
 </jnlp>
