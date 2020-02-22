@@ -5,8 +5,8 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.JarURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,25 +17,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import static br.com.assistente.infra.util.UtilArquivo.buscarNomeArquivoAplicacaoJar;
 import static br.com.assistente.infra.util.UtilYaml.load;
-import static java.lang.String.format;
 import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
-import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWith;
-import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
 public final class DriverCnx {
 
@@ -176,16 +166,19 @@ public final class DriverCnx {
 
         if ( isEmpty( cache ) ) {
             final URL resource = DriverCnx.class.getResource( "" );
-            if ( startsWith( resource.getFile(), "http:" ) ) {
-                cache = loadCacheFromJavaUrl( resource );
-            } else {
-                cache = equalsIgnoreCase( resource.getProtocol(), "jar" )
-                        ? loadCacheFromJar( )
-                        : loadCacheFromFile( resource );
-            }
+            cache = startsWith( resource.getFile(), "http:" )
+                ? loadCacheFromJavaUrl( resource )
+                : loadCacheFromClassLoader( );
         }
     }
 
+    /**
+     * Leitura através da distribuição JavaWebStart
+     *
+     * @param url Url Java
+     *
+     * @return Lista de drivers.
+     */
     private static List<DriverCnx> loadCacheFromJavaUrl( final URL url ) {
 
         try {
@@ -212,46 +205,21 @@ public final class DriverCnx {
         }
     }
 
-    private static List<DriverCnx> loadCacheFromJar( ) {
+    private static List<DriverCnx> loadCacheFromClassLoader( ) {
 
-        final String jarFile = buscarNomeArquivoAplicacaoJar();
-
-        try ( final ZipFile zipFile = new ZipFile( jarFile ) ) {
-            final Enumeration<? extends ZipEntry> e = zipFile.entries();
-            final List<DriverCnx> buffer = new ArrayList<>(  );
-            while (e.hasMoreElements()) {
-                final ZipEntry entry = e.nextElement();
-                if ( startsWithIgnoreCase( entry.getName(), "drivers/" ) ) {
-                    if ( lastIndexOfIgnoreCase( entry.getName(), ".yml" ) > 0 ) {
-                        try ( final BufferedInputStream bis = new BufferedInputStream( zipFile.getInputStream(entry) ) ) {
-                            final Yaml yaml = new Yaml( new Constructor( DriverCnx.class ) );
-                            buffer.add(  yaml.load( bis ) );
-                        }
-                    }
-                }
-            }
-            return buffer;
-        } catch ( IOException e) {
-            throw new UncheckedIOException( format( "Falha ao ler arquivo %s", jarFile ), e );
-        }
-    }
-
-    private static List<DriverCnx> loadCacheFromFile( final URL resource ) {
-
-        // Tratamento para paths do Windows:
-        final Pattern regex = compile( "(/\\w:)(.*)$", CASE_INSENSITIVE );
-        final Matcher matcher = regex.matcher( resource.getFile() );
-        final String nomeArquivo =  ( matcher.find() && matcher.groupCount() > 1 )
-            ? resource.getFile().substring( 1 )
-            : resource.getFile();
+        final ClassLoader classLoader = DriverCnx.class.getClassLoader();
+        final URL drivers =  requireNonNull(
+            classLoader.getResource( "drivers" ),
+            "Pasta drivers não localizada!"
+        );
 
         try {
-            return Files.list( Paths.get( nomeArquivo ) )
-                .map( path -> load( DriverCnx.class, path ) )
-                .map( Optional::get )
-                .collect( toList() );
-        } catch ( final IOException e ) {
-            throw new UncheckedIOException( format( "Falhou leitura em: %s", nomeArquivo ), e );
+            return Files.list( Paths.get( drivers.toURI() ) )
+                    .map( path -> load( DriverCnx.class, path ) )
+                    .map( Optional::get )
+                    .collect( toList() );
+        } catch ( IOException | URISyntaxException e ) {
+            throw new RuntimeException( e );
         }
     }
 
