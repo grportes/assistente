@@ -6,6 +6,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,6 +15,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -28,8 +31,10 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.startsWith;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
 public final class DriverCnx {
@@ -170,10 +175,40 @@ public final class DriverCnx {
     public static void loadCache() {
 
         if ( isEmpty( cache ) ) {
-            final URL resource = DriverCnx.class.getResource( "/drivers" );
-            cache = equalsIgnoreCase( resource.getProtocol(), "jar" )
-                ? loadCacheFromJar( )
-                : loadCacheFromFile( resource );
+            final URL resource = DriverCnx.class.getResource( "" );
+            if ( startsWith( resource.getFile(), "http:" ) ) {
+                cache = loadCacheFromJavaUrl( resource );
+            } else {
+                cache = equalsIgnoreCase( resource.getProtocol(), "jar" )
+                        ? loadCacheFromJar( )
+                        : loadCacheFromFile( resource );
+            }
+        }
+    }
+
+    private static List<DriverCnx> loadCacheFromJavaUrl( final URL url ) {
+
+        try {
+            final List<DriverCnx> buffer = new ArrayList<>(  );
+            final JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
+            final JarFile jarFile = jarURLConnection.getJarFile();
+            final Enumeration<JarEntry> entries = jarFile.entries();
+            while ( entries.hasMoreElements() ) {
+                final JarEntry jarEntry = entries.nextElement();
+                final String nomeArquivo = jarEntry.getName();
+                final boolean arquivoYml = startsWith( nomeArquivo, "drivers/" )
+                    && endsWithIgnoreCase( nomeArquivo, ".yml" );
+                if ( arquivoYml ) {
+                    final JarEntry fileEntry = jarFile.getJarEntry( nomeArquivo );
+                    try ( final BufferedInputStream bis = new BufferedInputStream( jarFile.getInputStream( fileEntry ) ) ) {
+                        final Yaml yaml = new Yaml( new Constructor( DriverCnx.class ) );
+                        buffer.add(  yaml.load( bis ) );
+                    }
+                }
+            }
+            return buffer;
+        } catch ( final IOException e ) {
+            throw new RuntimeException( e );
         }
     }
 

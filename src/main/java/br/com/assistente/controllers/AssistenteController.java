@@ -1,9 +1,7 @@
 package br.com.assistente.controllers;
 
-import br.com.assistente.infra.util.UtilArquivo;
 import br.com.assistente.models.Constante;
 import br.com.assistente.models.DefinicaoDto;
-import br.com.assistente.models.DriverCnx;
 import br.com.assistente.models.Modelo;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
@@ -17,7 +15,6 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
@@ -32,40 +29,14 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
 
-import javax.imageio.ImageIO;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import static br.com.assistente.controllers.DtoIdentityController.openViewDtoIdentity;
 import static br.com.assistente.controllers.MapeamentoConfirmaGravacaoController.openViewConfirmarGravacao;
@@ -73,12 +44,9 @@ import static br.com.assistente.controllers.SetupController.openViewConfiguracoe
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.infra.javafx.Dialog.msgInfo;
 import static br.com.assistente.infra.javafx.Dialog.selecionarArquivo;
-import static br.com.assistente.infra.util.UtilArquivo.buscarNomeArquivoAplicacaoJar;
-import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static br.com.assistente.models.Constante.convPadraoNomeEnum;
 import static br.com.assistente.models.DefinicaoDto.convPadraoNomeClasse;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
-import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
@@ -185,46 +153,6 @@ public class AssistenteController {
 
     public void onActionConfiguracoes() {
 
-        //////////////////////////////////////////////////////////////////////////////////////
-
-        final URL url = AssistenteController.class.getResource( "" );
-        logger.info( ">>>>>>>>>>>>>>>>>>>>" );
-        logger.info( format( "getResource :   %s", url.getFile() ) );
-        logger.info( ">>>>>>>>>>>>>>>>>>>>" );
-
-        try {
-            final JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-            final JarFile jarFile = jarURLConnection.getJarFile();
-            final Enumeration<JarEntry> entries = jarFile.entries();
-            while ( entries.hasMoreElements() ) {
-                final JarEntry jarEntry = entries.nextElement();
-                final String nomeArquivo = jarEntry.getName();
-                final boolean arquivoYml = StringUtils.startsWith( nomeArquivo, "drivers/" )
-                        && StringUtils.endsWithIgnoreCase( nomeArquivo, ".yml" );
-                if ( arquivoYml ) {
-                    logger.info( format( "Jar Name:   %s", nomeArquivo ) );
-                    final JarEntry fileEntry = jarFile.getJarEntry( nomeArquivo );
-
-                    final List<DriverCnx> buffer = new ArrayList<>(  );
-                    try ( final BufferedInputStream bis = new BufferedInputStream( jarFile.getInputStream( fileEntry ) ) ) {
-                        final Yaml yaml = new Yaml( new Constructor( DriverCnx.class ) );
-                        buffer.add(  yaml.load( bis ) );
-                    }
-                    for ( DriverCnx driverCnx : buffer ) {
-                        logger.info( format( "driver: %s", driverCnx.getDriver() ) );
-                    }
-                }
-            }
-
-        } catch ( IOException e ) {
-            throw new RuntimeException( e );
-        }
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////
-
-/*
         openViewConfiguracoes(
             getParent(),
             reload -> {
@@ -232,7 +160,6 @@ public class AssistenteController {
                     cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
                 }
             });
-*/
     }
 
 
