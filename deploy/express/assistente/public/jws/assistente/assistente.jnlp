@@ -44,6 +44,7 @@
         <jar href="lib/vavr-0.10.2.jar" />
         <jar href="lib/vavr-match-0.10.2.jar" />
         <jar href="lib/velocity-engine-core-2.1.jar" />
+        <jar href="lib/log4j-1.2.17.jar" />
     </resources>
 
     <application-desc

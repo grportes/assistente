@@ -19,3 +19,4 @@ jarsigner -keystore "../keystore/assistente.jks" -storepass Arcom10$ -keypass Ar
 jarsigner -keystore "../keystore/assistente.jks" -storepass Arcom10$ -keypass Arcom10$  ../target/lib/vavr-0.10.2.jar assistente
 jarsigner -keystore "../keystore/assistente.jks" -storepass Arcom10$ -keypass Arcom10$  ../target/lib/vavr-match-0.10.2.jar assistente
 jarsigner -keystore "../keystore/assistente.jks" -storepass Arcom10$ -keypass Arcom10$  ../target/lib/velocity-engine-core-2.1.jar assistente
+jarsigner -keystore "../keystore/assistente.jks" -storepass Arcom10$ -keypass Arcom10$  ../target/lib/log4j-1.2.17.jar assistente
