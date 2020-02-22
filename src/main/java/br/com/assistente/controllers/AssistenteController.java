@@ -187,9 +187,10 @@ public class AssistenteController {
 
         //////////////////////////////////////////////////////////////////////////////////////
 
-        msgAviso( "TESTE 21" );
-        final URL url = getResource( "fxml" );
-        logger.info( format( "resource.getFile():   %s", url.getFile() ) );
+        final URL url = AssistenteController.class.getResource( "" );
+        logger.info( ">>>>>>>>>>>>>>>>>>>>" );
+        logger.info( format( "getResource :   %s", url.getFile() ) );
+        logger.info( ">>>>>>>>>>>>>>>>>>>>" );
 
         try {
             final JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
