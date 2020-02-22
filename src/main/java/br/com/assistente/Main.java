@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -14,6 +15,8 @@ import static br.com.assistente.infra.db.ConnectionFactory.closeConnection;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 
 public class Main extends Application {
+
+    private static Logger logger = Logger.getLogger( Main.class );
 
     @Override
     public void start( final Stage stage ) throws IOException {
@@ -39,7 +42,7 @@ public class Main extends Application {
         final Throwable e
     ) {
 
-        e.printStackTrace();
+        logger.error( "Erro critico:", e );
         Throwable rootCause = ExceptionUtils.getRootCause(e);
         String message = rootCause.getMessage();
         Dialog.msgErro( message );
