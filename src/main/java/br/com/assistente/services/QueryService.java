@@ -45,16 +45,13 @@ public class QueryService {
         requireNotBlank( query, "Query vazia!" );
         requireNonNull( callback, "Callback necessário para gerar DTO/Query!" );
 
-        final Set<DefinicaoDto> dtos = extrairColunas( query );
-
-        final Set<DefinicaoDto> dtosComIdentity = callback.apply( dtos );
-
+        final Set<DefinicaoDto> dtos = callback.apply( extrairColunas( query ) );
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
 
         results.add(
             new ResultMapeamento.Builder()
                 .comNomeEntidade( nomeClasse )
-                .comConteudoEntidade( gerarDto( nomeClasse, dtosComIdentity, gerarJsonAnnotations, gerarClasseBuilder ) )
+                .comConteudoEntidade( gerarDto( nomeClasse, dtos, gerarJsonAnnotations, gerarClasseBuilder ) )
                 .comTipoResult( DTO )
                 .build()
         );
