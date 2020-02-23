@@ -33,6 +33,43 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 public class QueryService {
 
+    public Set<ResultMapeamento> convTexto(
+            final String nomeClasse,
+            final String query,
+            boolean gerarJsonAnnotations,
+            boolean gerarClasseBuilder,
+            final Function<Set<DefinicaoDto>, Set<DefinicaoDto>> callback
+    ) {
+
+        requireNotBlank( nomeClasse, "Nome da DTO vazio!" );
+        requireNotBlank( query, "Query vazia!" );
+        requireNonNull( callback, "Callback necessário para gerar DTO/Query!" );
+
+        final Set<DefinicaoDto> dtos = extrairColunas( query );
+
+        final Set<DefinicaoDto> dtosComIdentity = callback.apply( dtos );
+
+        final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
+
+        results.add(
+            new ResultMapeamento.Builder()
+                .comNomeEntidade( nomeClasse )
+                .comConteudoEntidade( gerarDto( nomeClasse, dtosComIdentity, gerarJsonAnnotations, gerarClasseBuilder ) )
+                .comTipoResult( DTO )
+                .build()
+        );
+
+        results.add(
+            new ResultMapeamento.Builder()
+                .comNomeEntidade( "XML Query" )
+                .comConteudoEntidade( gerarXMLQuery( query, nomeClasse ) )
+                .comTipoResult( DTO )
+                .build()
+        );
+
+        return results;
+    }
+
     public Set<ResultMapeamento> convTexto( final String query ) {
 
         requireNotBlank( query, "É necessário informar a query!" );
@@ -106,43 +143,6 @@ public class QueryService {
         context.put( "nomeClasse", nomeClasse );
         context.put( "StringUtils", StringUtils.class );
         return exec( context, "/templates/query_xml.vm" );
-    }
-
-    public Set<ResultMapeamento> convTexto(
-        final String nomeClasse,
-        final String query,
-        boolean gerarJsonAnnotations,
-        boolean gerarClasseBuilder,
-        final Function<Set<DefinicaoDto>, Set<DefinicaoDto>> callback
-    ) {
-
-        requireNotBlank( nomeClasse, "Nome da DTO vazio!" );
-        requireNotBlank( query, "Query vazia!" );
-        requireNonNull( callback, "Callback necessário para gerar DTO/Query!" );
-
-        final Set<DefinicaoDto> dtos = extrairColunas( query );
-
-        final Set<DefinicaoDto> dtosComIdentity = callback.apply( dtos );
-
-        final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
-
-        results.add(
-            new ResultMapeamento.Builder()
-            .comNomeEntidade( nomeClasse )
-            .comConteudoEntidade( gerarDto( nomeClasse, dtosComIdentity, gerarJsonAnnotations, gerarClasseBuilder ) )
-            .comTipoResult( DTO )
-            .build()
-        );
-
-        results.add(
-            new ResultMapeamento.Builder()
-            .comNomeEntidade( "XML Query" )
-            .comConteudoEntidade( gerarXMLQuery( query, nomeClasse ) )
-            .comTipoResult( DTO )
-            .build()
-        );
-
-        return results;
     }
 
     private String gerarDto(

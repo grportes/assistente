@@ -1,7 +1,7 @@
 #if ( $StringUtils.isNotBlank( $nomeClasse ) )
 <named-native-query
     name="?????"
-    result-class="models.commons.dto.$nomeClasse"
+    result-set-mapping="?????"
 >
 #else
 <named-native-query name="?????">
@@ -12,3 +12,11 @@
 
     ]]></query>
 </named-native-query>
+
+#if ( $StringUtils.isNotBlank( $nomeClasse ) )
+<sql-result-set-mapping name="?????">
+    <constructor-result target-class="models.commons.dto.$nomeClasse">
+        <column name="id" class="java.lang.Long"/>
+    </constructor-result>
+</sql-result-set-mapping>
+#end
