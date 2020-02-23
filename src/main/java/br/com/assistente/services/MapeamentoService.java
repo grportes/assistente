@@ -52,8 +52,7 @@ public class MapeamentoService {
         return getMetaData( modelo )
             .stream()
             .map( m -> {
-                final DataType dataType = dataTypes
-                    .stream()
+                final DataType dataType = dataTypes.stream()
                     .filter( type -> Objects.equals( m.getTipoDB(), type.getDbType() ) )
                     .findFirst()
                     .orElseThrow( () -> new RuntimeException( format(

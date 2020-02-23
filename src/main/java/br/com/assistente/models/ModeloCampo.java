@@ -6,14 +6,13 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static br.com.assistente.infra.util.UtilString.convDbToJava;
 import static java.lang.Integer.parseInt;
@@ -27,6 +26,7 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.split;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
 public final class ModeloCampo {
 
@@ -266,18 +266,12 @@ public final class ModeloCampo {
 
     public static Set<String> buscarImports( final Set<ModeloCampo> lista ) {
 
-        final Supplier<Stream<String>> tiposJavaObrigatorios = () -> Stream.of(
-            "java.math.BigDecimal",
-            "java.time.LocalDate",
-            "java.time.LocalTime",
-            "java.time.LocalDateTime"
-        );
-
         return isEmpty( lista )
             ? emptySet()
             : lista.stream()
                 .map( ModeloCampo::getTipoJava )
-                .filter( tipoJava ->  tiposJavaObrigatorios.get().anyMatch( t -> t.equalsIgnoreCase( tipoJava ) )  )
+                .filter( StringUtils::isNotBlank )
+                .filter( tipoJava -> !startsWithIgnoreCase( tipoJava, "java.lang." ) )
                 .collect( toSet() );
     }
 
