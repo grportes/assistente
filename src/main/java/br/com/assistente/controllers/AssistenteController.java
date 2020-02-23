@@ -11,7 +11,6 @@ import br.com.assistente.services.DefinicaoDtoService;
 import br.com.assistente.services.MapeamentoService;
 import br.com.assistente.services.QueryService;
 import io.vavr.Tuple2;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,6 +37,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static br.com.assistente.controllers.DtoIdentityController.openViewDtoIdentity;
 import static br.com.assistente.controllers.MapeamentoConfirmaGravacaoController.openViewConfirmarGravacao;
@@ -53,6 +53,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static javafx.scene.input.KeyCode.DELETE;
@@ -69,6 +70,12 @@ public class AssistenteController {
 
     // Container principal da Aplicação
     @FXML private VBox vboxContainer;
+
+    // Tabs:
+    @FXML Tab tabMapeamento;
+    @FXML Tab tabConstante;
+    @FXML Tab tabDto;
+    @FXML Tab tabQuery;
 
     // Mapeamento:
     @FXML private ComboBox<String> cbxMapeamentoBanco;
@@ -133,12 +140,6 @@ public class AssistenteController {
     private final QueryService queryService = new QueryService();
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // EVENTOS
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     @FXML
     public void initialize() {
 
@@ -186,6 +187,23 @@ public class AssistenteController {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    // TAB
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void onSelectionTab() {
+
+        final Consumer<Control> setarFoco = control -> runLater( control::requestFocus );
+
+        if ( nonNull( tabMapeamento ) && tabMapeamento.isSelected() ) setarFoco.accept( cbxMapeamentoBanco );
+        if ( nonNull( tabConstante ) && tabConstante.isSelected() ) setarFoco.accept( txfConstanteEnum );
+        if ( nonNull( tabDto ) && tabDto.isSelected() ) setarFoco.accept( txfDtoNomeClasse );
+        if ( nonNull( tabQuery ) && tabQuery.isSelected() ) setarFoco.accept( txfQueryNomeClasse );
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     // MAPEAMENTO
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +242,7 @@ public class AssistenteController {
         tcMapeamentoConverter.setCellFactory( forTableColumn( index -> {
             final ModeloCampo modeloCampo = observableModelo.get( index );
             if ( modeloCampo.isConverter() ) {
-                Platform.runLater( () -> {
+                runLater( () -> {
                     final TextInputDialog dialog = new TextInputDialog( modeloCampo.getNomeEnum() );
                     dialog.setTitle( "Atenção" );
                     dialog.setContentText( "Informe o nome do Enum:" );
@@ -303,6 +321,7 @@ public class AssistenteController {
 
         tab.getTabPane().getSelectionModel().select( tab );
     }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //

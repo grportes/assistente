@@ -35,7 +35,7 @@
     </MenuBar>
       <TabPane prefHeight="485.0" prefWidth="772.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
-          <Tab text="Mapeamento">
+          <Tab fx:id="tabMapeamento" onSelectionChanged="#onSelectionTab" text="Mapeamento">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="564.0" prefWidth="804.0">
                      <children>
@@ -96,7 +96,7 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-          <Tab text="Constante">
+          <Tab fx:id="tabConstante" onSelectionChanged="#onSelectionTab" text="Constante">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -177,7 +177,7 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-            <Tab text="DTO">
+            <Tab fx:id="tabDto" onSelectionChanged="#onSelectionTab" text="DTO">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -256,7 +256,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Query">
+            <Tab fx:id="tabQuery" onSelectionChanged="#onSelectionTab" text="Query">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
