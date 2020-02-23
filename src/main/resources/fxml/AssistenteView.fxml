@@ -26,9 +26,9 @@
       <menus>
         <Menu mnemonicParsing="false" text="Ações">
           <items>
-            <MenuItem mnemonicParsing="false" onAction="#onActionConfiguracoes" text="Configuraçoes" />
+            <MenuItem fx:id="mnConfiguracoes" mnemonicParsing="false" onAction="#onActionMenu" text="Configuraçoes" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Sair" />
+            <MenuItem fx:id="mnSair" mnemonicParsing="false" onAction="#onActionMenu" text="Sair" />
           </items>
         </Menu>
       </menus>

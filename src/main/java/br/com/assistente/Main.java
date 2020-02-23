@@ -28,6 +28,7 @@ public class Main extends Application {
         stage.setTitle( "Assistente" );
         loader.setLocation( getResource("/fxml/AssistenteView.fxml") );
         stage.setScene( new Scene(loader.load()) );
+        stage.setOnCloseRequest( e -> Platform.exit() );
         stage.show();
     }
 

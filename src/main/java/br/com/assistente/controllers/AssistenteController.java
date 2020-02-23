@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -44,6 +45,7 @@ import static br.com.assistente.controllers.SetupController.openViewConfiguracoe
 import static br.com.assistente.infra.javafx.Dialog.msgAviso;
 import static br.com.assistente.infra.javafx.Dialog.msgInfo;
 import static br.com.assistente.infra.javafx.Dialog.selecionarArquivo;
+import static br.com.assistente.infra.util.UtilString.isBlankGet;
 import static br.com.assistente.models.Constante.convPadraoNomeEnum;
 import static br.com.assistente.models.DefinicaoDto.convPadraoNomeClasse;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
@@ -151,15 +153,34 @@ public class AssistenteController {
         return vboxContainer.getScene().getWindow();
     }
 
-    public void onActionConfiguracoes() {
 
-        openViewConfiguracoes(
-            getParent(),
-            reload -> {
-                if ( reload ) {
-                    cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
-                }
-            });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // MENUS
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void onActionMenu( final ActionEvent event ) {
+
+        if ( isNull(event) || isNull(event.getTarget()) ) return;
+
+        final String id = isBlankGet( ( (MenuItem) event.getTarget() ).getId(), "?" );
+
+        switch ( id ) {
+            case "mnConfiguracoes":
+                openViewConfiguracoes(
+                    getParent(),
+                    reload -> {
+                        if ( reload )
+                            cbxMapeamentoBanco.setItems( observableArrayList( getCatalogosCnxSelecionada() ) );
+                    }
+                );
+                break;
+            case "mnSair":
+                System.exit(0);
+                break;
+        }
+
     }
 
 

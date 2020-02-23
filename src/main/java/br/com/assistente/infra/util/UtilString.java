@@ -156,4 +156,11 @@ public final class UtilString {
         return str;
     }
 
+    public static String isBlankGet(
+        final String str,
+        final String strNew
+    ) {
+
+        return isNotBlank( str ) ? str : strNew;
+    }
 }
