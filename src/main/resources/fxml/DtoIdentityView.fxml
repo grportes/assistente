@@ -15,12 +15,12 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="94.0" prefWidth="121.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button fx:id="btnConfirmar" mnemonicParsing="false" onAction="#onActionBtnConfirmar" text="Confirmar" />
+                        <Button fx:id="btnConfirmar" mnemonicParsing="false" onAction="#onActionBtn" text="Confirmar" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="94.0" prefWidth="120.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button fx:id="btnCancelar" mnemonicParsing="false" text="Cancelar" />
+                        <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#onActionBtn" text="Cancelar" />
                      </children>
                   </HBox>
                </children>

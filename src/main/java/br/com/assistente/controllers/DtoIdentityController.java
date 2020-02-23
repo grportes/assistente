@@ -2,9 +2,11 @@ package br.com.assistente.controllers;
 
 import br.com.assistente.models.DefinicaoDto;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
@@ -14,16 +16,19 @@ import javafx.stage.Window;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static java.lang.String.format;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.scene.control.cell.CheckBoxTableCell.forTableColumn;
 import static javafx.stage.Modality.WINDOW_MODAL;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 public class DtoIdentityController {
 
@@ -59,9 +64,10 @@ public class DtoIdentityController {
         });
     }
 
+    public void onActionBtn( final ActionEvent event  ) {
 
-    @FXML
-    public void onActionBtnConfirmar( ) {
+        if ( isNull(event) || isNull(event.getSource()) ) return;
+        final Control source = (Control) event.getSource();
 
         final Stage stage = getStage();
         assert stage != null;

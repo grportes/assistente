@@ -22,11 +22,13 @@ import static br.com.assistente.models.DefinicaoDto.buscarImports;
 import static br.com.assistente.models.DefinicaoDto.buscarImportsSerializer;
 import static br.com.assistente.models.DefinicaoDto.buscarImportsTupleConverter;
 import static br.com.assistente.models.DefinicaoDto.buscarTodosAtributoId;
+import static br.com.assistente.models.DefinicaoDto.existeAtributoId;
 import static br.com.assistente.models.DefinicaoDto.orderByPosicao;
 import static br.com.assistente.models.TipoResult.DTO;
 import static java.lang.String.format;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.util.Collections.emptySet;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
@@ -46,6 +48,9 @@ public class QueryService {
         requireNonNull( callback, "Callback necessário para gerar DTO/Query!" );
 
         final Set<DefinicaoDto> dtos = callback.apply( extrairColunas( query ) );
+
+        if ( !existeAtributoId( dtos ) ) return emptySet();
+
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
 
         results.add(

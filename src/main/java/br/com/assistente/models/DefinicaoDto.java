@@ -27,6 +27,7 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
@@ -188,9 +189,12 @@ public class DefinicaoDto {
 
         return isEmpty( lista )
             ? emptySet()
-            : lista.stream()
-                .filter( DefinicaoDto::isAtributoId )
-                .collect( toSet() );
+            : lista.stream().filter( DefinicaoDto::isAtributoId ).collect( toSet() );
+    }
+
+    public static boolean existeAtributoId( final Set<DefinicaoDto> lista ) {
+
+        return isNotEmpty( lista ) && lista.stream().anyMatch( DefinicaoDto::isAtributoId );
     }
 
     private static Pattern REGEX = Pattern.compile( "(.*)(dto)$", CASE_INSENSITIVE );
