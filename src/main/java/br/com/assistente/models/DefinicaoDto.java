@@ -29,6 +29,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 import static org.apache.commons.lang3.StringUtils.trim;
 
@@ -136,8 +137,8 @@ public class DefinicaoDto {
             ? emptySet()
             : lista.stream()
                 .map( DefinicaoDto::getTipo )
-                .map( Tipo::getImportNecessario )
-                .filter( StringUtils::isNotBlank )
+                .map( Tipo::getPackage )
+                .filter( nomePackage -> !startsWithIgnoreCase( nomePackage, "java.lang." ) )
                 .collect( toSet() );
     }
 
@@ -207,9 +208,8 @@ public class DefinicaoDto {
 
         SHORT("Short") {
             @Override
-            public String getImportNecessario() {
-
-                return "";
+            public String getPackage() {
+                return "java.lang.Short";
             }
 
             @Override
@@ -225,9 +225,8 @@ public class DefinicaoDto {
 
         INTEGER("Integer") {
             @Override
-            public String getImportNecessario() {
-
-                return "";
+            public String getPackage() {
+                return "java.lang.Integer";
             }
 
             @Override
@@ -243,14 +242,12 @@ public class DefinicaoDto {
 
         LONG("Long") {
             @Override
-            public String getImportNecessario() {
-
-                return "";
+            public String getPackage() {
+                return "java.lang.Long";
             }
 
             @Override
             public String getJsonSerialize() {
-
                 return "";
             }
 
@@ -262,120 +259,102 @@ public class DefinicaoDto {
 
         BIGDECIMAL( "BigDecimal" ) {
             @Override
-            public String getImportNecessario() {
-
+            public String getPackage() {
                 return "java.math.BigDecimal";
             }
 
             @Override
             public String getJsonSerialize() {
-
                 return "";
             }
 
             @Override
             public String getTupleConverter() {
-
                 return "infra.util.UtilNumber.toBigDecimal";
             }
         },
 
         LOCAL_DATE( "LocalDate" ) {
             @Override
-            public String getImportNecessario() {
-
+            public String getPackage() {
                 return "java.time.LocalDate";
             }
 
             @Override
             public String getJsonSerialize() {
-
                 return "infra.json.Serializer.SerializerLocalDateSerializer";
             }
 
             @Override
             public String getTupleConverter() {
-
                 return "infra.util.UtilDate.toLocalDate";
             }
         },
 
         LOCAL_DATETIME( "LocalDateTime") {
             @Override
-            public String getImportNecessario() {
-
+            public String getPackage() {
                 return "java.time.LocalDateTime";
             }
 
             @Override
             public String getJsonSerialize() {
-
                 return "infra.json.Serializer.SerializerLocalDateTimeSerializer";
             }
 
             @Override
             public String getTupleConverter() {
-
                 return "infra.util.UtilDate.toLocalDateTime";
             }
         },
 
         LOCAL_TIME( "LocalTime") {
             @Override
-            public String getImportNecessario() {
-
+            public String getPackage() {
                 return "java.time.LocalTime";
             }
 
             @Override
             public String getJsonSerialize() {
-
                 return "infra.json.Serializer.SerializerLocalTime";
             }
 
             @Override
             public String getTupleConverter() {
-
                 return "infra.util.UtilDate.toLocalTime";
             }
         },
 
         CHAR( "Char" ) {
             @Override
-            public String getImportNecessario() {
-
-                return "";
+            public String getPackage() {
+                return "java.lang.Character";
             }
 
             @Override
             public String getJsonSerialize() {
-
                 return "";
             }
 
             @Override
             public String getTupleConverter() {
-
                 return "";
             }
         },
 
         STRING("String") {
             @Override
-            public String getImportNecessario() {
-
-                return "";
+            public String getPackage() {
+                return "java.lang.String";
             }
 
             @Override
             public String getJsonSerialize() {
-
                 return "";
             }
 
             @Override
             public String getTupleConverter() {
-
                 return "";
             }
         };
@@ -398,7 +377,7 @@ public class DefinicaoDto {
             return getNome();
         }
 
-        public abstract String getImportNecessario();
+        public abstract String getPackage();
         public abstract String getJsonSerialize();
         public abstract String getTupleConverter();
 

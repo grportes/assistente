@@ -34,11 +34,11 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 public class QueryService {
 
     public Set<ResultMapeamento> convTexto(
-            final String nomeClasse,
-            final String query,
-            boolean gerarJsonAnnotations,
-            boolean gerarClasseBuilder,
-            final Function<Set<DefinicaoDto>, Set<DefinicaoDto>> callback
+        final String nomeClasse,
+        final String query,
+        boolean gerarJsonAnnotations,
+        boolean gerarClasseBuilder,
+        final Function<Set<DefinicaoDto>, Set<DefinicaoDto>> callback
     ) {
 
         requireNotBlank( nomeClasse, "Nome da DTO vazio!" );
