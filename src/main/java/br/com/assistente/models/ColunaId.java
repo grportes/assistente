@@ -5,24 +5,22 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.net.URISyntaxException;
+import java.net.JarURLConnection;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
-import static br.com.assistente.infra.util.UtilArquivo.buscarNomeArquivoAplicacaoJar;
-import static java.lang.String.format;
-import static java.nio.file.Files.newInputStream;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.collections4.MapUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public final class ColunaId {
 
@@ -55,42 +53,49 @@ public final class ColunaId {
     private static Map<String, String> loadCache() {
 
         if ( isNotEmpty( cache ) ) return cache;
-
-        final URL resource = ColunaId.class.getResource( "/templates" );
-
-        cache = equalsIgnoreCase( resource.getProtocol(), "jar" )
-            ? loadCacheFromJar( )
-            : loadCacheFromFile( resource );
-
+        final URL resource = ColunaId.class.getResource( "" );
+        cache = startsWith( resource.getFile(), "http:" )
+            ? loadCacheFromJar( resource )
+            : loadCacheFromFile( );
         return cache;
     }
 
 
-    private static Map<String, String> loadCacheFromJar( ) {
+    private static Map<String, String> loadCacheFromJar( final URL url ) {
 
-        final String jarFile = buscarNomeArquivoAplicacaoJar();
-
-        try ( final ZipFile zipFile = new ZipFile( jarFile ) ) {
-            final Enumeration<? extends ZipEntry> e = zipFile.entries();
-            while ( e.hasMoreElements() ) {
-                final ZipEntry entry = e.nextElement();
-                if ( equalsIgnoreCase( entry.getName(), "templates/colunas_id.yml" )  ) {
-                    try ( final BufferedInputStream in = new BufferedInputStream( zipFile.getInputStream(entry) ) ) {
-                        return readYaml( in );
+        try {
+            final JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
+            final JarFile jarFile = jarURLConnection.getJarFile();
+            final Enumeration<JarEntry> entries = jarFile.entries();
+            while ( entries.hasMoreElements() ) {
+                final JarEntry jarEntry = entries.nextElement();
+                final String nomeArquivo = jarEntry.getName();
+                final boolean arquivoYml = startsWith( nomeArquivo, "templates/" )
+                        && endsWithIgnoreCase( nomeArquivo, "colunas_id.yml" );
+                if ( arquivoYml ) {
+                    final JarEntry fileEntry = jarFile.getJarEntry( nomeArquivo );
+                    try ( final BufferedInputStream bis = new BufferedInputStream( jarFile.getInputStream( fileEntry ) ) ) {
+                        return readYaml( bis );
                     }
                 }
             }
-            throw new RuntimeException( "Não localizou arquivo templates/colunas_id.yml" );
-        } catch ( final IOException e) {
-            throw new UncheckedIOException( format( "Falha ao ler arquivo %s", jarFile ), e );
+            throw new RuntimeException( "Não localizou arquivo colunas_id.yml!" );
+        } catch ( final IOException e ) {
+            throw new RuntimeException( e );
         }
     }
 
-    private static Map<String, String> loadCacheFromFile( final URL resource ) {
+    private static Map<String, String> loadCacheFromFile( ) {
 
-        try ( final InputStream in = newInputStream( Paths.get( resource.toURI() ).resolve( "colunas_id.yml" ) ) ) {
+        final ClassLoader classLoader = DriverCnx.class.getClassLoader();
+        final URL drivers =  requireNonNull(
+            classLoader.getResource( "templates/colunas_id.yml" ),
+            "Pasta drivers não localizada!"
+        );
+
+        try ( final InputStream in = drivers.openStream() )  {
             return readYaml( in );
-        } catch ( final IOException | URISyntaxException e ) {
+        } catch ( final IOException e ) {
             throw new RuntimeException( e );
         }
     }

@@ -13,9 +13,6 @@ import static java.nio.file.Files.createDirectory;
 import static java.nio.file.Files.deleteIfExists;
 import static java.nio.file.Files.exists;
 import static java.util.Objects.requireNonNull;
-import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.substringAfterLast;
-import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 public final class UtilArquivo {
 
@@ -65,21 +62,4 @@ public final class UtilArquivo {
             throw new UncheckedIOException( "Falhou criar pasta" + path.toString(), e );
         }
     }
-
-    public static String buscarNomeArquivoAplicacaoJar() {
-
-        final URL resource = UtilArquivo.class.getResource( "" );
-
-        String file = resource.getFile();
-
-        if ( startsWithIgnoreCase( file, "http://" ) ) {
-            final String jarFile = substringBetween( file, "http://", ".jar!" );
-            file = substringAfterLast( jarFile, "/" );
-        } else {
-            file = substringBetween( file, "file:", ".jar!" );
-        }
-
-        return requireNotBlank( file,"Arquivo jar não localizado!").concat( ".jar" );
-    }
-
 }
