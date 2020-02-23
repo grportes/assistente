@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static br.com.assistente.controllers.DtoIdentityController.openViewDtoIdentity;
 import static br.com.assistente.controllers.MapeamentoConfirmaGravacaoController.openViewConfirmarGravacao;
@@ -193,12 +193,15 @@ public class AssistenteController {
 
     public void onSelectionTab() {
 
-        final Consumer<Control> setarFoco = control -> runLater( control::requestFocus );
+        final BiConsumer<Tab,Control> setarFoco = (tab,control) -> {
+            if ( nonNull( tab ) && tab.isSelected() )
+                runLater( control::requestFocus );
+        };
 
-        if ( nonNull( tabMapeamento ) && tabMapeamento.isSelected() ) setarFoco.accept( cbxMapeamentoBanco );
-        if ( nonNull( tabConstante ) && tabConstante.isSelected() ) setarFoco.accept( txfConstanteEnum );
-        if ( nonNull( tabDto ) && tabDto.isSelected() ) setarFoco.accept( txfDtoNomeClasse );
-        if ( nonNull( tabQuery ) && tabQuery.isSelected() ) setarFoco.accept( txfQueryNomeClasse );
+        setarFoco.accept( tabMapeamento, cbxMapeamentoBanco );
+        setarFoco.accept( tabConstante, txfConstanteEnum );
+        setarFoco.accept( tabDto, txfDtoNomeClasse );
+        setarFoco.accept( tabQuery, txfQueryNomeClasse );
     }
 
 
