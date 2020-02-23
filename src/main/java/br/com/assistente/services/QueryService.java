@@ -50,7 +50,7 @@ public class QueryService {
         results.add(
             new ResultMapeamento.Builder()
                 .comNomeEntidade( "XML Query" )
-                .comConteudoEntidade( gerarXMLQuery( query, false ) )
+                .comConteudoEntidade( gerarXMLQuery( query, null ) )
                 .comTipoResult( DTO )
                 .build()
         );
@@ -67,8 +67,9 @@ public class QueryService {
             throw new IllegalArgumentException(
                     "Não foi possivel ler metadados da query - Verifique se query esta retornando valores" );
 
-        return dados.stream().map( m -> {
-            final DataType dataType = dataTypes
+        return dados.stream()
+            .map( m -> {
+                final DataType dataType = dataTypes
                     .stream()
                     .filter( type -> Objects.equals( m.getTipoDB(), type.getDbType() ) )
                     .findFirst()
@@ -77,12 +78,12 @@ public class QueryService {
                             m.getColunaDB(), m.getTipoDB()
                     ) ) );
 
-            return new DefinicaoDto.Builder()
+                return new DefinicaoDto.Builder()
                     .comPosicao( m.getPosicao() )
                     .comNomeAtributo( normalizeJava( m.getColunaJava(), false ) )
                     .comTipo( dataType )
                     .build();
-        } ).collect( toSet() );
+            } ).collect( toSet() );
     }
 
     private String gerarTuple( final Set<DefinicaoDto> campos ) {
@@ -92,18 +93,18 @@ public class QueryService {
         context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "importsTupleConverter", buscarImportsTupleConverter( campos ) );
         context.put( "StringUtils", StringUtils.class );
-        context.put( "query", StringUtils.class );
         return exec( context, "/templates/query_tuple.vm" );
     }
 
     private String gerarXMLQuery(
         final String query,
-        final boolean exibirResultClass
+        final String nomeClasse
     ) {
 
         final VelocityContext context = new VelocityContext();
         context.put( "query", query );
-        context.put( "exibirResultClass", exibirResultClass );
+        context.put( "nomeClasse", nomeClasse );
+        context.put( "StringUtils", StringUtils.class );
         return exec( context, "/templates/query_xml.vm" );
     }
 
@@ -136,7 +137,7 @@ public class QueryService {
         results.add(
             new ResultMapeamento.Builder()
             .comNomeEntidade( "XML Query" )
-            .comConteudoEntidade( gerarXMLQuery( query, false ) )
+            .comConteudoEntidade( gerarXMLQuery( query, nomeClasse ) )
             .comTipoResult( DTO )
             .build()
         );
