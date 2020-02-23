@@ -16,7 +16,9 @@
 #if ( $StringUtils.isNotBlank( $nomeClasse ) )
 <sql-result-set-mapping name="?????">
     <constructor-result target-class="models.commons.dto.$nomeClasse">
-        <column name="id" class="java.lang.Long"/>
+        #foreach ( $definicao in $definicoes )
+        <column name="$definicao.nomeColunaDB" class="$definicao.tipo.package"/>
+        #end
     </constructor-result>
 </sql-result-set-mapping>
 #end

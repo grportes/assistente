@@ -37,6 +37,7 @@ public class DefinicaoDto {
 
     private final IntegerProperty posicao;
     private final ObjectProperty<DefinicaoDto.Tipo> tipo;
+    private final StringProperty nomeColunaDB;
     private final StringProperty nomeAtributo;
     private final BooleanProperty atributoId;
 
@@ -51,6 +52,7 @@ public class DefinicaoDto {
 
         this.posicao = new SimpleIntegerProperty( builder.posicao );
         this.tipo = new SimpleObjectProperty<>( builder.tipo );
+        this.nomeColunaDB = new SimpleStringProperty( builder.nomeColunaDB );
         this.nomeAtributo = new SimpleStringProperty( builder.nomeAtributo );
         this.atributoId = new SimpleBooleanProperty( builder.atributoId );
     }
@@ -61,7 +63,6 @@ public class DefinicaoDto {
     // GETTERS
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     public int getPosicao() {
 
@@ -81,6 +82,16 @@ public class DefinicaoDto {
     public ObjectProperty<DefinicaoDto.Tipo> tipoProperty() {
 
         return tipo;
+    }
+
+    public String getNomeColunaDB() {
+
+        return nomeColunaDB.get();
+    }
+
+    public StringProperty nomeColunaDBProperty() {
+
+        return nomeColunaDB;
     }
 
     public String getNomeAtributo() {
@@ -399,6 +410,7 @@ public class DefinicaoDto {
 
         public Integer posicao;
         private Tipo tipo;
+        private String nomeColunaDB;
         private String nomeAtributo;
         private Boolean atributoId;
 
@@ -406,6 +418,7 @@ public class DefinicaoDto {
 
             this.posicao = null;
             this.tipo = null;
+            this.nomeColunaDB = null;
             this.nomeAtributo = null;
             this.atributoId = false;
         }
@@ -433,6 +446,13 @@ public class DefinicaoDto {
                 .filter( t -> equalsIgnoreCase( t.getNome(), javaType ) )
                 .findFirst()
                 .orElseThrow( () -> new IllegalArgumentException( "Nao localizou tipo de dados" ) );
+            return this;
+        }
+
+        public Builder comNomeColunaDB( final String value ) {
+
+            if ( isBlank( value ) ) throw new IllegalArgumentException( "Obrigatório informar o nome da coluna" );
+            this.nomeColunaDB = value;
             return this;
         }
 

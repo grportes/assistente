@@ -59,7 +59,7 @@ public class QueryService {
         results.add(
             new ResultMapeamento.Builder()
                 .comNomeEntidade( "XML Query" )
-                .comConteudoEntidade( gerarXMLQuery( query, nomeClasse ) )
+                .comConteudoEntidade( gerarXMLQuery( query, nomeClasse, dtos ) )
                 .comTipoResult( DTO )
                 .build()
         );
@@ -84,7 +84,7 @@ public class QueryService {
         results.add(
             new ResultMapeamento.Builder()
                 .comNomeEntidade( "XML Query" )
-                .comConteudoEntidade( gerarXMLQuery( query, null ) )
+                .comConteudoEntidade( gerarXMLQuery( query, null, null ) )
                 .comTipoResult( DTO )
                 .build()
         );
@@ -114,6 +114,7 @@ public class QueryService {
 
                 return new DefinicaoDto.Builder()
                     .comPosicao( m.getPosicao() )
+                    .comNomeColunaDB( m.getColunaDB() )
                     .comNomeAtributo( normalizeJava( m.getColunaJava(), false ) )
                     .comTipo( dataType )
                     .build();
@@ -132,12 +133,14 @@ public class QueryService {
 
     private String gerarXMLQuery(
         final String query,
-        final String nomeClasse
+        final String nomeClasse,
+        final Set<DefinicaoDto> definicoes
     ) {
 
         final VelocityContext context = new VelocityContext();
         context.put( "query", query );
         context.put( "nomeClasse", nomeClasse );
+        context.put( "definicoes", orderByPosicao( definicoes ) );
         context.put( "StringUtils", StringUtils.class );
         return exec( context, "/templates/query_xml.vm" );
     }

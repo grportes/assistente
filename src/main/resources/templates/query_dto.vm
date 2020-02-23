@@ -58,6 +58,7 @@ public class $nomeClasse implements Serializable {
 
     #macroComentario( "CONSTRUCTOR" )
 
+    @Deprecated
     public $nomeClasse(
         #foreach ( $definicao in $definicoes )
         final $definicao.Tipo $definicao.NomeAtributo#if( $foreach.hasNext ),#end
