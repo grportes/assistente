@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.function.Function;
 
 import static br.com.assistente.infra.util.UtilArquivo.createDirectoryIfNotExists;
 import static br.com.assistente.infra.util.UtilCollections.requireNotEmpty;
@@ -30,7 +29,9 @@ import static java.nio.file.Files.exists;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.lang3.ArrayUtils.getLength;
 import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.split;
 
 public class ConstanteService {
 
@@ -98,18 +99,15 @@ public class ConstanteService {
             final BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream));
         ){
 
-            final Function<String, Constante> convertToConstante = row -> {
-                final String[] cols = row.split( "\t" );
-                if ( cols.length == 2 )
-                    return new Constante.Builder()
-                        .comNome( cols[0] )
-                        .comValor( cols[1] )
-                        .comDescricao( cols[0] )
-                        .build();
-                throw new RuntimeException( format( "Linha inválida: %s", row ) );
-            };
-
-            return buffer.lines().map( convertToConstante ).collect( toSet() );
+            return buffer.lines()
+                .map( row -> split( row, "\t" ) )
+                .filter( cols -> getLength( cols ) == 2 )
+                .map( cols -> new Constante.Builder()
+                    .comNome( cols[0] )
+                    .comValor( cols[1] )
+                    .comDescricao( cols[0] )
+                    .build()
+                ).collect( toSet() );
 
         } catch ( final IOException e ) {
             throw new RuntimeException( e );
