@@ -5,8 +5,8 @@ echo "------------------- executando assinatura das Libs -----------------------
 echo "-------------------------------------------------------------------------------"
 
 DIR='target/lib/*jar'
-for FILE in ls $DIR
+for JAR_FILE in ls $DIR
 do
-    echo $FILE
-    jarsigner -keystore "keystore/assistente.jks" -storepass Arcom10$ -keypass Arcom10$ $FILE assistente
+    echo $JAR_FILE
+    jarsigner -keystore "keystore/assistente.jks" -storepass Arcom10$ -keypass Arcom10$ $JAR_FILE assistente
 done
