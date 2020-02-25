@@ -35,8 +35,9 @@ public class UtilJar {
                 final String nomeArquivo = jarEntry.getName();
                 if ( startsWithIgnoreCase( nomeArquivo, resourceFile ) ) {
                     final JarEntry fileEntry = jarFile.getJarEntry( nomeArquivo );
-                    final InputStream inputStream = jarFile.getInputStream( fileEntry );
-                    exec.accept( inputStream );
+                    try ( final InputStream inputStream = jarFile.getInputStream( fileEntry ) ) {
+                        exec.accept( inputStream );
+                    }
                 }
             }
         } catch ( final IOException e ) {
