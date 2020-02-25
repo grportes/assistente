@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +20,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static br.com.assistente.infra.util.UtilArquivo.createDirectoryIfNotExists;
 import static br.com.assistente.infra.util.UtilCollections.requireNotEmpty;
@@ -31,6 +29,7 @@ import static java.lang.String.format;
 import static java.nio.file.Files.exists;
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase;
 
 public class ConstanteService {
@@ -91,28 +90,26 @@ public class ConstanteService {
     public Set<Constante> lerArquivoCSV( final String arquivo ) {
 
         final Path path = Paths.get( arquivo );
-        if ( !Files.exists( path ) )
+        if ( !exists( path ) )
             throw new IllegalArgumentException( "Arquivo não localizado!" );
 
-        final File fileHandle = path.toFile();
-
         try (
-            final InputStream inputStream = new FileInputStream(fileHandle);
+            final InputStream inputStream = new FileInputStream(path.toFile());
             final BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream));
         ){
 
-            final Function<String, Constante> fnMapToConstante = row -> {
+            final Function<String, Constante> convertToConstante = row -> {
                 final String[] cols = row.split( "\t" );
                 if ( cols.length == 2 )
                     return new Constante.Builder()
-                            .comNome( cols[0] )
-                            .comValor( cols[1] )
-                            .comDescricao( cols[0] )
-                            .build();
+                        .comNome( cols[0] )
+                        .comValor( cols[1] )
+                        .comDescricao( cols[0] )
+                        .build();
                 throw new RuntimeException( format( "Linha inválida: %s", row ) );
             };
 
-            return buffer.lines().skip(1).map( fnMapToConstante ).collect( Collectors.toSet() );
+            return buffer.lines().map( convertToConstante ).collect( toSet() );
 
         } catch ( final IOException e ) {
             throw new RuntimeException( e );
@@ -152,7 +149,7 @@ public class ConstanteService {
             }
 
             if ( existeArquivo.length() > 0 )
-                throw new RuntimeException( "Não foi possível criar classe(s) pois já existem!\n" + existeArquivo );
+                throw new RuntimeException( "Não é possivel sobrescrever classe(s) existentes!\n" + existeArquivo );
 
         }
     }

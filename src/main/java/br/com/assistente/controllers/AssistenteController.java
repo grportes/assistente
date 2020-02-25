@@ -395,7 +395,7 @@ public class AssistenteController {
 
     private void importarConstante() {
 
-        msgInfo( "Arquivo csv deve estar no formato:\n\n \"DESCRICAO<TAB>VALOR\"");
+        msgInfo( "Arquivo csv deve estar no formato:\n\n\n \"DESCRICAO<TAB>VALOR\"");
 
         selecionarArquivo(
             "Selecione o arquivo",
