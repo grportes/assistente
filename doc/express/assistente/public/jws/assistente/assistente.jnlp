@@ -15,6 +15,7 @@
             <desktop />
             <menu submenu="Assistente"/>
         </shortcut>
+        <icon href="ideia.png" width="64" height="64"/>
     </information>
 
     <security>
