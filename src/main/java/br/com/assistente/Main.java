@@ -1,18 +1,21 @@
 package br.com.assistente;
 
-import br.com.assistente.infra.javafx.Dialog;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
 import static br.com.assistente.infra.db.ConnectionFactory.closeConnection;
+import static br.com.assistente.infra.javafx.Dialog.msgErro;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
+import static java.lang.Thread.currentThread;
+import static java.lang.Thread.setDefaultUncaughtExceptionHandler;
+import static javafx.application.Platform.runLater;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 
 public class Main extends Application {
 
@@ -21,8 +24,8 @@ public class Main extends Application {
     @Override
     public void start( final Stage stage ) throws IOException {
 
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(() -> showErrorDialog(t, e)));
-        Thread.currentThread().setUncaughtExceptionHandler(this::showErrorDialog);
+        setDefaultUncaughtExceptionHandler( (t, e) -> runLater(() -> showErrorDialog(t, e)) );
+        currentThread().setUncaughtExceptionHandler( this::showErrorDialog );
 
         final FXMLLoader loader = new FXMLLoader();
         stage.setTitle( "Assistente" );
@@ -43,10 +46,10 @@ public class Main extends Application {
         final Throwable e
     ) {
 
-        logger.error( "Erro critico:", e );
-        Throwable rootCause = ExceptionUtils.getRootCause(e);
-        String message = rootCause.getMessage();
-        Dialog.msgErro( message );
+        final Throwable rootCause = getRootCause(e);
+        if ( !( rootCause instanceof IllegalArgumentException ) ) logger.error( "Erro critico:", e );
+        final String message = rootCause.getMessage();
+        msgErro( message );
     }
 
 
