@@ -395,6 +395,13 @@ public class AssistenteController {
 
     private void importarConstante() {
 
+        final Constante.Tipo value = cbxConstanteTipos.getValue();
+        if ( isNull( value ) ) {
+            msgAviso( "É necessário informar: DataType!!" );
+            runLater( () -> cbxConstanteTipos.requestFocus() );
+            return;
+        }
+
         msgInfo( "Arquivo csv deve estar no formato:\n\n\nDESCRICAO<TAB>VALOR");
 
         selecionarArquivo(
