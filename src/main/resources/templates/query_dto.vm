@@ -10,7 +10,8 @@ import $import;
     #end
 import java.util.Objects;
 
-#if ( $gerarJsonAnnotations )
+#if ( $CollectionUtils.isNotEmpty( $importsNecessariosSerializer ) )
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
     #foreach ( $import in $importsNecessariosSerializer )
 import $import;
     #end

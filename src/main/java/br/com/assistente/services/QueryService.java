@@ -6,6 +6,7 @@ import br.com.assistente.models.DefinicaoDto;
 import br.com.assistente.models.ModeloCampo;
 import br.com.assistente.models.ResultMapeamento;
 import br.com.assistente.models.SetupUsuario;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 
@@ -169,8 +170,8 @@ public class QueryService {
         context.put( "importsNecessariosSerializer", buscarImportsSerializer( definicoes ) );
         context.put( "identificadores", buscarTodosAtributoId( definicoes ) );
         context.put( "StringUtils", StringUtils.class );
+        context.put( "CollectionUtils", CollectionUtils.class );
         context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
-
         return exec( context, "/templates/query_dto.vm" );
     }
 }

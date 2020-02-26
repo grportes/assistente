@@ -297,7 +297,7 @@ public class DefinicaoDto {
 
             @Override
             public String getJsonSerialize() {
-                return "infra.json.Serializer.SerializerLocalDateSerializer";
+                return "infra.jsonConverters.LocalDateSerializer";
             }
 
             @Override
@@ -314,7 +314,7 @@ public class DefinicaoDto {
 
             @Override
             public String getJsonSerialize() {
-                return "infra.json.Serializer.SerializerLocalDateTimeSerializer";
+                return "infra.jsonConverters.LocalDateTimeSerializer";
             }
 
             @Override
@@ -331,7 +331,7 @@ public class DefinicaoDto {
 
             @Override
             public String getJsonSerialize() {
-                return "infra.json.Serializer.SerializerLocalTime";
+                return "infra.jsonConverters.LocalTimeSerializer";
             }
 
             @Override
