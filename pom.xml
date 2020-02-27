@@ -99,7 +99,9 @@
                             <Class-Path>.</Class-Path>
                             <Application-Name>assistente</Application-Name>
                             <Permissions>all-permissions</Permissions>
-                            <Codebase>http://localhost:3000/desktop/assistente</Codebase>
+                            <Codebase>*</Codebase>
+                            <Caller-Allowable-Codebase>*</Caller-Allowable-Codebase>
+                            <Application-Library-Allowable-Codebase>*</Application-Library-Allowable-Codebase>
                         </manifestEntries>
                     </archive>
                 </configuration>
