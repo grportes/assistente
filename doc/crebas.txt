@@ -1,26 +1,26 @@
 cd /tmp && mkdir play && cd play && sqlite3 exemplo.db
 
 create table parametros(
-    id INTEGER NOT NULL PRIMARY KEY,
+    parametro INTEGER NOT NULL PRIMARY KEY,
     descricao VARCHAR(100) NOT NULL,
     numero INTEGER NOT NULL,
     version INTEGER NOT NULL
 );
 
 create table perfis (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    perfil INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     descricao VARCHAR(100) NOT NULL,
     version INTEGER NOT NULL
 );
 
 create table usuarios (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    usuario INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     nome VARCHAR(100) NOT NULL,
     cpf CHAR(11) NOT NULL,
-    id_perfil INTEGER NULL,
+    perfil_usuario INTEGER NULL,
     version INTEGER NOT NULL,
 
-    FOREIGN KEY(id_perfil) REFERENCES perfis(id)
+    FOREIGN KEY(perfil_usuario) REFERENCES perfis(perfil)
 );
 
 create unique index idx_usuario_1 on usuarios ( cpf asc );
@@ -38,10 +38,10 @@ create table clientes(
 insert into perfis( descricao, version ) values ( "ADMINISTRADOR", 0 );
 insert into perfis( descricao, version ) values ( "ANALISTA", 0 );
 
-insert into usuarios( nome, cpf, id_perfil, version ) values ( "ABC", "03226355600", 1, 0 );
-insert into usuarios( nome, cpf, id_perfil, version ) values ( "XXX", "03526355622", 2, 0 );
+insert into usuarios( nome, cpf, perfil_usuario, version ) values ( "ABC", "03226355600", 1, 0 );
+insert into usuarios( nome, cpf, perfil_usuario, version ) values ( "XXX", "03526355622", 2, 0 );
 
-insert into parametros( id, descricao, numero, version ) values ( 1, 'PROXIMO CODIGO', 0, 0 );
+insert into parametros( parametro, descricao, numero, version ) values ( 1, 'PROXIMO CODIGO', 0, 0 );
 
 insert into clientes( empresa, cliente, razao_social, vlr_limite ) values ( 1, 10, 'TESTE', 950.50 );
 insert into clientes( empresa, cliente, razao_social, vlr_limite ) values ( 1, 20, 'TESTE 20', 1000 );

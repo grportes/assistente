@@ -139,6 +139,10 @@ import static java.lang.String.format;
     #foreach ( $campo in $campos )
         #set ( $nomeAtributo = $campo.ColunaJava )
         #set ( $nomeMetodo = $StringUtils.capitalize( $nomeAtributo ) )
+        #if ( $campo.Pk && !$modelo.ChaveComposta )
+            #set( $nomeMetodo = 'Id' )
+            #set( $nomeAtributo = 'id' )
+        #end
         #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
         #if ( $campo.Converter )
             #set( $tipo = $campo.NomeEnum )
