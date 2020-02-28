@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp
+    spec="7.0+"
+    codebase="http://localhost:3000/jws/assistente/"
+    href="assistente.jnlp"
+>
+
+    <information>
+        <title>Assistente Gerador de Código</title>
+        <description>Assistente Play</description>
+        <description kind="short">Assistente Play</description>
+        <vendor>Assistente Play</vendor>
+        <offline-allowed/>
+        <shortcut online="true" install="true">
+            <desktop />
+            <menu submenu="Assistente"/>
+        </shortcut>
+        <icon href="ideia.png" width="64" height="64"/>
+    </information>
+
+    <security>
+        <all-permissions/>
+    </security>
+
+    <resources>
+        <j2se version="1.8+" />
+        <jar href="assistente-1.0.2.jar" main="true" />
+        <jar href="lib/commons-collections4-4.4.jar" />
+        <jar href="lib/commons-dbutils-1.7.jar" />
+        <jar href="lib/commons-lang3-3.9.jar" />
+        <jar href="lib/commons-text-1.8.jar" />
+        <jar href="lib/javafx-base-13-win.jar" />
+        <jar href="lib/javafx-base-13.jar" />
+        <jar href="lib/javafx-controls-13-win.jar" />
+        <jar href="lib/javafx-controls-13.jar" />
+        <jar href="lib/javafx-fxml-13-win.jar" />
+        <jar href="lib/javafx-fxml-13.jar" />
+        <jar href="lib/javafx-graphics-13-win.jar" />
+        <jar href="lib/javafx-graphics-13.jar" />
+        <jar href="lib/org.everit.osgi.bundles.net.sourceforge.jtds-1.3.1.jar" />
+        <jar href="lib/slf4j-api-1.7.28.jar" />
+        <jar href="lib/slf4j-simple-1.7.28.jar" />
+        <jar href="lib/snakeyaml-1.25.jar" />
+        <jar href="lib/sqlite-jdbc-3.28.0.jar" />
+        <jar href="lib/vavr-0.10.2.jar" />
+        <jar href="lib/vavr-match-0.10.2.jar" />
+        <jar href="lib/velocity-engine-core-2.1.jar" />
+        <jar href="lib/log4j-1.2.17.jar" />
+    </resources>
+
+    <application-desc
+        name="Assistente"
+        main-class="br.com.assistente.Main.class"
+    />
+
+    <update check="background" />
+
+</jnlp>
