@@ -1,5 +1,7 @@
 package br.com.assistente.models;
 
+import br.com.assistente.Main;
+import org.apache.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -28,6 +30,8 @@ import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public final class DriverCnx {
+
+    private static Logger logger = Logger.getLogger( Main.class );
 
     private String id;
     private String driver;
@@ -166,7 +170,7 @@ public final class DriverCnx {
 
         if ( isEmpty( cache ) ) {
             final URL resource = DriverCnx.class.getResource( "" );
-            cache = startsWith( resource.getFile(), "http:" )
+            cache = startsWith( resource.getProtocol(), "jar" )
                 ? loadCacheFromJavaUrl( resource )
                 : loadCacheFromClassLoader( );
         }
