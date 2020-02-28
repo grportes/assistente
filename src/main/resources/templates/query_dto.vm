@@ -1,4 +1,4 @@
-package models.commons.dtos;
+package models.commons.dto;
 
 #if ( $gerarJsonAnnotations )
 import com.fasterxml.jackson.annotation.JsonProperty;
