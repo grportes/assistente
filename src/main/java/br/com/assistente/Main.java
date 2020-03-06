@@ -31,7 +31,7 @@ public class Main extends Application {
 
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation( getResource("/fxml/AssistenteView.fxml") );
-        stage.setTitle( "Assistente - 1.0.2" );
+        stage.setTitle( "Assistente - 1.0.3" );
         stage.setScene( new Scene(loader.load()) );
         stage.setOnCloseRequest( e -> Platform.exit() );
         setIconeApp( stage );

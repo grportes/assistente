@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
-        spec="7.0+"
-        codebase="http://localhost:3000/jws/assistente/"
-        href="assistente.jnlp"
+    spec="7.0+"
+    codebase="http://localhost:3000/jws/assistente/"
+    href="assistente.jnlp"
 >
 
     <information>
@@ -24,7 +24,7 @@
 
     <resources>
         <j2se version="1.8+" />
-        <jar href="assistente-1.0.2.jar" main="true" />
+        <jar href="assistente-1.0.3.jar" main="true" />
         <jar href="lib/commons-collections4-4.4.jar" />
         <jar href="lib/commons-dbutils-1.7.jar" />
         <jar href="lib/commons-lang3-3.9.jar" />
