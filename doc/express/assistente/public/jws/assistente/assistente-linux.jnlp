@@ -11,7 +11,7 @@
         <description kind="short">Assistente Play</description>
         <vendor>Assistente Play</vendor>
         <offline-allowed/>
-        <shortcut online="true" install="true">
+        <shortcut online="false" install="true">
             <desktop />
             <menu submenu="Assistente"/>
         </shortcut>
