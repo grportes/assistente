@@ -4,30 +4,21 @@ import javafx.persistence.Tuple;
 import static $import;
 #end
 
-final Tuple row = getEm().createNamedQuery( "named query", Tuple.class ).getSingleResult();
+// final Tuple row = getEm().createNamedQuery( "named query", Tuple.class ).getSingleResult();
 
-// ou
-
-final List<Tuple> rows = getEm().createNamedQuery( "named query", Tuple.class ).getResultList();
-
-final Function<Tuple, ?> fnKey = row -> {
-
-};
-
-final Function<Tuple, ?> fnValues = row -> {
-
-};
-
-return rows.stream().collect( groupingBy( fnKey, mapping( fnValues, toSet()) ) );
-
-
-// rows...
 #foreach ( $campo in $campos )
 #set ( $nomeColuna = $campo.NomeAtributo )
 #set ( $converter = $StringUtils.substringAfterLast( $campo.Tipo.TupleConverter, '.' ) )
 #if ( $StringUtils.isBlank( $converter ) )
 $StringUtils.join( 'row.get( "', $nomeColuna, '", String.class );' )
 #else
+    #set ( $package = $StringUtils.substringAfterLast( $campo.Tipo.Package, '.' ) )
+    #if ( $StringUtils.equalsIgnoreCase( $package, "LocalDateTime" ) )
+$StringUtils.join( $converter, '( ', 'row.get( "', $nomeColuna, '", java.sql.Timestamp.class ) ); ' )
+    #elseif ( $StringUtils.equalsIgnoreCase( $package, "LocalDate" ) )
+$StringUtils.join( $converter, '( ', 'row.get( "', $nomeColuna, '", java.sql.Date.class ) ); ' )
+    #else
 $StringUtils.join( $converter, '( ', 'row.get( "', $nomeColuna, '") ); ' )
+    #end
 #end
 #end
