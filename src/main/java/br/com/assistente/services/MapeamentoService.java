@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Function;
@@ -53,7 +52,7 @@ public class MapeamentoService {
             .stream()
             .map( m -> {
                 final DataType dataType = dataTypes.stream()
-                    .filter( type -> Objects.equals( m.getTipoDB(), type.getDbType() ) )
+                    .filter( type -> equalsIgnoreCase( m.getTipoDB(), type.getDbType() ) )
                     .findFirst()
                     .orElseThrow( () -> new RuntimeException( format(
                         "Coluna [ %s ] do tipo [ %s ] Não localizou tipo Java correspondente",

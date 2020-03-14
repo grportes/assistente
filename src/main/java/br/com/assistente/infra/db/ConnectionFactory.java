@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 import static br.com.assistente.infra.util.UtilCrypto.descriptografar;
 import static java.lang.String.format;
@@ -26,6 +27,7 @@ import static java.util.Collections.emptySet;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.apache.commons.dbutils.DbUtils.closeQuietly;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -112,6 +114,16 @@ public final class ConnectionFactory {
             ResultSet rs = metaData.getPrimaryKeys( modelo.getCatalogo(), modelo.getOwner(), modelo.getTabela() );
             while ( rs.next() ) pks.add( rs.getString("COLUMN_NAME" ) );
 
+            // Tratamentos...
+            final Function<ResultSet, Boolean> isColumnAutoIncrement = rss -> {
+                try {
+                    final Object column = rss.getObject( "IS_AUTOINCREMENT" );
+                    return ( column instanceof String ) ? equalsIgnoreCase( (String) column, "yes" ) : (Boolean) column;
+                } catch ( SQLException e ) {
+                    throw new RuntimeException( e );
+                }
+            };
+
             // Colunas:
             int posicaoLeitura = 0;
             rs = metaData.getColumns(modelo.getCatalogo(), modelo.getOwner(), modelo.getTabela(), null );
@@ -126,7 +138,7 @@ public final class ConnectionFactory {
                         .comColNull( Objects.equals( rs.getString( "NULLABLE" ), "1" ) )
                         .comTipoDB( rs.getString( "TYPE_NAME" ) )
                         .comDigitoDecimal( rs.getInt( "DECIMAL_DIGITS" )  )
-                        .comAutoIncremento( rs.getBoolean( "IS_AUTOINCREMENT" ) )
+                        .comAutoIncremento( isColumnAutoIncrement.apply( rs ) )
                         .build()
                 );
                 posicaoLeitura ++;

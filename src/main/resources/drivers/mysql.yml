@@ -1,0 +1,22 @@
+id: "MySQL"
+driver: "com.mysql.cj.jdbc.Driver"
+protocolo: "jdbc:mysql://"
+autenticar: true
+porta: true
+selecionarBaseDados: true
+selectDate: "select curdate()"
+dataTypes:
+  - { dbType: "varchar", dbLength: true, javaType: "java.lang.String" }
+  - { dbType: "char", dbLength: true, javaType: "java.lang.String" }
+  - { dbType: "text", dbLength: false, javaType: "java.lang.String" }
+  - { dbType: "smallint", dbLength: false, javaType: "java.lang.Short" }
+  - { dbType: "int", dbLength: false, javaType: "java.lang.Long" }
+  - { dbType: "bigint", dbLength: false, javaType: "java.lang.Long" }
+  - { dbType: "float", dbLength: false, javaType: "java.lang.Float" }
+  - { dbType: "double", dbLength: false, javaType: "java.long.Double" }
+  - { dbType: "numeric", dbLength: false, javaType: "java.math.BigDecimal" }
+  - { dbType: "decimal", dbLength: false, javaType: "java.math.BigDecimal" }
+  - { dbType: "date", dbLength: false, javaType: "java.time.LocalDate" }
+  - { dbType: "time", dbLength: false, javaType: "java.time.LocalTime" }
+  - { dbType: "datetime", dbLength: false, javaType: "java.time.LocalDateTime" }
+  - { dbType: "timestamp", dbLength: false, javaType: "java.time.LocalDateTime" }
