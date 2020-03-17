@@ -1,7 +1,13 @@
 package models.commons.dtos;
-
 #if ( $gerarJsonAnnotations )
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+    #if ( $CollectionUtils.isNotEmpty( $importsNecessariosSerializer ) )
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+        #foreach ( $import in $importsNecessariosSerializer )
+import $import;
+        #end
+    #end
 #end
 
 import java.io.Serializable;
@@ -9,13 +15,6 @@ import java.io.Serializable;
 import $import;
     #end
 import java.util.Objects;
-
-#if ( $CollectionUtils.isNotEmpty( $importsNecessariosSerializer ) )
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-    #foreach ( $import in $importsNecessariosSerializer )
-import $import;
-    #end
-#end
 
 import static java.util.Objects.isNull;
 
