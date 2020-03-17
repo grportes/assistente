@@ -15,7 +15,7 @@
 
 #if ( $StringUtils.isNotBlank( $nomeClasse ) )
 <sql-result-set-mapping name="?????">
-    <constructor-result target-class="models.commons.dto.$nomeClasse">
+    <constructor-result target-class="models.commons.dtos.$nomeClasse">
         #foreach ( $definicao in $definicoes )
         <column name="$definicao.nomeColunaDB" class="$definicao.tipo.package"/>
         #end
