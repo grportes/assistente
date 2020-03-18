@@ -103,7 +103,7 @@ import static java.lang.String.format;
     #set ( $tipo = $StringUtils.substringAfterLast( $campo.TipoJava, "." ) )
     #if ( $campo.Converter )
         #set( $tipo = $campo.NomeEnum )
-    @Converter( converter = $StringUtils.join( $campo.NomeEnum, "Converter.class" ) )
+    @Convert( converter = $StringUtils.join( $campo.NomeEnum, "Converter.class" ) )
     #end
     private $tipo #if ($campo.Pk)id;#{else}$campo.ColunaJava;#end
 #end
