@@ -1,5 +1,5 @@
 #set( $tipoShort = $EnumTipoShort.equals( $tipoJava ) )
-package model.commons.converters;
+package models.commons.converters;
 
 import models.commons.constantes.$nomeEnum;
 
