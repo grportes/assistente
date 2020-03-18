@@ -9,8 +9,9 @@ import javax.persistence.Converter;
 #if ( $tipoShort )
 import static infra.util.UtilNumero.toShort;
 import static infra.util.UtilConstante.getValorInteger;
-#end
+#else
 import static infra.util.UtilConstante.getValor;
+#end
 import static infra.util.UtilEnum.getEnum;
 
 /**
