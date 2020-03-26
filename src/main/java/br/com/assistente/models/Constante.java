@@ -130,7 +130,7 @@ public final class Constante {
             @Override
             public String aplicarCast( final Object valor ) {
 
-                return format( "(Short) %s", valor );
+                return format( "(short) %s", valor );
             }
         },
 
