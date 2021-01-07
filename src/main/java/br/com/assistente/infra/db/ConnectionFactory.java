@@ -37,7 +37,6 @@ public final class ConnectionFactory {
     private static DriverCnx driverCnx;
 
     public static Tuple2<Connection, DriverCnx> getConnection() {
-
         if ( isNull( connection ) ) {
             final SetupCnxBanco cnxBanco = SetupUsuario.buscarCnxSelecionada();
 
@@ -64,12 +63,10 @@ public final class ConnectionFactory {
     }
 
     public static void closeConnection() {
-
         if ( nonNull(connection) ) closeQuietly( connection );
     }
 
     public static boolean checkCnx( final SetupCnxBanco cnxBanco ) {
-
         if ( isNull(cnxBanco) || isNull(cnxBanco.getIdDriver()) ) return false;
 
         final DriverCnx driverCnx = DriverCnx.findById(cnxBanco.getIdDriver())
@@ -95,10 +92,8 @@ public final class ConnectionFactory {
     }
 
     public static Set<ModeloCampo> getMetaData( final Modelo modelo )  {
-
         if ( isNull(modelo) )
             throw new IllegalArgumentException( "Modelo de dados não informado!!" );
-
         if ( isBlank(modelo.getTabela()) )
             throw new IllegalArgumentException( "Tabela não informada!" );
 
@@ -153,7 +148,6 @@ public final class ConnectionFactory {
     }
 
     public static Set<ModeloCampo> execQuery( final String query ) {
-
         if ( isBlank( query ) )
             throw new IllegalArgumentException( "Faltou definir query de execução" );
 

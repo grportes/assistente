@@ -43,7 +43,6 @@ public class QueryService {
         boolean gerarClasseBuilder,
         final Function<Set<DefinicaoDto>, Set<DefinicaoDto>> callback
     ) {
-
         requireNotBlank( nomeClasse, "Nome da DTO vazio!" );
         requireNotBlank( query, "Query vazia!" );
         requireNonNull( callback, "Callback necessário para gerar DTO/Query!" );
@@ -74,7 +73,6 @@ public class QueryService {
     }
 
     public Set<ResultMapeamento> convTexto( final String query ) {
-
         requireNotBlank( query, "É necessário informar a query!" );
         final Set<DefinicaoDto> campos = extrairColunas( query );
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
@@ -99,7 +97,6 @@ public class QueryService {
     }
 
     private Set<DefinicaoDto> extrairColunas( final String query ) {
-
         final List<DataType> dataTypes = SetupUsuario.buscarDataTypesCnxSelecionada();
 
         final Set<ModeloCampo> dados = ConnectionFactory.execQuery( query );
@@ -157,7 +154,6 @@ public class QueryService {
         boolean gerarJsonAnnotations,
         boolean gerarClasseBuilder
     ) {
-
         final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
 
         final VelocityContext context = new VelocityContext();

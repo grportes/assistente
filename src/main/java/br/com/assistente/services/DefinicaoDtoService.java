@@ -36,7 +36,6 @@ public class DefinicaoDtoService {
         boolean gerarJsonAnnotations,
         boolean gerarClasseBuilder
     ) {
-
         requireNotBlank( nomeClasse, "É necessário informar o nome do DTO!");
         requireNotEmpty( definicoes, "É necessário informar os atributos do DTO" );
 
@@ -63,7 +62,6 @@ public class DefinicaoDtoService {
     }
 
     public void gravarArquivos( final Set<ResultMapeamento> rsMapeamentos ) {
-
         final Path rootPath = SetupUsuario.buscarLocalProjeto().resolve( "app" ).resolve( "models" );
         if ( !exists( rootPath ) )
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
@@ -89,6 +87,5 @@ public class DefinicaoDtoService {
         } catch ( final IOException e ) {
             throw new UncheckedIOException( format( "Falhou gravação de %s", pathArquivo.toString()), e );
         }
-
     }
 }

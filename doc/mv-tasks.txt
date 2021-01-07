@@ -1,0 +1,8 @@
+Compilar
+	clean:clean compiler:compile
+
+Executar
+	clean javafx:run
+
+Empacotar
+	clean javafx:jlink

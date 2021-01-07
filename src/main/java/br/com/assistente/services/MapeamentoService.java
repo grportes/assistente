@@ -45,7 +45,6 @@ import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 public class MapeamentoService {
 
     public Set<ModeloCampo> extrair( final Modelo modelo )  {
-
         final List<DataType> dataTypes = SetupUsuario.buscarDataTypesCnxSelecionada();
 
         return getMetaData( modelo )
@@ -125,7 +124,6 @@ public class MapeamentoService {
         final Set<ModeloCampo> campos,
         final String arquivoTemplate
     ) {
-
         final VelocityContext context = new VelocityContext();
         context.put( "nomeAutor", nomeAutor );
         context.put( "modelo", modelo );
@@ -139,7 +137,6 @@ public class MapeamentoService {
         final Set<ResultMapeamento> rsMapeamentos,
         final Function<Tuple2<String,String>, Boolean> callbackConfirmacao
     ) {
-
         final Path rootPath = SetupUsuario.buscarLocalProjeto().resolve( "app" ).resolve( "models" );
         if ( !exists(rootPath) )
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
@@ -218,7 +215,6 @@ public class MapeamentoService {
         final Set<ResultMapeamento> rsMapeamentos,
         final String nomeModulo
     ) {
-
         if ( rsMapeamentos.size() == 2 )
             return rsMapeamentos.stream()
                 .findFirst()
@@ -244,6 +240,4 @@ public class MapeamentoService {
         final String importPacote = removeEnd( tipo, "." + tipoBase );
         return new Tuple2<>( tipoBase, importPacote );
     }
-
-
 }

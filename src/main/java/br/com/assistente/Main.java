@@ -21,11 +21,10 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 
 public class Main extends Application {
 
-    private static Logger logger = Logger.getLogger( Main.class );
+    private static final Logger logger = Logger.getLogger( Main.class );
 
     @Override
     public void start( final Stage stage ) throws IOException {
-
         setDefaultUncaughtExceptionHandler( (t, e) -> runLater(() -> showErrorDialog(t, e)) );
         currentThread().setUncaughtExceptionHandler( this::showErrorDialog );
 
@@ -40,12 +39,10 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-
         closeConnection();
     }
 
     private void setIconeApp( final Stage stage ) {
-
         try {
             getInputStream(
                 "icons/ideia.png",
@@ -60,16 +57,13 @@ public class Main extends Application {
         final Thread t,
         final Throwable e
     ) {
-
         final Throwable rootCause = getRootCause(e);
         if ( !( rootCause instanceof IllegalArgumentException ) ) logger.error( "Erro critico:", e );
         final String message = rootCause.getMessage();
         msgErro( message );
     }
 
-
     public static void main(String[] args) {
-
         launch( args );
     }
 }

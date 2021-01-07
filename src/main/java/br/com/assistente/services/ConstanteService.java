@@ -41,7 +41,6 @@ public class ConstanteService {
         final Set<Constante> constantes,
         final boolean gerarConverter
     ) {
-
         requireNotBlank( nomeEnum, "É necessário informar o nome do Enum" );
         requireNotEmpty( constantes, "É necessário informar os atributos do Enum" );
 
@@ -75,7 +74,6 @@ public class ConstanteService {
         final Set<Constante> constantes,
         final String arquivoTemplate
     ) {
-
         final VelocityContext context = new VelocityContext();
         context.put( "nomeAutor", nomeAutor );
         context.put( "nomeEnum", nomeEnum );
@@ -84,12 +82,10 @@ public class ConstanteService {
         context.put( "StringUtils", StringUtils.class );
         context.put( "EnumTipoShort", Constante.Tipo.SHORT );
         context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
-
         return UtilVelocity.exec( context, arquivoTemplate );
     }
 
     public Set<Constante> lerArquivoCSV( final String arquivo ) {
-
         final Path path = Paths.get( arquivo );
         if ( !exists( path ) )
             throw new IllegalArgumentException( "Arquivo não localizado!" );
@@ -115,7 +111,6 @@ public class ConstanteService {
     }
 
     public void gravarArquivos( final Set<ResultMapeamento> rsMapeamentos ) {
-
         final Path rootPath = SetupUsuario.buscarLocalProjeto().resolve( "app" ).resolve( "models" );
         if ( !exists( rootPath ) )
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
@@ -151,6 +146,4 @@ public class ConstanteService {
 
         }
     }
-
-
 }

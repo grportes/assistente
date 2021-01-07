@@ -19,11 +19,9 @@ import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 import static org.apache.commons.lang3.StringUtils.replaceIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.trim;
 
-
 public final class UtilString {
 
     public static <T extends Number> String createString( final T value ) {
-
         return nonNull(value) ?  value.toString() : null;
     }
 
@@ -31,14 +29,12 @@ public final class UtilString {
         final Set<String> lista,
         final Character separador
     ) {
-
         return isNotEmpty( lista ) && nonNull(separador)
                 ? join( separador.toString(), lista )
                 : "";
     }
 
     public static String removerAcentosECaracteresEspeciais( final String str ) {
-
         return isNotBlank( str )
             ? normalize( str, NFD ).replaceAll("[^\\p{ASCII}]", "" )
             : str;
@@ -49,21 +45,16 @@ public final class UtilString {
         final String replacement,
         final String... searchString
     ) {
-
         if ( isBlank(str) || ArrayUtils.isEmpty( searchString ) ) return str;
-
         String tmp = str;
         for ( final String search : searchString ) tmp = replaceIgnoreCase( tmp, search, replacement );
-
         return tmp;
     }
 
     public static String convPluralToSingular( final String substantivo ) {
-
         if ( isEmpty( substantivo ) ) return substantivo;
         int tamanho = substantivo.length();
         if ( tamanho == 1 ) return substantivo;
-
         if ( tamanho > 2 ) {
             final String novaString = substantivo.substring( 0, tamanho - 2 );
             final String tmp = substantivo.substring( tamanho - 2 );
@@ -130,9 +121,7 @@ public final class UtilString {
     }
 
     public static String convDbToJava( final String str ) {
-
         if ( isBlank( str ) ) return str;
-
         final String[] tmp = normalizeJava( str.toLowerCase(), false ).split( "_" );
         String newStr = tmp[0];
         for ( int index = 1; index < tmp.length; index++ )
@@ -141,7 +130,6 @@ public final class UtilString {
     }
 
     public static String requireNotBlank( final String str ) {
-
         return requireNotBlank( str, "String vazia não permitida" );
     }
 
@@ -149,10 +137,8 @@ public final class UtilString {
         final String str,
         final String message
     ) {
-
         if ( isBlank( str ) )
             throw new NullPointerException( message );
-
         return str;
     }
 
@@ -160,7 +146,6 @@ public final class UtilString {
         final String str,
         final String strNew
     ) {
-
         return isNotBlank( str ) ? str : strNew;
     }
 }

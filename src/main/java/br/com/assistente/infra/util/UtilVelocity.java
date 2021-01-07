@@ -20,14 +20,11 @@ public final class UtilVelocity {
         final VelocityContext context,
         final String arquivoTemplate
     ) {
-
         final VelocityEngine engine = new VelocityEngine();
         engine.setProperty( RESOURCE_LOADERS, "classpath" );
         engine.setProperty( "resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
         engine.init();
-
         final Template template = engine.getTemplate( arquivoTemplate );
-
         try ( final StringWriter writer = new StringWriter() ) {
             template.merge( context, writer );
             return writer.toString();
@@ -41,7 +38,6 @@ public final class UtilVelocity {
         final String arquivoTemplate,
         final Path arquivoDestino
     ) {
-
         final VelocityEngine engine = new VelocityEngine();
         engine.setProperty( RESOURCE_LOADERS, "classpath" );
         engine.setProperty( "resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
@@ -56,5 +52,4 @@ public final class UtilVelocity {
             throw new UncheckedIOException( e );
         }
     }
-
 }

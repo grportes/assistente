@@ -29,12 +29,9 @@ public final class UtilYaml {
         final Class<T> clazz,
         final Path arquivo
     ) {
-
         requireNonNull(clazz);
         requireNonNull(arquivo);
-
         if (!exists(arquivo)) return empty();
-
         try ( final InputStream in = newInputStream(arquivo) ) {
             final Yaml yaml = new Yaml( new Constructor(clazz));
             return ofNullable( yaml.load(in) );
@@ -47,10 +44,8 @@ public final class UtilYaml {
         final Class<T> clazz,
         final URL resource
     ) {
-
         requireNonNull(clazz);
         requireNonNull(resource);
-
         try {
             return load( clazz, Paths.get( resource.toURI() ) );
         } catch ( URISyntaxException e ) {
@@ -58,12 +53,10 @@ public final class UtilYaml {
         }
     }
 
-
     public static void dump(
         final Object data,
         final Path arquivo
     ) {
-
         final DumperOptions options = new DumperOptions();
         options.setAllowReadOnlyProperties(true);
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
@@ -71,18 +64,14 @@ public final class UtilYaml {
         final Yaml yaml = new Yaml(options);
         final StringWriter writer = new StringWriter();
         yaml.dump( data, writer );
-
         excluir( arquivo );
         gravar( arquivo, writer );
     }
 
-
     public static Path getArquivoYaml()  {
-
         final String userHomePath = System.getProperty( "user.home" );
         final Path assistentePath = Paths.get( userHomePath ).resolve( "assistente" );
         createDirectoryIfNotExists( assistentePath );
         return assistentePath.resolve( "assistente.yml" );
     }
-
 }

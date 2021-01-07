@@ -31,7 +31,7 @@ import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public final class DriverCnx {
 
-    private static Logger logger = Logger.getLogger( Main.class );
+    private static final Logger logger = Logger.getLogger( Main.class );
 
     private String id;
     private String driver;
