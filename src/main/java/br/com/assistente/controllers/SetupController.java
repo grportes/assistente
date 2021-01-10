@@ -78,7 +78,6 @@ public class SetupController {
 
     @FXML
     public void initialize() {
-
         cbxCnxBanco.setItems( observableArrayList( emptyList() ) );
         cbxCnxBancoFornecedor.setItems( observableArrayList( DriverCnx.buscarIds() ) );
 
@@ -96,11 +95,9 @@ public class SetupController {
 
     @FXML
     public void onActionDefinicoes( final ActionEvent event ) {
-
         if ( isNull(event) || isNull(event.getSource()) ) return;
 
         final Control source = (Control) event.getSource();
-
         switch ( source.getId() ) {
             case "btnConfirmar":
                 SetupUsuario.save( getSetupUsuario() );
@@ -127,11 +124,9 @@ public class SetupController {
 
     @FXML
     public void onActionCnxBanco( final ActionEvent event ) {
-
         if ( isNull(event) || isNull(event.getSource()) ) return;
 
         final Control source = (Control) event.getSource();
-
         switch ( source.getId() ) {
             case "cbxCnxBancoFornecedor":
                 ajustarAcesso();
@@ -172,7 +167,6 @@ public class SetupController {
     }
 
     private void ajustarAcesso() {
-
         final DriverCnx driverCnx = DriverCnx.findById(cbxCnxBancoFornecedor.getValue())
                 .orElseThrow(() -> new RuntimeException("Não localizou driver"));
         txfCnxBancoPorta.setDisable( !driverCnx.isExigePorta() );
@@ -182,7 +176,6 @@ public class SetupController {
     }
 
     private SetupUsuario getSetupUsuario() {
-
         final SetupUsuario setupUsuario = new SetupUsuario();
         setupUsuario.setAutor( txfAutor.getText() );
         setupUsuario.setLocalProjeto( txfLocalProjeto.getText() );
@@ -191,13 +184,11 @@ public class SetupController {
     }
 
     private Integer getIdCnxBancoSelecionada() {
-
         final SetupCnxBanco cnx = cbxCnxBanco.getValue();
         return isNull( cnx ) ? null : cnx.getId();
     }
 
     private SetupCnxBanco getCnxBanco() {
-
         txfCnxBancoHost.setText( trim( txfCnxBancoHost.getText() ) );
         txfCnxBancoUserName.setText( trim( txfCnxBancoUserName.getText() ) );
         psCnxBancoSenha.setText( trim( psCnxBancoSenha.getText() ) );
@@ -216,7 +207,6 @@ public class SetupController {
     }
 
     private void objToView( final SetupCnxBanco cnx ) {
-
         cbxCnxBancoFornecedor.getSelectionModel().select( cnx.getIdDriver() );
         txfCnxBancoHost.setText( cnx.getHost() );
         txfCnxBancoPorta.setText( createString( cnx.getPorta() ) );
@@ -228,7 +218,6 @@ public class SetupController {
     }
 
     private void reset() {
-
         txfCnxBancoId.setText("");
         txfCnxBancoDescricao.setText("");
         txfCnxBancoHost.setText("");
@@ -249,10 +238,8 @@ public class SetupController {
         final Window windowPai,
         final Consumer<Boolean> actionExit
     ) {
-
         try {
             final URL resource = getResource("/fxml/SetupView.fxml");
-
             final Stage stage = new Stage();
             stage.setScene( new Scene(FXMLLoader.load(resource)) );
             stage.initOwner( windowPai );

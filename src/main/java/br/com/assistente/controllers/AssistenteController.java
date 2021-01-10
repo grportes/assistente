@@ -1,5 +1,6 @@
 package br.com.assistente.controllers;
 
+import br.com.assistente.infra.javafx.Dialog;
 import br.com.assistente.models.Constante;
 import br.com.assistente.models.DefinicaoDto;
 import br.com.assistente.models.Modelo;
@@ -10,6 +11,7 @@ import br.com.assistente.services.ConstanteService;
 import br.com.assistente.services.DefinicaoDtoService;
 import br.com.assistente.services.MapeamentoService;
 import br.com.assistente.services.QueryService;
+import br.com.assistente.services.VersaoService;
 import io.vavr.Tuple2;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -139,19 +141,18 @@ public class AssistenteController {
     private final ConstanteService constanteService = new ConstanteService();
     private final DefinicaoDtoService definicaoDtoService = new DefinicaoDtoService();
     private final QueryService queryService = new QueryService();
-
+    private final VersaoService versaoService = new VersaoService();
 
     @FXML
     public void initialize() {
-
         SetupUsuario.load();
         initializeMapeamento();
         initializeConstantes();
         initializeDto();
+        versaoService.checkVersao().ifPresent(Dialog::msgInfo);
     }
 
     private Window getParent() {
-
         return vboxContainer.getScene().getWindow();
     }
 
@@ -163,11 +164,9 @@ public class AssistenteController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void onActionMenu( final ActionEvent event ) {
-
         if ( isNull(event) || isNull(event.getTarget()) ) return;
 
         final String id = isBlankGet( ( (MenuItem) event.getTarget() ).getId(), "?" );
-
         switch ( id ) {
             case "mnConfiguracoes":
                 openViewConfiguracoes(
@@ -182,7 +181,6 @@ public class AssistenteController {
                 System.exit(0);
                 break;
         }
-
     }
 
 
@@ -193,12 +191,10 @@ public class AssistenteController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void onSelectionTab() {
-
         final BiConsumer<Tab,Control> setarFoco = (tab,control) -> {
             if ( nonNull( tab ) && tab.isSelected() )
                 runLater( control::requestFocus );
         };
-
         setarFoco.accept( tabMapeamento, cbxMapeamentoBanco );
         setarFoco.accept( tabConstante, txfConstanteEnum );
         setarFoco.accept( tabDto, txfDtoNomeClasse );
@@ -213,7 +209,6 @@ public class AssistenteController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void onActionMapeamento( final ActionEvent event ) {
-
         if ( isNull(event) || isNull(event.getSource()) ) return;
         final Control source = (Control) event.getSource();
 
@@ -231,7 +226,6 @@ public class AssistenteController {
     }
 
     private void initializeMapeamento() {
-
         tcMapeamentoPosicao.setCellValueFactory( c -> c.getValue().posicaoProperty().asObject() );
         tcMapeamentoColNull.setCellValueFactory( c -> c.getValue().colNullProperty() );
         tcMapeamentoColNull.setCellFactory( forTableColumn(tcMapeamentoColNull) );
@@ -270,7 +264,6 @@ public class AssistenteController {
     }
 
     private void lerTabelaMapeamento() {
-
         txtMapeamentoOwner.setText( lowerCase( trim( txtMapeamentoOwner.getText() ) ) );
         txfMapeamentoNomeTabela.setText( lowerCase( trim( txfMapeamentoNomeTabela.getText() ) ) );
 
@@ -293,7 +286,6 @@ public class AssistenteController {
     }
 
     private void limparMapeamento() {
-
         observableModelo.clear();
         txfMapeamentoNomeTabela.setText( "" );
         txtMapeamentoOwner.setText( "" );
@@ -301,7 +293,6 @@ public class AssistenteController {
     }
 
     private void gerarMapeamento() {
-
         final Modelo modelo = new Modelo.Builder()
             .comBanco( cbxMapeamentoBanco.getValue() )
             .comOwner( txtMapeamentoOwner.getText() )
@@ -322,7 +313,6 @@ public class AssistenteController {
     }
 
     private void setarTab( final Tab tab ) {
-
         tab.getTabPane().getSelectionModel().select( tab );
     }
 
@@ -334,7 +324,6 @@ public class AssistenteController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void onActionConstante( final ActionEvent event ) {
-
         if ( isNull(event) || isNull(event.getSource()) ) return;
         final Control source = (Control) event.getSource();
 
@@ -355,7 +344,6 @@ public class AssistenteController {
     }
 
     private void initializeConstantes() {
-
         cbxConstanteTipos.setItems( observableArrayList( Constante.Tipo.buscarTipos() ) );
         txfConstanteNome.focusedProperty().addListener( (ov, oldV, newV) -> {
             if ( !newV && isBlank( txfConstanteDescricao.getText() )) {
@@ -395,7 +383,6 @@ public class AssistenteController {
     }
 
     private void importarConstante() {
-
         final Constante.Tipo value = cbxConstanteTipos.getValue();
         if ( isNull( value ) ) {
             msgAviso( "É necessário informar: DataType!!" );
@@ -422,7 +409,6 @@ public class AssistenteController {
     }
 
     private void resetConstante() {
-
         txfConstanteEnum.setText( " " );
         txfConstanteNome.setText( "" );
         txfConstanteValor.setText( "" );
@@ -433,7 +419,6 @@ public class AssistenteController {
     }
 
     private void adicionarConstante() {
-
         final String valor = trim( txfConstanteValor.getText() );
         requireNonNull( cbxConstanteTipos.getValue(), "Favor informar o tipo!" ).checkTipo( valor );
 
@@ -455,7 +440,6 @@ public class AssistenteController {
     }
 
     private void gerarResultConstante() {
-
         txfConstanteEnum.setText( convPadraoNomeEnum( txfConstanteEnum.getText() ) );
 
         setarResultado( constanteService.convTexto(
@@ -473,10 +457,9 @@ public class AssistenteController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void onActionDto( final ActionEvent event ) {
-
         if ( isNull(event) || isNull(event.getSource()) ) return;
-        final Control source = (Control) event.getSource();
 
+        final Control source = (Control) event.getSource();
         switch ( source.getId() ) {
             case "btnDtoLimpar":
                 resetDto();
@@ -491,7 +474,6 @@ public class AssistenteController {
     }
 
     private void initializeDto() {
-
         cbxDtoTipo.setItems( observableArrayList( DefinicaoDto.Tipo.buscarTipos() ) );
         tcDtoTipo.setCellValueFactory( c -> c.getValue().tipoProperty() );
         tcDtoNomeAtributo.setCellValueFactory( c -> c.getValue().nomeAtributoProperty() );
@@ -526,7 +508,6 @@ public class AssistenteController {
     }
 
     private void resetDto() {
-
         txfDtoNomeClasse.setText( "" );
         cbxDtoTipo.setValue( null );
         txfDtoNomeAtributo.setText( "" );
@@ -537,7 +518,6 @@ public class AssistenteController {
     }
 
     private void adicionarItemDto() {
-
         final DefinicaoDto definicaoDto = new DefinicaoDto.Builder()
             .comPosicao( size( definicaoDtos ) + 1 )
             .comNomeAtributo( txfDtoNomeAtributo.getText() )
@@ -555,7 +535,6 @@ public class AssistenteController {
     }
 
     private void gerarResultDto() {
-
         txfDtoNomeClasse.setText( convPadraoNomeClasse( txfDtoNomeClasse.getText() ) );
         setarResultado( definicaoDtoService.convTexto(
             txfDtoNomeClasse.getText(),
@@ -565,6 +544,7 @@ public class AssistenteController {
         ));
     }
 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // QUERY
@@ -572,11 +552,9 @@ public class AssistenteController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void onActionQuery( final ActionEvent event ) {
-
         if ( isNull(event) || isNull(event.getSource()) ) return;
 
         final Control source = (Control) event.getSource();
-
         switch ( source.getId() ) {
             case "btnQueryLimpar":
                 resetQuery();
@@ -591,7 +569,6 @@ public class AssistenteController {
     }
 
     private void resetQuery() {
-
         txfQueryNomeClasse.setText( "" );
         txaQuery.setText( "" );
         cbxQueryTuple.setSelected( false );
@@ -602,7 +579,6 @@ public class AssistenteController {
     }
 
     private void desabilitarAcoesQuery( final boolean desabilitar ) {
-
         if ( desabilitar ) txfQueryNomeClasse.setText( "" );
         txfQueryNomeClasse.setDisable( desabilitar );
         cbxQueryJsonAnnotation.setDisable( desabilitar );
@@ -610,7 +586,6 @@ public class AssistenteController {
     }
 
     public void gerarResultQuery() {
-
         if ( cbxQueryTuple.isSelected() ) {
             setarResultado( queryService.convTexto( txaQuery.getText() ) );
         } else {
@@ -627,6 +602,7 @@ public class AssistenteController {
         }
     }
 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // RESULTADO.
@@ -634,11 +610,9 @@ public class AssistenteController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void onActionResult( final ActionEvent event ) {
-
         if ( isNull(event) || isNull(event.getSource()) ) return;
 
         final Control source = (Control) event.getSource();
-
         switch ( source.getId() ) {
             case "btnResultCopiar":
                 copiarResultadoParaAreaTransferencia();
@@ -656,7 +630,6 @@ public class AssistenteController {
     }
 
     private void setarResultado( final Set<ResultMapeamento> results ) {
-
         if ( isEmpty( results ) ) return;
 
         cbxResultArquivos.setItems( observableArrayList( results ) );
@@ -669,25 +642,21 @@ public class AssistenteController {
     }
 
     private boolean gerouResult() {
-
         return nonNull(cbxResultArquivos) && nonNull( cbxResultArquivos.getValue() );
     }
 
     private void selecionarClasse() {
-
         if ( !gerouResult() ) return;
         txaResult.setText( cbxResultArquivos.getValue().getConteudoEntidade() );
     }
 
     private void copiarResultadoParaAreaTransferencia() {
-
         final ClipboardContent content = new ClipboardContent();
         content.putString( txaResult.getText() );
         Clipboard.getSystemClipboard().setContent( content );
     }
 
     private void atualizarResult() {
-
         if ( !gerouResult() ) return;
         final String nomeEntidade = cbxResultArquivos.getValue().getNomeEntidade();
         final List<ResultMapeamento> novaLista = cbxResultArquivos
@@ -701,7 +670,6 @@ public class AssistenteController {
     }
 
     private void gravarResultadoNaPastaDoProjeto() {
-
         if ( !gerouResult() ) return;
 
         final ResultMapeamento value = cbxResultArquivos.getValue();
@@ -723,5 +691,4 @@ public class AssistenteController {
 
         }
     }
-
 }
