@@ -6,7 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -21,7 +22,7 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 
 public class Main extends Application {
 
-    private static final Logger logger = Logger.getLogger( Main.class );
+    private static final Logger logger = LogManager.getLogger(Main.class);
 
     @Override
     public void start( final Stage stage ) throws IOException {
@@ -30,7 +31,7 @@ public class Main extends Application {
 
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation( getResource("/fxml/AssistenteView.fxml") );
-        stage.setTitle( "Assistente - 1.0.4" );
+        stage.setTitle( "Assistente - 1.0.5" );
         stage.setScene( new Scene(loader.load()) );
         stage.setOnCloseRequest( e -> Platform.exit() );
         setIconeApp( stage );
