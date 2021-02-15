@@ -50,7 +50,7 @@ public class App extends Application {
             getInputStream(
             "icons/ideia.png",inputStream -> stage.getIcons().add( new Image( inputStream ) )
             );
-        } catch ( Throwable e ) {
+        } catch ( final Throwable e ) {
             logger.error( e );
         }
     }

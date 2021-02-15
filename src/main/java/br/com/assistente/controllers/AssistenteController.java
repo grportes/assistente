@@ -31,6 +31,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,6 +65,7 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.collections4.CollectionUtils.size;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.trim;
 
@@ -149,7 +151,9 @@ public class AssistenteController {
         initializeMapeamento();
         initializeConstantes();
         initializeDto();
-        versaoService.checkVersao().ifPresent(Dialog::msgInfo);
+        versaoService.checkVersao(msg -> {
+            if (isNotBlank(msg)) Dialog.msgInfo(msg);
+        });
     }
 
     private Window getParent() {

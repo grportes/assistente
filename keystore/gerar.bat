@@ -1,1 +1,0 @@
-keytool -genkey -alias assistente -keyalg RSA -keystore assistente.jks -validity 3650
