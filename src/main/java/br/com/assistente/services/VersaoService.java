@@ -1,8 +1,5 @@
 package br.com.assistente.services;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.function.Consumer;
@@ -17,14 +14,14 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 public class VersaoService {
 
-    private static final Logger logger = LogManager.getLogger(VersaoService.class);
+//    private static final Logger logger = LogManager.getLogger(VersaoService.class);
 
     public static final String VERSAO = "1.0";
     private static final String API = "http://localhost:8080/api/sys/assistente";
 
     public void checkVersao( final Consumer<String> aviso ) {
         try {
-            logger.info("Executando {}", API);
+//            logger.info("Executando {}", API);
             newHttpClient()
                 .sendAsync( newBuilder(new URI(API)).GET().build(), ofString() )
                 .whenComplete((resp,erro) -> {
@@ -41,11 +38,11 @@ public class VersaoService {
                             );
                         }
                     }
-                    logger.info("{}", msg);
+//                    logger.info("{}", msg);
                     aviso.accept(msg);
                 });
         } catch ( final URISyntaxException e ) {
-            logger.throwing(e);
+//            logger.throwing(e);
             aviso.accept( format(
                 "Não foi possivel verificar atualizações do Assistente! %n" +
                 "Falha ao acessar WS: [ %s ]", API

@@ -1,7 +1,7 @@
 package br.com.assistente.models;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -31,7 +31,7 @@ import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public final class DriverCnx {
 
-    private static final Logger logger = LogManager.getLogger(DriverCnx.class);
+//    private static final Logger logger = LogManager.getLogger(DriverCnx.class);
 
     private String id;
     private String driver;

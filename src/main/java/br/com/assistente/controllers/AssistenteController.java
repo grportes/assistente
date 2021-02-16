@@ -31,9 +31,6 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.HashSet;
@@ -71,7 +68,7 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 public class AssistenteController {
 
-    private static final Logger logger = LogManager.getLogger(AssistenteController.class);
+//    private static final Logger logger = LogManager.getLogger(AssistenteController.class);
 
     // Container principal da Aplicação
     @FXML private VBox vboxContainer;

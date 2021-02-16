@@ -41,7 +41,7 @@ if %delJRE%==1 (
 )
 jlink --output jre ^
  --module-path %_jfxmods% ^
- --add-modules javafx.media,javafx.web,javafx.fxml,java.logging,java.net.http
+ --add-modules javafx.media,javafx.web,javafx.fxml,java.logging,java.net.http,java.sql
 goto end
 
 :end

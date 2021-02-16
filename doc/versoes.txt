@@ -1,0 +1,3 @@
+VERSÃO: Evolução
+RELEASE: Exclusão ou inclusão de novas funcionalidades
+REVISÃO: correção de bugs.

@@ -34,14 +34,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.5</version>
-        <configuration>
-          <mainClass>br.com.assistente.Main</mainClass>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <dependencies>
