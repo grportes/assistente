@@ -34,20 +34,17 @@ public enum $nomeEnum implements Constante<$tipoJava> {
         final String descricao,
         final $tipoJava valor
     ) {
-
         this.descricao = descricao;
         this.valor = valor;
     }
 
     @Override
     public String getDescricao() {
-
         return this.descricao;
     }
 
     @Override
     public $tipoJava getValor() {
-
         return this.valor;
     }
 }

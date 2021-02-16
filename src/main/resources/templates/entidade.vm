@@ -113,7 +113,6 @@ import static java.lang.String.format;
     #macroComentario( "CONSTRUCTOR" )
 
     public $StringUtils.join( $modelo.Entidade, '()' ) {
-
         super();
     }
 
@@ -126,12 +125,10 @@ import static java.lang.String.format;
     #if ( $modelo.ChaveComposta )
         #set ( $tipo = $StringUtils.join($modelo.Entidade,"Id") )
     public $tipo getId() {
-
         return this.id;
     }
 
     public void setId( final $tipo id ) {
-
         this.id = id;
     }
 
@@ -148,12 +145,10 @@ import static java.lang.String.format;
             #set( $tipo = $campo.NomeEnum )
         #end
     public $tipo get$nomeMetodo() {
-
         return this.$nomeAtributo;
     }
 
     public void set$nomeMetodo( final $tipo $nomeAtributo ) {
-
         this.$nomeAtributo = $nomeAtributo;
     }
 
@@ -178,7 +173,6 @@ import static java.lang.String.format;
 
     @Override
     public boolean equals( final Object obj ) {
-
         if ( this == obj ) return true;
         if ( !( obj instanceof $modelo.Entidade ) ) return false;
         return Objects.equals( getId(), (($modelo.Entidade) obj).getId() );
@@ -186,7 +180,6 @@ import static java.lang.String.format;
 
     @Override
     public int hashCode() {
-
         return Objects.hash( getId() );
     }
 
@@ -198,9 +191,7 @@ import static java.lang.String.format;
 
     @Override
     public String toString() {
-
         return format( "$modelo.Entidade { id = %s }", this.getId() );
     }
-
 
 #end

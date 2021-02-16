@@ -28,13 +28,11 @@ public class $StringUtils.join( $nomeEnum, "Converter" ) implements AttributeCon
 
     @Override
     public Integer convertToDatabaseColumn( final $nomeEnum value ) {
-
         return getValorInteger( value );
     }
 
     @Override
     public $nomeEnum convertToEntityAttribute( final Integer dbValue ) {
-
         return getEnum( $StringUtils.join( $nomeEnum, '.class' ), toShort( dbValue ) );
     }
 }
@@ -43,13 +41,11 @@ public class $StringUtils.join( $nomeEnum, "Converter" ) implements AttributeCon
 
     @Override
     public $tipoJava convertToDatabaseColumn( final $nomeEnum value ) {
-
         return getValor( value );
     }
 
     @Override
     public $nomeEnum convertToEntityAttribute( final $tipoJava dbValue ) {
-
         return getEnum( $StringUtils.join( $nomeEnum, '.class' ), dbValue );
     }
 }

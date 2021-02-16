@@ -64,7 +64,6 @@ public class $nomeClasse implements Serializable {
         final $definicao.Tipo $definicao.NomeAtributo#if( $foreach.hasNext ),#end
         #end
     ) {
-
         #foreach ( $definicao in $definicoes )
         this.$definicao.NomeAtributo = $definicao.NomeAtributo;
         #end
@@ -74,7 +73,6 @@ public class $nomeClasse implements Serializable {
 
 #macro( macroConstructorBuilder )
     private $nomeClasse( final Builder builder ) {
-
         #foreach ( $definicao in $definicoes )
         this.$definicao.NomeAtributo = builder.$definicao.NomeAtributo;
         #end
@@ -110,7 +108,6 @@ public class $nomeClasse implements Serializable {
 
     @Override
     public boolean equals( final Object obj ) {
-
         if ( this == obj ) return true;
         if ( isNull( obj ) || getClass() != obj.getClass() ) return false;
         final $nomeClasse that = ($nomeClasse) obj;
@@ -119,7 +116,6 @@ public class $nomeClasse implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(
             #foreach ( $definicao in $identificadores )
                 #set ( $metodo = $StringUtils.join( "get", $StringUtils.capitalize( $definicao.NomeAtributo ) ,"()" ) )
@@ -164,14 +160,12 @@ public class $nomeClasse implements Serializable {
     #foreach ( $definicao in $definicoes )
         #set ( $nomeMetodo = $StringUtils.capitalize( $definicao.NomeAtributo ) )
         public Builder $StringUtils.join( 'com', $nomeMetodo, '(' ) final $definicao.Tipo value ) {
-
             this.$definicao.NomeAtributo = value;
             return this;
         }
 
     #end
         public $nomeClasse build() {
-
             return new $nomeClasse( this );
         }
 
