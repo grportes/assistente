@@ -9,7 +9,7 @@ set _jfxmods=%homedrive%%homepath%\develop\ferramentas\java\javafx\javafx-jmods-
 cls
 echo.
 echo 1. Package
-echo 2. Jre
+echo 2. Custom JRE
 echo 3. Exit
 echo.
 set /p choice=Informe a opcao:

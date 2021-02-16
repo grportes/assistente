@@ -50,7 +50,6 @@ public class DefinicaoDto {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public DefinicaoDto( final Builder builder ) {
-
         this.posicao = new SimpleIntegerProperty( builder.posicao );
         this.tipo = new SimpleObjectProperty<>( builder.tipo );
         this.nomeColunaDB = new SimpleStringProperty( builder.nomeColunaDB );
@@ -66,52 +65,42 @@ public class DefinicaoDto {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public int getPosicao() {
-
         return posicao.get();
     }
 
     public IntegerProperty posicaoProperty() {
-
         return posicao;
     }
 
     public Tipo getTipo() {
-
         return tipo.get();
     }
 
     public ObjectProperty<DefinicaoDto.Tipo> tipoProperty() {
-
         return tipo;
     }
 
     public String getNomeColunaDB() {
-
         return nomeColunaDB.get();
     }
 
     public StringProperty nomeColunaDBProperty() {
-
         return nomeColunaDB;
     }
 
     public String getNomeAtributo() {
-
         return nomeAtributo.get();
     }
 
     public StringProperty nomeAtributoProperty() {
-
         return nomeAtributo;
     }
 
     public Boolean isAtributoId() {
-
         return atributoId.get();
     }
 
     public BooleanProperty atributoIdProperty() {
-
         return atributoId;
     }
 
@@ -122,8 +111,7 @@ public class DefinicaoDto {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public boolean equals( Object o ) {
-
+    public boolean equals( final Object o ) {
         if ( this == o ) return true;
         if ( o == null || getClass() != o.getClass() ) return false;
         DefinicaoDto that = (DefinicaoDto) o;
@@ -132,7 +120,6 @@ public class DefinicaoDto {
 
     @Override
     public int hashCode() {
-
         return Objects.hash( getNomeAtributo() );
     }
 
@@ -144,7 +131,6 @@ public class DefinicaoDto {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static Set<String> buscarImports( final Set<DefinicaoDto> lista ) {
-
         return isEmpty( lista )
             ? emptySet()
             : lista.stream()
@@ -155,7 +141,6 @@ public class DefinicaoDto {
     }
 
     public static Set<String> buscarImportsSerializer( final Set<DefinicaoDto> lista ) {
-
         return isEmpty( lista )
             ? emptySet()
             : lista.stream()
@@ -166,7 +151,6 @@ public class DefinicaoDto {
     }
 
     public static Set<String> buscarImportsTupleConverter( final Set<DefinicaoDto> lista ) {
-
         return isEmpty( lista )
             ? emptySet()
             : lista.stream()
@@ -177,7 +161,6 @@ public class DefinicaoDto {
     }
 
     public static Set<DefinicaoDto> orderByPosicao( final Set<DefinicaoDto> lista ) {
-
         return isEmpty( lista )
                 ? emptySet()
                 : lista.stream()
@@ -186,29 +169,23 @@ public class DefinicaoDto {
     }
 
     public static Set<DefinicaoDto> buscarTodosAtributoId( final Set<DefinicaoDto> lista ) {
-
         return isEmpty( lista )
             ? emptySet()
             : lista.stream().filter( DefinicaoDto::isAtributoId ).collect( toSet() );
     }
 
     public static boolean existeAtributoId( final Set<DefinicaoDto> lista ) {
-
         return isNotEmpty( lista ) && lista.stream().anyMatch( DefinicaoDto::isAtributoId );
     }
 
     private static Pattern REGEX = Pattern.compile( "(.*)(dto)$", CASE_INSENSITIVE );
 
     public static String convPadraoNomeClasse( final String nomeClasse ) {
-
         requireNotBlank( nomeClasse, "Favor informar o nome da classe" );
-
         final String tmp = normalizeJava( nomeClasse, true );
-
         final Matcher matcher = REGEX.matcher( tmp );
         if ( matcher.find() && matcher.groupCount() > 1 )
             return trim( matcher.group( 1 ) ) + "Dto";
-
         return trim(tmp) + "Dto";
     }
 
@@ -220,6 +197,23 @@ public class DefinicaoDto {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public enum Tipo {
+
+        BOOLEAN( "Boolean") {
+            @Override
+            public String getPackage() {
+                return "java.lang.Boolean";
+            }
+
+            @Override
+            public String getJsonSerialize() {
+                return "";
+            }
+
+            @Override
+            public String getTupleConverter() {
+                return "";
+            }
+        },
 
         SHORT("Short") {
             @Override
@@ -374,21 +368,18 @@ public class DefinicaoDto {
             }
         };
 
-        private String nome;
+        private final String nome;
 
         Tipo( final String nome ) {
-
             this.nome = nome;
         }
 
         public String getNome() {
-
             return nome;
         }
 
         @Override
         public String toString() {
-
             return getNome();
         }
 
@@ -397,7 +388,6 @@ public class DefinicaoDto {
         public abstract String getTupleConverter();
 
         public static List<Tipo> buscarTipos() {
-
             return asList( values() );
         }
 
@@ -419,7 +409,6 @@ public class DefinicaoDto {
         private Boolean atributoId;
 
         public Builder() {
-
             this.posicao = null;
             this.tipo = null;
             this.nomeColunaDB = null;
@@ -428,21 +417,18 @@ public class DefinicaoDto {
         }
 
         public Builder comPosicao( final Integer value ) {
-
             requireNonNull( value, "Obrigatório informar posição do atributo" );
             this.posicao = value;
             return this;
         }
 
         public Builder comTipo( final Tipo value ) {
-
             requireNonNull( value, "Obrigatório informar o tipo do atributo" );
             this.tipo = value;
             return this;
         }
 
         public Builder comTipo( final DataType dataType ) {
-
             requireNonNull( dataType, "Obrigatório informar o tipo do atributo" );
             final String javaType = substringAfterLast( dataType.getJavaType(), "." );
             this.tipo = Tipo.buscarTipos()
@@ -454,27 +440,23 @@ public class DefinicaoDto {
         }
 
         public Builder comNomeColunaDB( final String value ) {
-
             if ( isBlank( value ) ) throw new IllegalArgumentException( "Obrigatório informar o nome da coluna" );
             this.nomeColunaDB = value;
             return this;
         }
 
         public Builder comNomeAtributo( final String value ) {
-
             if ( isBlank( value ) ) throw new IllegalArgumentException( "Obrigatório informar o nome do atributo" );
             this.nomeAtributo = normalizeJava( value, false );
             return this;
         }
 
         public Builder comAtributoId( final Boolean value ) {
-
             this.atributoId = value;
             return this;
         }
 
         public DefinicaoDto build() {
-
             return new DefinicaoDto(this );
         }
 
