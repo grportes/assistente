@@ -1,6 +1,5 @@
 package br.com.assistente;
 
-import br.com.assistente.services.VersaoService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +13,7 @@ import static br.com.assistente.infra.db.ConnectionFactory.closeConnection;
 import static br.com.assistente.infra.javafx.Dialog.msgErro;
 import static br.com.assistente.infra.util.UtilArquivo.getResource;
 import static br.com.assistente.infra.util.UtilJar.getInputStream;
+import static br.com.assistente.services.VersaoService.VERSAO;
 import static java.lang.String.format;
 import static java.lang.Thread.currentThread;
 import static java.lang.Thread.setDefaultUncaughtExceptionHandler;
@@ -21,6 +21,8 @@ import static javafx.application.Platform.runLater;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 
 public class App extends Application {
+
+    public static final String TITULO_APP = format( "Assistente: %s", VERSAO );
 
     @Override
     public void start( final Stage stage ) {
@@ -30,7 +32,7 @@ public class App extends Application {
         try {
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation( getResource("/fxml/AssistenteView.fxml") );
-            stage.setTitle( format( "Assistente - %s", VersaoService.VERSAO) );
+            stage.setTitle( TITULO_APP );
             stage.setScene( new Scene(loader.load()) );
             stage.setOnCloseRequest( e -> Platform.exit() );
             setIconeApp( stage );

@@ -1,6 +1,5 @@
 package br.com.assistente.controllers;
 
-import br.com.assistente.infra.javafx.Dialog;
 import br.com.assistente.models.Constante;
 import br.com.assistente.models.DefinicaoDto;
 import br.com.assistente.models.Modelo;
@@ -30,6 +29,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.File;
@@ -40,6 +40,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
+import static br.com.assistente.App.TITULO_APP;
 import static br.com.assistente.controllers.DtoIdentityController.openViewDtoIdentity;
 import static br.com.assistente.controllers.MapeamentoConfirmaGravacaoController.openViewConfirmarGravacao;
 import static br.com.assistente.controllers.SetupController.openViewConfiguracoes;
@@ -50,6 +51,7 @@ import static br.com.assistente.infra.util.UtilString.isBlankGet;
 import static br.com.assistente.models.Constante.convPadraoNomeEnum;
 import static br.com.assistente.models.DefinicaoDto.convPadraoNomeClasse;
 import static br.com.assistente.models.SetupUsuario.getCatalogosCnxSelecionada;
+import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
@@ -148,8 +150,12 @@ public class AssistenteController {
         initializeMapeamento();
         initializeConstantes();
         initializeDto();
-        versaoService.checkVersao(msg -> {
-            if (isNotBlank(msg)) Dialog.msgInfo(msg);
+
+        versaoService.check(value -> {
+            if ( isNotBlank(value) ) {
+                final Stage stage = (Stage) vboxContainer.getScene().getWindow();
+                stage.setTitle( format("%s - %s", TITULO_APP, value) );
+            }
         });
     }
 
