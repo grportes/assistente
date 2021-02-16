@@ -1,13 +1,15 @@
 @echo off
+clear
 
 set _target=%cd%\target
 set _jre=%cd%\jre
+set _jfxmods=%homedrive%%homepath%\develop\ferramentas\java\javafx\javafx-jmods-11.0.2
 
 :start
 cls
 echo.
 echo 1. Package
-echo 2. JRE
+echo 2. Jre
 echo 3. Exit
 echo.
 set /p choice=Informe a opcao:
@@ -37,8 +39,10 @@ if %delJRE%==1 (
     for /d %%p in ("%_jre%\*.*") do rmdir "%%p" /s /q
     rmdir "%_jre%\" /s /q
 )
-jlink --module-path %JAVA_HOME%/jmods --add-modules java.base,java.sql,java.net.http --output %_jre%
-
+jlink --output jre ^
+ --module-path %_jfxmods% ^
+ --add-modules javafx.media,javafx.web,javafx.fxml,java.logging,java.net.http
+goto end
 
 :end
 pause
