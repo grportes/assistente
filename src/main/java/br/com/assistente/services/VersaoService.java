@@ -19,8 +19,8 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 public class VersaoService {
 
-    public static final String VERSAO = "1.0";
-    private static final String API = "http://localhost:8080/api/sys/assistente";
+    public static final String VERSAO = "1.0.0";
+    private static final String API = "http://localhost:9000/api/sys/v1/assistente";
 
     public void check( final Consumer<String> acao ) {
         final ExecutorService executorService = newFixedThreadPool(1);
@@ -42,7 +42,7 @@ public class VersaoService {
                         .send( newBuilder( new URI(API) ).GET().build(), ofString() );
                 if ( response.statusCode() == 200 ) {
                     if ( equalsIgnoreCase( trim( response.body() ), VERSAO ) ) return null;
-                    return format( "NOVA VERSÃO: %s DISPONÍVEL!!", response.body() );
+                    return format( "<< NOVA VERSÃO: %s DISPONÍVEL!! >>", response.body() );
                 }
                 return format( "Check Versão: %s ", response.statusCode() );
             } catch ( final URISyntaxException | InterruptedException | IOException e ) {
