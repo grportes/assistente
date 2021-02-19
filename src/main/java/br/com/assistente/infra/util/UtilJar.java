@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
@@ -44,9 +43,7 @@ public class UtilJar {
 
         } else if ( equalsIgnoreCase( url.getProtocol(), "file" ) ) {
 
-            final ClassLoader classLoader = UtilJar.class.getClassLoader();
-            final URL drivers =  requireNonNull( classLoader.getResource( resourceFile ),"Resource não localizado!" );
-
+            final URL drivers =  UtilArquivo.getResource( resourceFile );
             try ( final InputStream in = drivers.openStream() )  {
                 exec.accept( in );
             } catch ( final IOException e ) {
