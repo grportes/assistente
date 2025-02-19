@@ -19,7 +19,7 @@ import java.util.Objects;
 import static java.util.Objects.isNull;
 
 /**
- * Classe que representa informações...
+ * Classe que representa informacoes...
  *
  * <p>Autor: $nomeAutor</p>
  *
@@ -94,7 +94,6 @@ public class $nomeClasse implements Serializable {
     #end
     #set ( $nomeMetodo = $StringUtils.capitalize( $definicao.NomeAtributo ) )
     public $definicao.Tipo $StringUtils.join( 'get', $nomeMetodo, '() {' )
-
         return this.$definicao.NomeAtributo;
     }
 
@@ -151,7 +150,6 @@ public class $nomeClasse implements Serializable {
     #end
 
         public Builder() {
-
     #foreach ( $definicao in $definicoes )
             this.$definicao.NomeAtributo = null;
     #end

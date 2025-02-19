@@ -55,7 +55,7 @@ public class DefinicaoDtoService {
 
         return singleton( new ResultMapeamento.Builder()
             .comNomeEntidade( nomeClasse )
-            .comConteudoEntidade( exec( context, "/templates/definicao_dto.vm" ) )
+            .comConteudoEntidade( exec( context, "definicao_dto.vm" ) )
             .comTipoResult( DTO )
             .build()
         );

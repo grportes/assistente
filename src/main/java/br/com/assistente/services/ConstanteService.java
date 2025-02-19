@@ -51,7 +51,7 @@ public class ConstanteService {
             new ResultMapeamento.Builder()
                 .comTipoResult( CONSTANTE )
                 .comNomeEntidade( nomeEnum )
-                .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/constante.vm") )
+                .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"constante.vm") )
                 .build()
         );
 
@@ -60,7 +60,7 @@ public class ConstanteService {
                 new ResultMapeamento.Builder()
                     .comTipoResult( CONSTANTE )
                     .comNomeEntidade( nomeEnum + "Converter" )
-                    .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"/templates/converter.vm") )
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, nomeEnum, tipo, constantes,"converter.vm") )
                     .build()
             );
 

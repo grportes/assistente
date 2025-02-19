@@ -12,6 +12,6 @@ module assistente {
     requires commons.dbutils;
 
     opens br.com.assistente.controllers to javafx.fxml;
-    opens br.com.assistente.models to org.yaml.snakeyaml;
+    opens br.com.assistente.models to org.yaml.snakeyaml, velocity.engine.core;
     exports br.com.assistente;
 }

@@ -20,16 +20,16 @@ public class $modelo.Entidade extends Model {
 #macro( macroImports )
 import infra.model.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
     #if ( $modelo.ChaveComposta )
-import javax.persistence.EmbeddedId;
+import jakarta.persistence.EmbeddedId;
     #else
-import javax.persistence.Id;
+import jakarta.persistence.Id;
     #end
     #if ( $modelo.AtributoVersion )
-import javax.persistence.Version;
+import jakarta.persistence.Version;
     #end
 import java.util.Objects;
 

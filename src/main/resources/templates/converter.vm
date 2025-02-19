@@ -3,8 +3,8 @@ package models.commons.converters;
 
 import models.commons.constantes.$nomeEnum;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 #if ( $tipoShort )
 import static infra.util.UtilNumero.toShort;

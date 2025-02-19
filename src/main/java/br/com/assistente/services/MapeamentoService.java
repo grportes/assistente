@@ -91,7 +91,7 @@ public class MapeamentoService {
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
                     .comTipoDadosId( embeddableEntity )
-                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"/templates/entidade.vm"))
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"entidade.vm"))
                     .build()
             );
             results.add(
@@ -100,7 +100,7 @@ public class MapeamentoService {
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( embeddableEntity )
                     .comTipoDadosId( embeddableEntity )
-                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, camposPk,"/templates/entidadeId.vm"))
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, camposPk,"entidadeId.vm"))
                     .build()
             );
         } else {
@@ -110,7 +110,7 @@ public class MapeamentoService {
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
                     .comTipoDadosId( camposPk.stream().map(ModeloCampo::getTipoJava).findFirst().orElse( "??") )
-                    .comConteudoEntidade(gerarMapeamento(nomeAutor, modelo, campos, "/templates/entidade.vm"))
+                    .comConteudoEntidade(gerarMapeamento(nomeAutor, modelo, campos, "entidade.vm"))
                     .build()
             );
         }
@@ -198,7 +198,7 @@ public class MapeamentoService {
             context.put( "tipoJavaId", tuple._1() );
             context.put( "importJavaId", tuple._2() );
             context.put( "StringUtils", StringUtils.class );
-            gerarArquivo( context, "/templates/repository.vm", pathRep );
+            gerarArquivo( context, "repository.vm", pathRep );
 
             context = new VelocityContext();
             context.put( "nomePacote", nomePacote );
@@ -207,7 +207,7 @@ public class MapeamentoService {
             context.put( "tipoJavaId", tuple._1() );
             context.put( "importJavaId", tuple._2() );
             context.put( "StringUtils", StringUtils.class );
-            gerarArquivo( context, "/templates/repositoryImpl.vm", pathRepImpl );
+            gerarArquivo( context, "repositoryImpl.vm", pathRepImpl );
         }
     }
 
