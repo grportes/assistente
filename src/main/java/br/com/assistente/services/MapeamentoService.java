@@ -44,7 +44,7 @@ import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 
 public class MapeamentoService {
 
-    public Set<ModeloCampo> extrair( final Modelo modelo )  {
+    public Set<ModeloCampo> extrair( final Modelo modelo ) {
         final List<DataType> dataTypes = SetupUsuario.buscarDataTypesCnxSelecionada();
 
         return getMetaData( modelo )
@@ -56,7 +56,7 @@ public class MapeamentoService {
                     .orElseThrow( () -> new RuntimeException( format(
                         "Coluna [ %s ] do tipo [ %s ] Não localizou tipo Java correspondente",
                         m.getColunaDB(), m.getTipoDB()
-                    )));
+                    ) ) );
 
                 // Tratamento p/ execeções!!
                 if ( equalsIgnoreCase( dataType.getJavaType(), "java.math.BigDecimal" ) ) {
@@ -64,12 +64,12 @@ public class MapeamentoService {
                         || startsWithIgnoreCase( m.getColunaDB(), "cgc" )
                         || startsWithIgnoreCase( m.getColunaDB(), "cnpj" ) )
                         return new ModeloCampo.Builder( m )
-                            .comDataType( new DataType.Builder(dataType).comJavaType("java.lang.Long").build() )
+                            .comDataType( new DataType.Builder( dataType ).comJavaType( "java.lang.Long" ).build() )
                             .build();
                 }
 
                 return new ModeloCampo.Builder( m ).comDataType( dataType ).build();
-            }).collect( toSet() );
+            } ).collect( toSet() );
     }
 
     public Set<ResultMapeamento> executar( final Modelo modelo ) {
@@ -77,7 +77,7 @@ public class MapeamentoService {
         if ( isNull( modelo ) || isEmpty( modelo.getCampos() ) )
             throw new IllegalArgumentException( "É necessário informar a tabela!!" );
 
-        final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
+        final String nomeAutor = SetupUsuario.find().map( SetupUsuario::getAutor ).orElse( "????" );
         final Set<ModeloCampo> camposPk = buscarPks( modelo.getCampos() );
         final Set<ModeloCampo> campos = modelo.getCampos();
         final Set<ResultMapeamento> results = new LinkedHashSet<>( 2 );
@@ -85,13 +85,16 @@ public class MapeamentoService {
         if ( modelo.isChaveComposta() ) {
             campos.removeAll( camposPk );
             final String embeddableEntity = modelo.getEntidade() + "Id";
+            final String entidadeId = gerarMapeamento( nomeAutor, modelo, camposPk, "entidadeId.vm" );
+            final String entidade = gerarMapeamento( nomeAutor, modelo, campos, "entidade.vm" );
+
             results.add(
                 new ResultMapeamento.Builder()
                     .comTipoResult( MAPEAMENTO )
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
                     .comTipoDadosId( embeddableEntity )
-                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos,"entidade.vm"))
+                    .comConteudoEntidade( entidade )
                     .build()
             );
             results.add(
@@ -100,7 +103,7 @@ public class MapeamentoService {
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( embeddableEntity )
                     .comTipoDadosId( embeddableEntity )
-                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, camposPk,"entidadeId.vm"))
+                    .comConteudoEntidade( entidadeId )
                     .build()
             );
         } else {
@@ -109,8 +112,8 @@ public class MapeamentoService {
                     .comTipoResult( MAPEAMENTO )
                     .comNomePacote( modelo.getCatalogo() )
                     .comNomeEntidade( modelo.getEntidade() )
-                    .comTipoDadosId( camposPk.stream().map(ModeloCampo::getTipoJava).findFirst().orElse( "??") )
-                    .comConteudoEntidade(gerarMapeamento(nomeAutor, modelo, campos, "entidade.vm"))
+                    .comTipoDadosId( camposPk.stream().map( ModeloCampo::getTipoJava ).findFirst().orElse( "??" ) )
+                    .comConteudoEntidade( gerarMapeamento( nomeAutor, modelo, campos, "entidade.vm" ) )
                     .build()
             );
         }
@@ -135,15 +138,15 @@ public class MapeamentoService {
 
     public void gravarArquivos(
         final Set<ResultMapeamento> rsMapeamentos,
-        final Function<Tuple2<String,String>, Boolean> callbackConfirmacao
+        final Function<Tuple2<String, String>, Boolean> callbackConfirmacao
     ) {
         final Path rootPath = SetupUsuario.buscarLocalProjeto().resolve( "app" ).resolve( "models" );
-        if ( !exists(rootPath) )
+        if ( !exists( rootPath ) )
             throw new IllegalArgumentException( format( "Não foi possível localizar caminho: %s", rootPath ) );
 
-        final Tuple2<String,String> nomeEntidadePacote =
+        final Tuple2<String, String> nomeEntidadePacote =
             buscarNomeEntidadePacote( rsMapeamentos )
-            .orElseThrow( () -> new IllegalArgumentException( "Não localizou resultado" ) );
+                .orElseThrow( () -> new IllegalArgumentException( "Não localizou resultado" ) );
 
         final String nomeModulo = isNotBlank( nomeEntidadePacote._2() ) ? nomeEntidadePacote._2() : "";
 
@@ -179,15 +182,15 @@ public class MapeamentoService {
             try {
                 Files.write( p, texto.toString().getBytes() );
             } catch ( IOException e ) {
-                throw new UncheckedIOException( format( "Falhou gravação de %s", p.toString()), e );
+                throw new UncheckedIOException( format( "Falhou gravação de %s", p.toString() ), e );
             }
-        });
+        } );
 
         if ( criarRepository ) {
             if ( exists( pathRep ) )
                 throw new RuntimeException( "Classe(s) domain criada(s) porém não foi possível criar classe(s) Repository, pois já existem!" );
 
-            final String nomeAutor = SetupUsuario.find().map(SetupUsuario::getAutor).orElse("????");
+            final String nomeAutor = SetupUsuario.find().map( SetupUsuario::getAutor ).orElse( "????" );
             final String nomePacote = "models.repository." + nomeModulo;
             final Tuple2<String, String> tuple = extrarImport( rsMapeamentos, nomeModulo );
 
@@ -211,7 +214,7 @@ public class MapeamentoService {
         }
     }
 
-    private Tuple2<String,String> extrarImport(
+    private Tuple2<String, String> extrarImport(
         final Set<ResultMapeamento> rsMapeamentos,
         final String nomeModulo
     ) {
@@ -219,13 +222,13 @@ public class MapeamentoService {
             return rsMapeamentos.stream()
                 .findFirst()
                 .map( rs -> {
-                    final String tipoJava =  lastIndexOfIgnoreCase( rs.getNomeEntidade(), "Id" ) == -1
+                    final String tipoJava = lastIndexOfIgnoreCase( rs.getNomeEntidade(), "Id" ) == -1
                         ? rs.getNomeEntidade().concat( "Id" ) : rs.getNomeEntidade();
                     final String importJava = isNotBlank( nomeModulo )
                         ? "models.domains.".concat( nomeModulo )
                         : "models.domains";
-                    return new Tuple2<>( tipoJava, importJava);
-                })
+                    return new Tuple2<>( tipoJava, importJava );
+                } )
                 .orElseThrow( () -> new RuntimeException( "Falhou extração dos imports" ) );
 
         final String tipo = rsMapeamentos.stream()
