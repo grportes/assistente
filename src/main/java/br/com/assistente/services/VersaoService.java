@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 public class VersaoService {
 
-    public static final String VERSAO = "1.0.1";
+    public static final String VERSAO = "1.0.2";
     private static final String API = "http://siga.arcom.com.br/api/sys/v1/assistente";
 
     public void check( final Consumer<String> acao ) {

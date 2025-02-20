@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.com.assistente</groupId>
     <artifactId>assistente</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <name>assistente</name>
     <packaging>jar</packaging>
 
