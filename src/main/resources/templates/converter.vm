@@ -8,9 +8,9 @@ import jakarta.persistence.Converter;
 
 #if ( $tipoShort )
 import static infra.util.UtilNumero.toShort;
-import static infra.util.UtilConstante.getValorInteger;
+import static infra.model.Constante.getIntegerValue;
 #else
-import static infra.util.UtilConstante.getValor;
+import static infra.model.Constante.getValue;
 #end
 import static infra.util.UtilEnum.getEnum;
 
@@ -28,7 +28,7 @@ public class $StringUtils.join( $nomeEnum, "Converter" ) implements AttributeCon
 
     @Override
     public Integer convertToDatabaseColumn( final $nomeEnum value ) {
-        return getValorInteger( value );
+        return getIntegerValue( value );
     }
 
     @Override
@@ -41,7 +41,7 @@ public class $StringUtils.join( $nomeEnum, "Converter" ) implements AttributeCon
 
     @Override
     public $tipoJava convertToDatabaseColumn( final $nomeEnum value ) {
-        return getValor( value );
+        return getValue( value );
     }
 
     @Override

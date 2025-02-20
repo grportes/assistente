@@ -28,13 +28,13 @@ import static java.util.Objects.isNull;
 public class $nomeClasse implements Serializable {
 
     #macroDeclaracaoVariaves
+    #macroGetters
+    #macroEqualsHashcode
     #if ( $gerarClasseBuilder )
     #macroConstructorBuilder
     #else
     #macroConstructor
     #end
-    #macroGetters
-    #macroEqualsHashcode
     #if ( $gerarClasseBuilder )
     #macroBuilder
     #end

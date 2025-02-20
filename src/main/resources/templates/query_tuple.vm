@@ -1,5 +1,5 @@
 // imports...
-import javafx.persistence.Tuple;
+import jakarta.persistence.Tuple;
 #foreach ( $import in $importsTupleConverter )
 import static $import;
 #end
