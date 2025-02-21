@@ -131,7 +131,7 @@ public class QueryService {
         context.put( "importsNecessarios", buscarImports( campos ) );
         context.put( "importsTupleConverter", buscarImportsTupleConverter( campos ) );
         context.put( "StringUtils", StringUtils.class );
-        return exec( context, "query_tuple.vm" );
+        return exec( context, "templates/query_tuple.vm" );
     }
 
     private String gerarXMLQuery(
@@ -145,7 +145,7 @@ public class QueryService {
         context.put( "nomeClasse", nomeClasse );
         context.put( "definicoes", orderByPosicao( definicoes ) );
         context.put( "StringUtils", StringUtils.class );
-        return exec( context, "query_xml.vm" );
+        return exec( context, "templates/query_xml.vm" );
     }
 
     private String gerarDto(
@@ -168,6 +168,6 @@ public class QueryService {
         context.put( "StringUtils", StringUtils.class );
         context.put( "CollectionUtils", CollectionUtils.class );
         context.put( "dataHora", now().format( ofPattern( "dd/MM/yyyy" ) ) );
-        return exec( context, "query_dto.vm" );
+        return exec( context, "templates/query_dto.vm" );
     }
 }

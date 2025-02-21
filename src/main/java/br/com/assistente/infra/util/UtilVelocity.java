@@ -19,9 +19,8 @@ public final class UtilVelocity {
     static {
         try {
             final Properties props = new Properties();
-            props.setProperty( "resource.loader.file.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader" );
-            props.setProperty( "resource.loader.file.path", "src/main/resources/templates" );
-            props.setProperty( "resource.loader.file.cache", "true" );
+            props.setProperty( "resource.loader", "classpath" );
+            props.setProperty( "classpath.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader" );
 
             // Desativar logs do Velocity
             props.setProperty( "runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogSystem" );
